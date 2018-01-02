@@ -1,0 +1,13 @@
+//
+//  DZSignWeekView.h
+//  Police
+//
+//  Created by 陈刚 on 17/6/13.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface DZSignWeekView : UIView
+
+@end

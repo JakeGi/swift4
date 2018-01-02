@@ -1,0 +1,113 @@
+//
+//  JYNavigationContrller.m
+//  miaoyi
+//
+//  Created by 锦颐养老 on 16/8/31.
+//  Copyright © 2016年 陕西大众健康投资管理有限公司. All rights reserved.
+//
+
+#import "JYNavigationContrller.h"
+#import "tabBarViewController.h"
+@interface JYNavigationContrller ()<UIGestureRecognizerDelegate>
+
+@end
+
+@implementation JYNavigationContrller
+//初始化
++ (void)initialize
+{
+    UINavigationBar *bar = [UINavigationBar appearance];
+
+    bar.shadowImage = [UIImage new];
+    //设置背景图片
+    UIImage *imag = [UIImage imageNamed:@"MyCenter.bundle/bg_navigationbar"];
+
+    [bar setBackgroundImage:imag forBarMetrics:UIBarMetricsDefault];
+    //设置导航条上的文字属性
+    NSMutableDictionary *dicAttr = [NSMutableDictionary dictionary];
+    //字体颜色
+    dicAttr[NSForegroundColorAttributeName]= [UIColor whiteColor];
+    //字体大小,样式
+    dicAttr[NSFontAttributeName] = [UIFont boldSystemFontOfSize:18];
+    
+    [bar setTitleTextAttributes:dicAttr];
+    //设置item属性
+    UIBarButtonItem *item = [UIBarButtonItem appearance];
+    NSMutableDictionary *itemArrays = [NSMutableDictionary dictionary];
+    itemArrays[NSFontAttributeName] = [UIFont systemFontOfSize:16];
+    itemArrays[NSForegroundColorAttributeName] = [UIColor whiteColor];
+    [item setTitleTextAttributes:itemArrays forState:UIControlStateNormal];
+    
+    NSMutableDictionary *itemDisAttrys = [NSMutableDictionary dictionary];
+    itemDisAttrys[NSForegroundColorAttributeName] = [UIColor whiteColor];
+    [item setTitleTextAttributes:itemDisAttrys forState:UIControlStateDisabled];
+
+}
+
+//- (void)viewDidLoad {
+//    [super viewDidLoad];
+//    // 不允许边缘手势触发
+//    self.interactivePopGestureRecognizer.enabled = NO;
+//
+//    // 添加Pan,全屏
+//    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self.interactivePopGestureRecognizer.delegate action:@selector(handleNavigationTransition:)];
+//    // 实现滑动返回功能
+//    pan.delegate = self;
+//    [self.view addGestureRecognizer:pan];
+//    
+//}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    JYLog(@"%lu",(unsigned long)self.childViewControllers.count);
+
+    return (self.topViewController !=[self.viewControllers firstObject]);
+}
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (self.childViewControllers.count !=0) {
+
+        viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initCreatLeftItemWithNormalImg:[UIImage imageNamed:@"Main.bundle/ico_back"] HightImg:[UIImage imageNamed:@"Main.bundle/ico_back"] withTitle:nil withTitleColor:nil withTarget:self withAction:@selector(back)];
+        // 隐藏tabbar
+        viewController.hidesBottomBarWhenPushed = YES;
+    }
+    //放在后面,可以覆盖上面设置的leftBarButtonItem
+    [super pushViewController:viewController animated:animated];
+    
+}
+//返回上一页
+- (void)back
+{
+    
+    [self popViewControllerAnimated:YES];
+}
+#pragma mark -  设置状态栏颜色
+-(UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+//#pragma mark - 获取当前控制器
+//+ (UIViewController *)topViewController
+//{
+//    return [self topViewControllerWithRootViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
+//}
+//+ (UIViewController *)topViewControllerWithRootViewController:(UIViewController *)rootViewController
+//{
+//    if ([rootViewController isKindOfClass:[tabBarViewController class]]) {
+//        tabBarViewController *tabBarController = (tabBarViewController *)rootViewController;
+//        return [self topViewControllerWithRootViewController:tabBarController.selectedViewController];
+//    }else if ([rootViewController isKindOfClass:[JYNavigationContrller class]]){
+//        JYNavigationContrller *nav = (JYNavigationContrller *)rootViewController;
+//        return [self topViewControllerWithRootViewController:nav.visibleViewController];
+//        
+//    }else if (rootViewController.presentedViewController){
+//        
+//        UIViewController *presentedViewController = rootViewController.presentedViewController;
+//        return [self topViewControllerWithRootViewController:presentedViewController];
+//    }else{
+//        return  rootViewController;
+//    }
+//}
+
+@end

@@ -1,0 +1,77 @@
+//
+//  DZSignWeekView.m
+//  Police
+//
+//  Created by 陈刚 on 17/6/13.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZSignWeekView.h"
+
+@implementation DZSignWeekView
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        
+        for (int i =0; i <7; i++) {
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [btn setTitleColor:kBlackColor forState:UIControlStateNormal];
+            [btn setTitleColor:[UIColorFromRGB(0x000000) colorWithAlphaComponent:0.87] forState:UIControlStateNormal];
+            btn.titleLabel.font =[UIFont fontWithName:@".PingFangSC-Regular" size:12];
+            btn.titleLabel.textAlignment = NSTextAlignmentCenter;
+            btn.tag = i;
+            [self addSubview:btn];
+        }
+        
+    }
+    return self;
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    CGFloat x = 0;
+    CGFloat y = 0;
+    CGFloat w = self.JY_width /self.subviews.count;
+    CGFloat h = kHeight(25);
+    int i = 0;
+    for (UIButton *btn in self.subviews) {
+        x = i * w;
+        btn.frame = CGRectMake(x, y, w, h);
+        switch (i) {
+            case 0:
+                [btn setTitle:@"日" forState:UIControlStateNormal];
+                break;
+            case 1:
+                [btn setTitle:@"一" forState:UIControlStateNormal];
+                
+                break;
+            case 2:
+                [btn setTitle:@"二" forState:UIControlStateNormal];
+                
+                break;
+            case 3:
+                [btn setTitle:@"三" forState:UIControlStateNormal];
+                
+                break;
+            case 4:
+                [btn setTitle:@"四" forState:UIControlStateNormal];
+                
+                break;
+            case 5:
+                [btn setTitle:@"五" forState:UIControlStateNormal];
+                
+                break;
+            case 6:
+                [btn setTitle:@"六" forState:UIControlStateNormal];
+                break;
+            default:
+                break;
+        }
+        i++;
+    }
+
+}
+@end

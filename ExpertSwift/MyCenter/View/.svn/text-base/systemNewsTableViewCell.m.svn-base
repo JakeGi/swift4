@@ -1,0 +1,97 @@
+//
+//  systemNewsTableViewCell.m
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/22.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "systemNewsTableViewCell.h"
+#import "SystemNewsModel.h"
+@interface systemNewsTableViewCell()
+//cell图标
+@property (nonatomic,strong)UIImageView *headImg;
+//cell名字
+@property (nonatomic,strong)UILabel *nameLab;
+//分组详细
+@property (nonatomic,strong)UILabel *detailLab;
+//时间
+@property (nonatomic,strong)UILabel *timeLab;
+
+@end
+@implementation systemNewsTableViewCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
+              reuseIdentifier:(NSString *)reuseIdentifier
+                withIndexPath:(NSIndexPath *)indexPath
+                   WithTarget:(id)target
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
+        self.nameLab  = [[UILabel alloc] init];
+        self.nameLab.textColor = kBlackColor;
+        self.nameLab.textAlignment = NSTextAlignmentCenter;
+        self.nameLab.font = [UIFont boldSystemFontOfSize:16];
+        [self.contentView addSubview:self.nameLab];
+        
+        self.detailLab = [[UILabel alloc] init];
+        self.detailLab.textColor = UIColorFromRGB(0x6a6a6a);
+        
+        self.detailLab.textAlignment = NSTextAlignmentCenter;
+        self.detailLab.font = [UIFont systemFontOfSize:12];
+        [self.contentView addSubview:self.detailLab];
+        
+        self.timeLab = [[UILabel alloc] init];
+        self.timeLab.textColor = UIColorFromRGB(0xa0a6a9);
+        
+        self.timeLab.textAlignment = NSTextAlignmentCenter;
+        self.timeLab.font = [UIFont systemFontOfSize:10];
+        [self.contentView addSubview:self.timeLab];
+
+        self.headImg = [[UIImageView alloc] init];
+        self.headImg.image = [UIImage imageNamed:@"My.bundle/ico_logo_yiguo"];
+        [self.contentView addSubview:self.headImg];        
+    }
+    return self;
+    
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self.headImg makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(kWidth(15));
+        make.width.equalTo(kWidth(44));
+        make.height.equalTo(kHeight(44));
+        make.centerY.equalTo(self.contentView);
+        
+    }];
+    
+    [self.headImg layoutRoundImage:kWidth(22)];
+
+    [self.nameLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.headImg.right).offset(kWidth(15));
+        make.top.equalTo(self.contentView).offset(kHeight(10));
+    }];
+    
+    [self.detailLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.headImg.right).offset(kWidth(15));
+        make.bottom.equalTo(self.contentView).offset(-kHeight(10));
+    }];
+    
+    [self.timeLab makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.nameLab);
+        make.right.equalTo(self.contentView).offset(-kWidth(15));
+    }];
+}
+
+-(void)setModel:(SystemNewsModel *)model
+{
+    _model = model;
+    
+    [UIImageView SDimageWithImageView:self.headImg withUrl:_model.photo withPlaceholderImg:[UIImage imageNamed:@"MyCenter.bundle/img_avatar_default_lg"] withLoadErrorImg:[UIImage imageNamed:@"MyCenter.bundle/img_failtoload_lg"]];
+    self.nameLab.text = _model.message;
+    self.detailLab.text = _model.remarks;
+    self.timeLab.text = _model.creat_time;
+}
+@end

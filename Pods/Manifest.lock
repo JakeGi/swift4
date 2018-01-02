@@ -1,0 +1,35 @@
+PODS:
+  - Alamofire (4.5.1)
+  - HandyJSON (4.0.0-beta.1)
+  - Kingfisher (4.1.0)
+  - NVActivityIndicatorView (4.0.0):
+    - NVActivityIndicatorView/Presenter (= 4.0.0)
+  - NVActivityIndicatorView/Presenter (4.0.0)
+  - ReachabilitySwift (3)
+  - SnapKit (4.0.0)
+  - SwiftyJSON (3.1.4)
+  - WRNavigationBar (1.0.1)
+
+DEPENDENCIES:
+  - Alamofire
+  - HandyJSON (= 4.0.0-beta.1)
+  - Kingfisher
+  - NVActivityIndicatorView
+  - ReachabilitySwift
+  - SnapKit
+  - SwiftyJSON
+  - WRNavigationBar
+
+SPEC CHECKSUMS:
+  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
+  HandyJSON: 428bb18e2c34c2a77361accebf90cf64e4f74118
+  Kingfisher: f14df8cbe576bf55f211fa589e9869bceb4ea87d
+  NVActivityIndicatorView: 54c9b93b6f25a4f467512680c0c90c09a1095cf2
+  ReachabilitySwift: f5b9bb30a0777fac8f09ce8b067e32faeb29bb64
+  SnapKit: a42d492c16e80209130a3379f73596c3454b7694
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  WRNavigationBar: ab5b042168e28ca0c12a16fc72e40dd7fdd9f87b
+
+PODFILE CHECKSUM: 4b2b36d8c2d24c6fe0301468c218100f1615e5be
+
+COCOAPODS: 1.4.0.beta.1

@@ -1,0 +1,18 @@
+//
+//  DZSignModel.h
+//  Police
+//
+//  Created by 陈刚 on 17/6/13.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+typedef NS_ENUM(NSInteger, DZSignType) {
+    DZSignTypeNone = 0,//未签到
+    DZSignTypeSigned = 1,//已经签到
+};
+@interface DZSignModel : NSObject
+@property (nonatomic, copy) NSString *dayText;
+@property (nonatomic, assign) DZSignType signType;
+
+@end

@@ -1,0 +1,54 @@
+//
+//  DZSignCollectionViewCell.m
+//  Police
+//
+//  Created by 陈刚 on 17/6/13.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZSignCollectionViewCell.h"
+#import "DZSignModel.h"
+
+@interface DZSignCollectionViewCell()
+
+@end
+@implementation DZSignCollectionViewCell
+
+#pragma mark初始化cell
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self =[super initWithFrame:frame]) {
+        _dataBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_dataBtn setTitleColor:[UIColorFromRGB(0x000000) colorWithAlphaComponent:0.87] forState:UIControlStateNormal];
+        _dataBtn.titleLabel.font =[UIFont fontWithName:@".PingFangSC-Regular" size:12];
+        _dataBtn.titleLabel.textAlignment = NSTextAlignmentCenter;
+        [_dataBtn setBackgroundImage:[UIImage imageNamed:@"MyCenter.bundle/bg_checked"] forState:UIControlStateDisabled];
+
+        [self.contentView addSubview:_dataBtn];
+    }
+    return self;
+}
+#pragma mark - 布局
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [_dataBtn makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(self.contentView);
+        make.top.equalTo(self.contentView);
+        make.left.equalTo(self.contentView);
+        make.right.equalTo(self.contentView);
+    }];
+
+}
+- (void)configureWithSignModel:(DZSignModel *)signModel {
+    
+    if (signModel.signType == DZSignTypeNone) {
+        self.dataBtn.enabled = YES;
+    } else {
+        self.dataBtn.enabled= NO;
+    }
+    [self.dataBtn setTitle:signModel.dayText forState:UIControlStateNormal];
+}
+
+@end

@@ -1,0 +1,31 @@
+//
+//  useCashModel.h
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/15.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface useCashModel : NSObject
+//名称
+@property (nonatomic,strong)NSString *name;
+//时间
+@property (nonatomic,strong)NSString *time;
+//金额
+@property (nonatomic,strong)NSString *price;
+
+//琪币模型端
+//ID
+@property (nonatomic,strong)NSString *ID;
+//时间
+@property (nonatomic,strong)NSString *create_time;
+//积分数量
+@property (nonatomic,strong)NSString *integral;
+//类型 加减 0加1减
+@property (nonatomic,strong)NSString *type;
+//琪币说明
+@property (nonatomic,strong)NSString *content;
+
+@end

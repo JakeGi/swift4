@@ -1,0 +1,387 @@
+//
+//  LoginViewController.m
+//  demo_yijiankang
+//
+//  Created by jinyiyanglao on 16/8/11.
+//  Copyright © 2016年 jinyiyanglao. All rights reserved.
+//
+// 只要添加了这个宏，就不用带mas_前缀
+#define MAS_SHORTHAND
+// 只要添加了这个宏，equalTo就等价于mas_equalTo
+#define MAS_SHORTHAND_GLOBALS
+
+#import "LoginViewController.h"
+#import "tabBarViewController.h"
+#import "JYNavigationContrller.h"
+#import "PerfectInfoMessageController.h"
+
+@interface LoginViewController ()<UITextFieldDelegate>
+
+@property(nonatomic,strong)UITextField *usernameTextField;
+@property(nonatomic,strong)UITextField *passwordTextField;
+@property (nonatomic,strong)NSString *userId;
+@property (nonatomic,strong)NSString *token;
+@property (nonatomic,strong)UIButton *loginBtn;
+
+@end
+
+@implementation LoginViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self loadUI];
+}
+-(void)loadUI{
+    self.view.backgroundColor=[UIColor whiteColor];
+    self.navigationItem.title=@"登录";
+    self.view.backgroundColor = kWhiteColor;
+    UIImageView *logoImageView=[[UIImageView alloc]init];
+    
+    logoImageView.image=[UIImage imageNamed:@"Login.bundle/ico_logo"];
+    
+    [self.view addSubview:logoImageView];
+    
+    UIImage *image = [UIImage imageNamed:@"Login.bundle/ico_logo"];
+    CGFloat w = image.size.width;
+    CGFloat W = JYScreenW *0.25;
+    CGFloat H = image.size.height * W/w;
+    [logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(W, H));
+        make.top.equalTo(kHeight(60));
+        make.centerX.equalTo(self.view);
+    }];
+
+    //textField
+    self.usernameTextField=[[UITextField alloc]init];
+    self.passwordTextField=[[UITextField alloc]init];
+    self.usernameTextField.placeholder=@"请输入手机号";
+    self.usernameTextField.keyboardType = UIKeyboardTypeNumberPad;
+    self.passwordTextField.placeholder=@"请输入密码";
+    self.usernameTextField.font=[UIFont systemFontOfSize:16];
+    self.passwordTextField.font=[UIFont systemFontOfSize:16];
+    self.passwordTextField.secureTextEntry=YES;
+    self.passwordTextField.delegate = self;
+    self.usernameTextField.delegate = self;
+    
+    [self.usernameTextField addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventAllEditingEvents];
+    [self.passwordTextField addTarget:self action:@selector(valueChanged) forControlEvents:UIControlEventAllEditingEvents];
+    
+    //清除文本内的内容
+    self.usernameTextField.clearButtonMode = UITextFieldViewModeAlways;
+//    self.passwordTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    [self.view addSubview:self.usernameTextField];
+    [self.view addSubview:self.passwordTextField];
+
+    
+    [self.usernameTextField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(self.view.bounds.size.width*0.65, 30));
+        make.top.mas_equalTo(logoImageView.bottom).offset(kHeight(40));
+        make.left.mas_equalTo(self.view).offset(kWidth(72));
+    }];
+    
+    [self.passwordTextField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(self.view.bounds.size.width*0.65, 30));
+        make.top.mas_equalTo(self.usernameTextField.bottom).offset(kHeight(20));
+        make.left.equalTo(self.view).offset(kWidth(72));
+    }];
+    
+    //图标
+    UIImageView *phoneImageView=[[UIImageView alloc]init];
+    [self.view addSubview:phoneImageView];
+    phoneImageView.image= [UIImage imageNamed:@"Login.bundle/ico_username"];
+    [phoneImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.equalTo(CGSizeMake(kWidth(22),kHeight(25)));
+        make.left.mas_equalTo(self.view).offset(kWidth(30.5));
+        make.centerY.equalTo(self.usernameTextField);
+    }];
+    
+    UIImageView *pswImageView=[[UIImageView alloc]init];
+    [self.view addSubview:pswImageView];
+    pswImageView.image = [UIImage imageNamed:@"Login.bundle/ico_password"];
+    [pswImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.equalTo(CGSizeMake(kWidth(22),kHeight(25)));
+        make.left.mas_equalTo(self.view).offset(kWidth(30.5));
+        make.centerY.equalTo(self.passwordTextField);
+    }];
+    //view
+    UIView *phoneView = [[UIView alloc]init];
+    phoneView.backgroundColor = [UIColorFromRGB(0x000000) colorWithAlphaComponent:0.54];
+    [self.view addSubview:phoneView];
+    phoneView.translatesAutoresizingMaskIntoConstraints=NO;
+    [phoneView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(1);
+        make.left.equalTo(self.view).offset(kWidth(30));
+        make.right.equalTo(self.view.right).offset( - kWidth(30));
+        make.top.mas_equalTo(self.usernameTextField.bottom).offset(kHeight(5));
+    }];
+    
+    UIView *passwordView = [[UIView alloc]init];
+    passwordView.backgroundColor= [UIColorFromRGB(0x000000) colorWithAlphaComponent:0.54];
+    [self.view addSubview:passwordView];
+    passwordView.translatesAutoresizingMaskIntoConstraints=NO;
+    [passwordView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(1);
+        make.left.equalTo(self.view).offset(kWidth(30));
+        make.right.equalTo(self.view.right).offset( - kWidth(30));
+        make.top.mas_equalTo(self.passwordTextField.bottom).offset(kHeight(5));
+    }];
+    self.loginBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.loginBtn setTitle:@"登录" forState:UIControlStateNormal];
+    [self.loginBtn setTitleColor:[UIColor whiteColor]forState:UIControlStateNormal];
+    [self.loginBtn setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
+    
+    [self.loginBtn addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
+
+    [self.loginBtn setBackgroundImage:[UIImage imageNamed:@"Answer.bundle/btn_primary_b"] forState:UIControlStateNormal];
+    [self.loginBtn setBackgroundImage:[UIImage imageNamed:@"Answer.bundle/btn_disable"] forState:UIControlStateDisabled];
+
+    self.loginBtn.enabled =NO;
+    [self.view addSubview:self.loginBtn];
+    [self.loginBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(kHeight(44));
+        make.left.equalTo(self.view).offset(kWidth(30));
+        make.right.equalTo(self.view.right).offset( - kWidth(30));
+        make.top.mas_equalTo(pswImageView.bottom).offset(kHeight(20));
+    }];
+    
+    UIButton *findpswdButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    [self.view addSubview:findpswdButton];
+    [findpswdButton addTarget:self action:@selector(gotofindPswdVC) forControlEvents:UIControlEventTouchUpInside];
+    [findpswdButton setTitleColor:UIColorFromRGB(0x46A0E3) forState:UIControlStateNormal];
+    [findpswdButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
+    findpswdButton.titleLabel.font = [UIFont systemFontOfSize: 14.0];
+    findpswdButton.translatesAutoresizingMaskIntoConstraints=NO;
+    
+    [findpswdButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(30);
+        make.right.mas_equalTo(self.view).offset(-kWidth(42));
+        make.top.mas_equalTo(self.loginBtn.bottom).offset(kHeight(20));
+        make.centerX.equalTo(self.loginBtn);
+    }];
+
+    UIButton *seeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [seeBtn setBackgroundImage:[UIImage imageNamed:@"Login.bundle/ico_eye"] forState:UIControlStateNormal];
+    [seeBtn setBackgroundImage:[UIImage imageNamed:@"Login.bundle/ico_seenothing"] forState:UIControlStateSelected];
+    [seeBtn addTarget:self action:@selector(seePswd:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:seeBtn];
+    [seeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_equalTo(22);
+        make.width.equalTo(kWidth(22));
+        make.right.mas_equalTo(self.passwordTextField.right);
+        make.centerY.equalTo(self.passwordTextField);
+    }];
+}
+
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    [self.usernameTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
+}
+#pragma mark - 代理传值
+-(void)passUsername:(NSString *)username{
+    self.usernameTextField.text=username;
+}
+-(void)passPassword:(NSString *)password{
+    self.passwordTextField.text=password;
+}
+- (void)PassPassword:(NSString *)Fpassword{
+    self.passwordTextField.text = Fpassword;
+}
+- (void)PassUsername:(NSString *)Fusername{
+    self.usernameTextField.text = Fusername;
+}
+#pragma mark -输入框内容变化进行判断
+- (void)valueChanged{
+    //判断输入框是否有内容,根据内容变化对对登录按钮的颜色进行改变
+    if (self.usernameTextField.text.length <11 || self.passwordTextField.text.length <6 ) {
+        
+        self.loginBtn.enabled =NO;
+        
+    }else if(self.usernameTextField.text.length ==11 && self.passwordTextField.text.length >=6){
+        self.loginBtn.enabled = YES;
+    }
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (textField == self.usernameTextField) {
+        if (range.length ==0&& range.location>10) {
+            
+            return NO;
+        }
+    }else if (textField == self.passwordTextField){
+        if (range.length ==0&& range.location>15) {
+            return NO;
+        }
+
+    }
+    return YES;
+}
+#pragma mark - 账号登录
+-(void)login{
+    [self.usernameTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
+    // 获取网络状态，没有网络弹出提示框
+    
+    //判断用户是否有输入
+    if (self.usernameTextField.text.length == 0 || self.passwordTextField.text.length == 0) {
+
+        [[commonUnit sharedCommonUtils] showAlertWithTitle:@"登录" message:@"手机号或密码不正确，请重试！" withDismissTime:1.5 withControl:self];
+        return;
+    }
+    
+    [self loginWithLoginType:@"phone" withUmType:nil];
+
+
+}
+
+#pragma mark - 进入软件
+- (void)gotoViewController{
+    [self.usernameTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
+    NSDictionary *userInfo = [[chiveDataManager sharedChive] unarchivewithPath:@"userInfo"];
+    //判断用户信息不全跳转至补全信息页面
+    if ([[userInfo objectForKey:@"birth"] isEqualToString:@""] || [[userInfo objectForKey:@"height"] isEqualToString:@""] || [[userInfo objectForKey:@"sex"] isEqualToString:@""]) {
+        PerfectInfoMessageController *vc = [[PerfectInfoMessageController alloc]init];
+        JYNavigationContrller *nav = [[JYNavigationContrller alloc] initWithRootViewController:vc];
+        [UIApplication sharedApplication].keyWindow.rootViewController = nav;
+        [[UIApplication sharedApplication].keyWindow makeKeyAndVisible];
+    }else{
+    
+        tabBarViewController *controller =[[tabBarViewController alloc] init];
+        [UIApplication sharedApplication].keyWindow.rootViewController = controller;
+        [[UIApplication sharedApplication].keyWindow makeKeyAndVisible];
+        
+    }
+}
+#pragma mark - 环信登录
+- (void)HXloginWithUserName:(NSString *)userName
+{
+    //环信自动登录
+    [[EMClient sharedClient] loginWithUsername:userName password:@"111111" completion:^(NSString *aUsername, EMError *aError) {
+        if (aError == NULL) {//没有错误，登陆成功
+            JYLog(@"环信登录成功");
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            
+            [[EMClient sharedClient].options setIsAutoLogin:YES];
+            //跳转界面
+            [self gotoViewController];
+            
+        }else{//登录失败
+            JYLog(@"环信登录失败");
+            JYLog(@"code====%u code====%@",aError.code,aError.errorDescription);
+            JYLog(@"%@",aError.errorDescription);
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"登录失败" withDismissTime:1 withControl:self];
+        }
+        
+    }];
+}
+
+#pragma mark - 找回密码
+-(void)gotofindPswdVC{
+    [self.usernameTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
+    [Mediator pushToControll:@"FindPswdViewController" withPropertyValueDic:(NSMutableDictionary *)@{@"delegate":self}];
+}
+
+#pragma mark - 登录
+- (void)loginWithLoginType:(NSString *)loginType withUmType:(NSString *)UmType
+{
+    NSMutableDictionary *mutableDic=[NSMutableDictionary dictionary];
+    mutableDic[@"alias"] = DeviceUDID;
+    mutableDic[@"platform"] = @"2";//平台
+    mutableDic[@"login_type"] = loginType;
+    mutableDic[@"telePhone"] = self.usernameTextField.text;
+    mutableDic[@"password"] = self.passwordTextField.text;
+    
+    //弹出登录提示
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    [NetWorkRequest sendRequestWithUrl:loginUrl withParameters:mutableDic withType:@"post" success:^(id responseObject) {
+        
+        JYLog(@"登录成功++++++%@",responseObject);
+        NSString *message=[NSString stringWithFormat:@"%@",[responseObject valueForKey:@"message"]];
+        //取出code做出判断
+        NSString *code=[NSString stringWithFormat:@"%@",[responseObject valueForKey:@"code"]];
+        
+        if ([code isEqualToString:@"001001"])
+        {
+            if ([[responseObject objectForKey:@"phone"] isEqualToString:@""]) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+
+                //完善个人信息界面
+                [self uploadUserInfo];
+                
+            }else{
+                if ([[EMClient sharedClient] isLoggedIn]) {
+                    [[EMClient sharedClient].options setIsAutoLogin:YES];
+                    JYLog(@"环信登录成功");
+                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                    //跳转界面
+                    [self gotoViewController];
+                }else{
+                    //环信自动登录
+                    [self HXloginWithUserName:[responseObject objectForKey:@"phone"]];
+                }
+            }
+            //保存登录返回信息
+            [[chiveDataManager sharedChive] chiveDataDic:responseObject withPathName:@"userInfo"];
+            
+        }else{
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+
+            [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:message withDismissTime:1.5 withControl:self];
+        }
+    } failure:^(NSError *error) {
+        JYLog(@"%@",error);
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [[commonUnit sharedCommonUtils]showAlertWithTitle:@"提示" message:@"登录失败" withDismissTime:1 withControl:self];
+    }];
+
+}
+#pragma mark - 进入个人中心完善信息
+- (void)uploadUserInfo
+{
+    [self.usernameTextField resignFirstResponder];
+    [self.passwordTextField resignFirstResponder];
+    
+    [Mediator pushToControll:@"ThirdLoginBundViewController"];
+        
+}
+#pragma mark - 密码可见
+- (void)seePswd:(UIButton *)btn
+{
+    btn.selected = !btn.selected;
+    if (btn.selected) {
+        self.passwordTextField.secureTextEntry = NO;
+
+    }else{
+        self.passwordTextField.secureTextEntry = YES;
+    }
+}
+#pragma mark - 忘记密码修改之后登陆
+-(void)changeUserName:(NSString *)username{
+    self.usernameTextField.text = username;
+}
+-(void)changePassWord:(NSString *)password{
+    self.passwordTextField.text = password;
+}
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+
+    self.navigationController.navigationBarHidden = YES;
+    
+    [self valueChanged];
+}
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    self.navigationController.navigationBarHidden = NO;
+}
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+@end

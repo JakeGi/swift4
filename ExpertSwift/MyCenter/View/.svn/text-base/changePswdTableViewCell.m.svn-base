@@ -1,0 +1,65 @@
+//
+//  changePswdTableViewCell.m
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/15.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "changePswdTableViewCell.h"
+@interface changePswdTableViewCell()
+@property(nonatomic,strong)UITextField *textfiled;
+@end
+@implementation changePswdTableViewCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier withIndexPath:(NSIndexPath *)indexPath WithTarget:(id)target
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.textLabel.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.54];
+        self.textfiled = [[UITextField alloc] init];
+        self.textfiled.delegate = target;
+        self.textfiled.tag = indexPath.row;
+        self.textfiled.textAlignment = NSTextAlignmentLeft;
+        [self.textfiled setSecureTextEntry:YES];
+
+        switch (indexPath.row) {
+            case 0:
+                self.textLabel.text = @"输入旧密码";
+                self.textfiled.placeholder = @"请输入6-16位数字及字母";
+                [self.contentView addSubview:self.textfiled];
+                break;
+            case 1:
+                self.textLabel.text = @"设置新密码";
+                self.textfiled.placeholder = @"请输入6-16位数字及字母";
+                [self.contentView addSubview:self.textfiled];
+
+                break;
+            case 2:
+                self.textLabel.text = @"确认新密码";
+                self.textfiled.placeholder = @"请再次输入您的密码";
+                [self.contentView addSubview:self.textfiled];
+                break;
+            default:
+                break;
+        }
+    }
+    [self.textfiled addTarget:target action:@selector(valueChanged:) forControlEvents:UIControlEventAllEditingEvents];
+    return self;
+}
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self.textLabel makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(kWidth(12));
+        make.centerY.equalTo(self.contentView);
+        make.width.equalTo(kWidth(80));
+    }];
+    [self.textfiled makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.textLabel.right).offset(kWidth(15));
+        make.height.equalTo(self.contentView);
+        make.right.equalTo(self.contentView);
+        make.centerY.equalTo(self.contentView);
+    }];
+    
+}
+@end

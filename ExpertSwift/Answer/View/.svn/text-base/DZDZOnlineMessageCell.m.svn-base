@@ -1,0 +1,132 @@
+//
+//  DZDZOnlineMessageCell.m
+//  Expert
+//
+//  Created by jyyl on 2017/6/14.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZDZOnlineMessageCell.h"
+@interface DZDZOnlineMessageCell()
+
+//名称
+@property (nonatomic,strong) UILabel *NameLab;
+//时间
+@property (nonatomic,strong) UILabel *timeLab;
+
+//接诊
+@property (nonatomic,strong) UIButton *replyBtn;
+
+//是否回复
+@property (nonatomic,strong) UILabel *isreplyLab;
+
+//图片
+@property (nonatomic,strong) UIImageView *commentImg;
+
+@end
+@implementation DZDZOnlineMessageCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier indexPath:(NSIndexPath *)indexPath Withtarget:(id)target
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+
+        
+        self.NameLab = [[UILabel alloc]init];
+        self.NameLab.font = [UIFont systemFontOfSize:16];
+        self.NameLab.textColor = UIColorFromRGB(0x000000);
+        self.NameLab.text = @"糖尿病饮食需要注意什么？";
+        [self.contentView addSubview:self.NameLab];
+        
+        
+        self.commentImg = [[UIImageView alloc]init];
+        [self.commentImg setImage:[UIImage imageNamed:@"MyCenter.bundle/bg_my"]];
+        
+        CGSize itemSize = CGSizeMake(JYScreenW-kWidth(24), kHeight(130));
+        //1.开启上下文,创建一个基于位图的上下文（context) size为新创建的位图上下文的大小; opaque—透明开关，如果图形完全不用透明，设置为YES以优化位图的存储; scale参数是缩放比例
+        UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
+       
+        CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
+         //2.绘制图片
+        //drawInRect:把图像画到了当前的image context里，这时就完成了解压缩和重采样的工作了。然后再从image context里获取新的image，这个image的缩放比例也能正确地和设备匹配。
+        [self.commentImg.image drawInRect:imageRect];
+       //3.从上下文中获取新图片
+        self.commentImg.image = UIGraphicsGetImageFromCurrentImageContext();
+       //4.关闭图形上下文
+        UIGraphicsEndImageContext();
+        [self.contentView addSubview:self.commentImg];
+        
+        self.timeLab = [[UILabel alloc]init];
+        self.timeLab.font = [UIFont systemFontOfSize:12];
+        self.timeLab.textColor = UIColorFromRGB(0x000000);
+        self.timeLab.text = @"2017-06-12";
+        self.timeLab.numberOfLines = 0;
+        [self.contentView addSubview:self.timeLab];
+        
+        self.isreplyLab = [[UILabel alloc]init];
+        self.isreplyLab.font = [UIFont systemFontOfSize:12];
+        self.isreplyLab.textColor = UIColorFromRGB(0x000000);
+        self.isreplyLab.text = @"已回复";
+        [self.contentView addSubview:self.isreplyLab];
+
+        self.replyBtn  = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [self.replyBtn setTitle:@"回复" forState:UIControlStateNormal];
+        self.replyBtn.tag = indexPath.row;
+        [self.replyBtn addTarget:target action:@selector(replyMessage:) forControlEvents:UIControlEventTouchUpInside];
+//        [self.replyBtn.layer setBorderColor:UIColorFromRGB(0x46A0E3).CGColor];
+//        [self.replyBtn.layer setBorderWidth:1];
+//        [self.replyBtn.layer setMasksToBounds:YES];
+//        [self.replyBtn.layer setCornerRadius:2.0];
+        [self.replyBtn setBackgroundImage:[UIImage imageNamed:@"Answer.bundle/btn_primary_wireframe_click"] forState:UIControlStateNormal];
+        [self.replyBtn setBackgroundImage:[UIImage imageNamed:@"Answer.bundle/btn_disable"] forState:UIControlStateDisabled];
+
+        [self.replyBtn setTitleColor:UIColorFromRGB(0x46A0E3) forState:UIControlStateNormal];
+        [self.contentView addSubview:self.replyBtn];
+    }
+    return self;
+    
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    
+    [self.NameLab makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.contentView).offset(kHeight(12));
+        make.left.equalTo(self.contentView).offset(kWidth(12));
+        
+    }];
+    
+    [self.commentImg makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.contentView);
+        make.height.mas_equalTo(kHeight(130));
+        make.left.equalTo(self.contentView).offset(kWidth(12));
+        make.right.equalTo(self.contentView).offset(-kWidth(12));
+    }];
+    
+
+    [self.timeLab makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.contentView).offset(-kHeight(12));
+        make.left.equalTo(self.contentView).offset(kWidth(12));
+        
+    }];
+    
+
+    [self.isreplyLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.timeLab.right).offset(kWidth(13.5));
+        make.centerY.equalTo(self.timeLab);
+    }];
+    
+    
+    [self.replyBtn makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.contentView).offset(-kWidth(16));
+        make.centerY.equalTo(self.isreplyLab);
+        make.height.mas_equalTo(kHeight(26));
+        make.width.mas_equalTo(kWidth(50));
+        
+        
+    }];
+}
+
+
+@end

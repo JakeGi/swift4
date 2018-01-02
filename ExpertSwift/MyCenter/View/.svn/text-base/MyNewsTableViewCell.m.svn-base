@@ -1,0 +1,121 @@
+//
+//  MyNewsTableViewCell.m
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/22.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "MyNewsTableViewCell.h"
+#import "MyNewsModel.h"
+@interface MyNewsTableViewCell()
+//cell图标
+@property (nonatomic,strong)UIImageView *headImg;
+//cell名字
+@property (nonatomic,strong)UILabel *nameLab;
+//分组详细
+@property (nonatomic,strong)UILabel *detailLab;
+//button
+@property (nonatomic,strong)UIButton *agreeBtn;
+
+@end
+@implementation MyNewsTableViewCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
+              reuseIdentifier:(NSString *)reuseIdentifier
+                withIndexPath:(NSIndexPath *)indexPath
+                   WithTarget:(id)target
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
+        
+        self.nameLab  = [[UILabel alloc] init];
+        self.nameLab.textColor = kBlackColor;
+        self.nameLab.textAlignment = NSTextAlignmentCenter;
+        self.nameLab.font = [UIFont boldSystemFontOfSize:16];
+        [self.contentView addSubview:self.nameLab];
+        
+        self.detailLab = [[UILabel alloc] init];
+        self.detailLab.textColor = UIColorFromRGB(0x6a6a6a);
+        
+        self.detailLab.textAlignment = NSTextAlignmentCenter;
+        self.detailLab.font = [UIFont systemFontOfSize:12];
+        [self.contentView addSubview:self.detailLab];
+        
+        
+        self.headImg = [[UIImageView alloc] init];
+        [self.contentView addSubview:self.headImg];
+        
+        self.agreeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.agreeBtn setBackgroundImage:[UIImage imageNamed:@"MyCenter.bundle/btn_primary_wireframe_default"] forState:UIControlStateNormal];
+        [self.agreeBtn setBackgroundImage:[UIImage new] forState:UIControlStateDisabled];
+
+        self.agreeBtn.tag = indexPath.row;
+        [self.agreeBtn setTitleColor:UIColorFromRGB(0x77BCB6) forState:UIControlStateNormal];
+        [self.agreeBtn setTitleColor:UIColorFromRGB(0xA0A6A9) forState:UIControlStateDisabled];
+        [self.agreeBtn addTarget:target action:@selector(agree:) forControlEvents:UIControlEventTouchUpInside];
+        [self.contentView addSubview:self.agreeBtn];
+        
+    }
+    return self;
+    
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self.headImg makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(kWidth(15));
+        make.width.equalTo(kWidth(44));
+        make.height.equalTo(kHeight(44));
+        make.centerY.equalTo(self.contentView);
+        
+    }];
+
+    [self.headImg layoutRoundImage:kWidth(22)];
+    [self.nameLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.headImg.right).offset(kWidth(15));
+        make.top.equalTo(self.contentView).offset(kHeight(10));
+    }];
+    
+    [self.detailLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.headImg.right).offset(kWidth(15));
+        make.bottom.equalTo(self.contentView).offset(-kHeight(10));
+    }];
+    
+    [self.agreeBtn makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.contentView);
+        make.right.equalTo(self.contentView).offset(-kWidth(15));
+        make.width.equalTo(kWidth(60));
+        make.height.equalTo(kHeight(26));
+    }];
+}
+#pragma mark - 模型赋值
+- (void)setModel:(MyNewsModel *)model
+{
+    _model = model;
+    [UIImageView SDimageWithImageView:self.headImg withUrl:_model.photoMini withPlaceholderImg:[UIImage imageNamed:@"MyCenter.bundle/img_avatar_default_lg"] withLoadErrorImg:[UIImage imageNamed:@"MyCenter.bundle/img_failtoload_lg"]];
+    self.nameLab.text = _model.name;
+    if (_model.remarks.length==0) {
+        
+        self.detailLab.text = _model.message;
+    }else{
+        self.detailLab.text = _model.remarks;
+
+    }
+    if ([_model.issuccess isEqualToString:@"0"]) {
+        
+        self.agreeBtn.enabled = NO;
+        [self.agreeBtn setTitle:@"已读" forState:UIControlStateDisabled];
+
+    }else if ([_model.issuccess isEqualToString:@"1"]){
+        self.agreeBtn.enabled = YES;
+        [self.agreeBtn setTitle:@"未读" forState:UIControlStateNormal];
+
+    }else{
+        self.agreeBtn.enabled = NO;
+        [self.agreeBtn setTitle:@"已读" forState:UIControlStateDisabled];
+
+    }
+}
+@end

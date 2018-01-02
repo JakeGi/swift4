@@ -1,0 +1,73 @@
+//
+//  DZHomeListCell.m
+//  Expert
+//
+//  Created by jyyl on 2017/6/14.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZHomeListCell.h"
+@interface DZHomeListCell()
+
+
+@property (nonatomic,strong) UIImageView *listImg;
+
+@property (nonatomic,strong) UIImageView *listArrow;
+
+@property (nonatomic,strong) UILabel *listName;
+
+@property (nonatomic,strong) UILabel *listDetile;
+
+@end
+@implementation DZHomeListCell
+
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier indexPath:(NSIndexPath *)indexPath
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
+        self.listImg = [[UIImageView alloc]init];
+        [self.listImg setImage:[UIImage imageNamed:@"Home.bundle/ico_schedule"]];
+        [self.contentView addSubview:self.listImg];
+        
+        self.listName = [[UILabel alloc]init];
+        self.listName.font = [UIFont systemFontOfSize:16];
+        self.listName.textColor = UIColorFromRGB(0x000000);
+        self.listName.text = @"五招教你克服焦虑症";
+        [self.contentView addSubview:self.listName];
+        
+        self.listDetile = [[UILabel alloc]init];
+        self.listDetile.font = [UIFont systemFontOfSize:13];
+        self.listDetile.textColor = UIColorFromRGB(0x000000);
+        self.listDetile.text = @"五招教你克服焦虑症";
+        self.listDetile.numberOfLines = 0;
+        [self.contentView addSubview:self.listDetile];
+    }
+    return self;
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [self.listImg makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(kWidth(12));
+        make.width.mas_equalTo(kHeight(60));
+        make.height.mas_equalTo(kHeight(60));
+        make.centerY.equalTo(self.contentView);
+    }];
+    
+    [self.listName makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.contentView).offset(kHeight(13));
+        make.left.equalTo(self.listImg.right).offset(kWidth(12));
+        
+    }];
+    
+    [self.listDetile makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.listName.bottom).offset(kHeight(10));
+        make.left.equalTo(self.listImg.right).offset(kWidth(12));
+        make.right.equalTo(self.contentView.right).offset(-kWidth(33.5));
+
+    }];
+}
+
+@end

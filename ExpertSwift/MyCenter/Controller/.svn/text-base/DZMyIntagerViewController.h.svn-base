@@ -1,0 +1,13 @@
+//
+//  DZMyIntagerViewController.h
+//  Police
+//
+//  Created by 陈刚 on 17/6/8.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface DZMyIntagerViewController : UIViewController
+
+@end

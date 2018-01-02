@@ -1,0 +1,200 @@
+//
+//  changePaswViewController.m
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/15.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "changePaswViewController.h"
+#import "changePswdTableViewCell.h"
+@interface changePaswViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
+//tableview
+@property (nonatomic,strong)UITableView *Tableview;
+//新密码
+@property (nonatomic,copy)NSString *PasswordStr;
+//旧密码
+@property (nonatomic,copy)NSString *oldPassword;
+//确认密码
+@property (nonatomic,copy)NSString *surePassword;
+//保存按钮
+@property (nonatomic,strong)UIButton *subMitBtn;
+
+@end
+
+@implementation changePaswViewController
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.navigationItem.title = @"修改密码";
+    self.view.backgroundColor = kWhiteColor;
+    //设置界面
+    [self setUI];
+    
+}
+
+#pragma mark - 界面设置
+-(void)setUI
+{
+    //创建列表
+    //添加tabbleview
+    self.Tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, JYScreenW, JYScreenH-64) style:UITableViewStyleGrouped];
+    self.Tableview.showsVerticalScrollIndicator = NO;
+    self.Tableview.delegate = self;
+    self.Tableview.dataSource = self;
+    
+    self.Tableview.backgroundColor = UIColorFromRGB(0xEBEBEB);
+    [self.view addSubview:_Tableview];
+    
+    _subMitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_subMitBtn setTitle:@"保存修改" forState:UIControlStateNormal];
+    [_subMitBtn setTitleColor:kWhiteColor forState:UIControlStateNormal];
+    [_subMitBtn setBackgroundImage:[UIImage imageNamed:@"MyCenter.bundle/btn_primary_default"] forState:UIControlStateNormal];
+    [_subMitBtn setBackgroundImage:[UIImage imageNamed:@"MyCenter.bundle/btn_disable"] forState:UIControlStateDisabled];
+    _subMitBtn.enabled = NO;
+    [_subMitBtn addTarget:self action:@selector(save) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_subMitBtn];
+    
+    [_subMitBtn makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(kHeight(44));
+        make.left.equalTo(self.view).offset(kWidth(12));
+        make.right.equalTo(self.view).offset(-kWidth(12));
+        make.centerY.equalTo(self.Tableview).offset(-kHeight(32));
+    }];
+
+}
+#pragma mark-<UITableViewDataSource>
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 3;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    changePswdTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (cell == nil) {
+        cell = [[changePswdTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell" withIndexPath:indexPath WithTarget:self];
+    }
+    return cell;
+}
+
+#pragma mark-<UITableViewDelegate>
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return kHeight(44);
+    
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    switch (indexPath.row) {
+        case 0:
+            
+            break;
+        case 1:
+            
+            break;
+        case 2:
+            
+            break;
+        case 3:
+            
+            break;
+        default:
+            
+            
+            break;
+    }
+}
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (range.length ==0&& range.location>15) {
+        
+        return NO;
+    }
+    return YES;
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+//    if (textField.text.length<6) {
+//        [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"请输入6-16位数字及字母" withDismissTime:1.2 withControl:self];
+//    }
+}
+#pragma mark - 输入
+- (void)valueChanged:(UITextField *)tf
+{
+    switch (tf.tag) {
+        case 0:
+            self.oldPassword = tf.text;
+            JYLog(@"%f%@",tf.tag,tf.text);
+            break;
+        case 1:
+            JYLog(@"%f%@",tf.tag,tf.text);
+            self.PasswordStr = tf.text;
+            break;
+        case 2:
+            JYLog(@"%f%@",tf.tag,tf.text);
+            self.surePassword = tf.text;
+            break;
+        default:
+            break;
+    }
+
+    if (self.surePassword.length>5&self.oldPassword.length>5&self.PasswordStr.length>5) {
+        self.subMitBtn.enabled = YES;
+    }else{
+        self.subMitBtn.enabled = NO;
+
+    }
+}
+#pragma mark - 保存
+- (void)save
+{
+    if (![self.PasswordStr isEqualToString:self.surePassword]) {
+        [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"两次密码不一致" withDismissTime:1.2 withControl:self];
+        
+    }else{
+        NSDictionary *userInfo = [[chiveDataManager sharedChive] unarchivewithPath:@"userInfo"];
+        NSMutableDictionary *mutableDic=[NSMutableDictionary dictionary];
+        mutableDic[@"token"] = [userInfo objectForKey:@"token"];
+        mutableDic[@"newPassword"] = self.PasswordStr;
+        mutableDic[@"oldPassword"] = self.oldPassword;
+        [NetWorkRequest sendRequestWithUrl:resetPasswordByLoginUrl withParameters:mutableDic withType:@"post" success:^(id responseObject) {
+            JYLog(@"%@",responseObject);
+            if ([[responseObject objectForKey:@"code"] isEqualToString:@"001004"]) {
+                [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:[responseObject objectForKey:@"message"] withDismissTime:1.2 withControl:self withDisHandler:^{
+                    [self.navigationController popViewControllerAnimated:YES];
+                }];
+            }else if ([[responseObject objectForKey:@"code"] isEqualToString:loginTimeout]){
+                //登录超时
+                [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"登录超时，请重新登录!" actionTitle:@"重新登录" withControl:self withHandler:^{
+                    [Mediator loginOutWithLoginClass:@"LoginViewController" withNavC:@"JYNavigationContrller"];
+                    
+                }];
+            }else{
+                [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:[responseObject objectForKey:@"message"] withDismissTime:1 withControl:self];
+            }
+            
+        } failure:^(NSError *error) {
+            
+            JYLog(@"%@",error);
+            
+        }];
+    
+    }
+
+}
+@end

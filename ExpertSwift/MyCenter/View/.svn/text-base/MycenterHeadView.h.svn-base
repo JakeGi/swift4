@@ -1,0 +1,17 @@
+//
+//  MycenterHeadView.h
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/2.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface MycenterHeadView : UITableViewHeaderFooterView
+//数据
+@property (nonatomic,strong)NSDictionary *userInfoDic;
+- (instancetype)initWithFrame:(CGRect)frame WithTarget:(id)target;
+@property(nonatomic,strong) UILabel *titleLab;
+;
+@end

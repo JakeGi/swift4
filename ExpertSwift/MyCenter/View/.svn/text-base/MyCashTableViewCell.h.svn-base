@@ -1,0 +1,17 @@
+//
+//  MyCashTableViewCell.h
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/15.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+@class TransactionRecordsModel;
+@class useCashModel;
+@interface MyCashTableViewCell : UITableViewCell
+//钱包使用模型
+@property (nonatomic,strong)TransactionRecordsModel *model;
+//琪币模型
+@property (nonatomic,strong)useCashModel *cashModel;
+@end

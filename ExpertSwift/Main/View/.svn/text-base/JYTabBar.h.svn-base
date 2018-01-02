@@ -1,0 +1,21 @@
+//
+//  JYTabBar.h
+//  miaoyi
+//
+//  Created by 陈刚 on 16/8/20.
+//  Copyright © 2016年 jinyiyanglao. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+@class JYTabBar;
+@protocol JYTabBarDelegate <NSObject>
+- (void)tabBar:(JYTabBar *)tabBar selButtonIndex:(NSInteger)index;
+@end
+
+@interface JYTabBar : UIView
+/** item数组*/
+@property(nonatomic,strong)NSMutableArray *itemArray;
+
+/** 代理*/
+@property(nonatomic,weak)id<JYTabBarDelegate> delegate;
+@end

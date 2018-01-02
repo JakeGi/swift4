@@ -1,0 +1,19 @@
+//
+//  MyNewsTableViewCell.h
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/22.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+@class MyNewsModel;
+@interface MyNewsTableViewCell : UITableViewCell
+//我的信息
+@property (nonatomic,strong)MyNewsModel  *model;
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
+              reuseIdentifier:(NSString *)reuseIdentifier
+                withIndexPath:(NSIndexPath *)indexPath
+                   WithTarget:(id)target;
+
+@end

@@ -1,0 +1,6 @@
+framework module Pods_ExpertSwift {
+  umbrella header "Pods-ExpertSwift-umbrella.h"
+
+  export *
+  module * { export * }
+}

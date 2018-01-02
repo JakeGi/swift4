@@ -1,0 +1,14 @@
+//
+//  newsCenterViewController.h
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/22.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface newsCenterViewController : UIViewController
+//展示消息界面 0 我的消息 3 系统消息
+@property (nonatomic,strong)NSString *newsType;
+@end

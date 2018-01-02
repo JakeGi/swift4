@@ -1,0 +1,129 @@
+//
+//  newsCenterViewController.m
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/22.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "newsCenterViewController.h"
+#import "MyNewsTableViewCell.h"
+#import "systemNewsTableViewCell.h"
+#import "MyNewsModel.h"
+#import "SystemNewsModel.h"
+
+#import "myNewsViewController.h"
+#import "systemNewsViewController.h"
+@interface newsCenterViewController ()<UIScrollViewDelegate>
+//滑动scrollview
+@property(nonatomic,strong)UIScrollView *scrollView;
+//seg
+@property (nonatomic,strong)UISegmentedControl *seg;
+
+@end
+
+@implementation newsCenterViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    //添加子控制器
+    myNewsViewController *my = [[myNewsViewController alloc] init];
+    [self addChildViewController:my];
+    systemNewsViewController *sys = [[systemNewsViewController alloc] init];
+    [self addChildViewController:sys];
+    
+    //添加内容scollview;
+    [self setUpscrollview];
+    //设置界面
+    [self creatUI];
+
+}
+#pragma mark - 添加横向导航栏
+/**
+ *  底部内容scollView
+ */
+- (void)setUpscrollview
+{
+
+    UIScrollView *contentView = [[UIScrollView alloc] init];
+    contentView.frame = CGRectMake(0,0, JYScreenW, JYScreenH - 64);
+    contentView.delegate = self;
+    contentView.pagingEnabled = YES;
+    //将scollview插入到view的最底层中;
+    [self.view insertSubview:contentView atIndex:0];
+    
+    //设置scollView的区域
+    contentView.contentSize = CGSizeMake(contentView.JY_width *self.childViewControllers.count, 0);
+    self.scrollView = contentView;
+    self.scrollView.backgroundColor = kWhiteColor;
+    self.scrollView.showsVerticalScrollIndicator = NO;
+    self.scrollView.showsHorizontalScrollIndicator = NO;
+    //默认添加第一个控制器
+    [self scrollViewDidEndScrollingAnimation:contentView];
+    
+}
+#pragma mark- <UIScrollViewDelegate>
+/**
+ *
+ *
+ *  @param scrollView 动画结束调用
+ */
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    //添加子控制器
+    //取出相对应的索引
+    NSInteger index = scrollView.contentOffset.x / scrollView.JY_width;
+    //取出自控制器
+    UIViewController *vc = self.childViewControllers[index];
+    vc.view.JY_x = scrollView.contentOffset.x;
+    vc.view.JY_y = 0;//设置控制器的列表y为0
+    vc.view.JY_height = scrollView.JY_height;
+    [scrollView addSubview:vc.view];
+}
+/**
+ *  滑动开始减速
+ *
+ *  @param scrollView
+ */
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    //调用动画结束的方法
+    [self scrollViewDidEndScrollingAnimation:scrollView];
+    //点击选择按钮
+    NSInteger index = scrollView.contentOffset.x / scrollView.JY_width;
+    self.seg.selectedSegmentIndex = index;
+}
+
+#pragma mark - 界面布局
+- (void)creatUI
+{
+    //设置导航条标题控件
+    UISegmentedControl *seg = [[UISegmentedControl alloc] initWithItems:@[@"我的消息",@"系统消息"]];
+    self.seg = seg;
+    seg.JY_width += 40;
+    //设置UISegmentedControl背景图片
+    [seg setBackgroundImage:[UIImage imageNamed:@"MyCenter.bundle/bg_segmentedctrol_g_ios"] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
+    [seg setBackgroundImage:[UIImage imageNamed:@"MyCenter.bundle/bg_segmentedctrol_w_ios"] forState:UIControlStateSelected barMetrics:UIBarMetricsDefault];
+    //默认选择第一个
+    seg.tintColor = [UIColor whiteColor];
+    seg.selectedSegmentIndex = 0;
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    dict[NSForegroundColorAttributeName] = kColor(59, 80, 141, 1);
+    [seg setTitleTextAttributes:dict forState:UIControlStateSelected];
+    
+    [seg addTarget:self action:@selector(action:) forControlEvents:UIControlEventValueChanged];
+    
+    self.navigationItem.titleView = seg;
+    
+}
+#pragma mark - 点击标题切换下部tableview
+- (void)action:(UISegmentedControl *)seg
+{
+    // 滚动
+    CGPoint offset = self.scrollView.contentOffset;
+    offset.x = seg.selectedSegmentIndex * self.scrollView.JY_width;
+    [self.scrollView setContentOffset:offset animated:YES];
+}
+
+@end

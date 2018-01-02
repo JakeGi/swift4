@@ -1,0 +1,13 @@
+//
+//  JYTabBarButton.h
+//  miaoyi
+//
+//  Created by 陈刚 on 16/8/20.
+//  Copyright © 2016年 jinyiyanglao. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface JYTabBarButton : UIButton
+@property (nonatomic,strong)UIButton *button;
+@end

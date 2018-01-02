@@ -1,0 +1,22 @@
+//
+//  MyInfoTableViewCell.h
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/9.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface MyInfoTableViewCell : UITableViewCell
+
+//cell展示属性
+@property (nonatomic,strong)NSDictionary *cellDic;
+
+
+@property (nonatomic,strong)UITextField *textField;
+
+@property (nonatomic,strong)UIImageView *headImage;
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier withIndexPath:(NSIndexPath *)indexPath withTarget:(id)target;
+@end

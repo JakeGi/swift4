@@ -1,0 +1,20 @@
+//
+//  PerfectInfoMessageCell.h
+//  qierkang
+//
+//  Created by jyyl on 17/4/12.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface PerfectInfoMessageCell : UITableViewCell<UITextFieldDelegate>
++ (instancetype)cellWithTableView:(UITableView *)tableView
+                    withIndexPath:(NSIndexPath *)indexPath
+                       withTarget:(id)target;
+
+
+@property(nonatomic,strong)UITextField *textfiled;
+@property(nonatomic,strong)UILabel *nameLab;
+
+@end

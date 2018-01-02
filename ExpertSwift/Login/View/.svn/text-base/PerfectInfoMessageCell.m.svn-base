@@ -1,0 +1,90 @@
+//
+//  PerfectInfoMessageCell.m
+//  qierkang
+//
+//  Created by jyyl on 17/4/12.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "PerfectInfoMessageCell.h"
+
+@implementation PerfectInfoMessageCell
+
+
+//初始化cell
++ (instancetype)cellWithTableView:(UITableView *)tableView
+                    withIndexPath:(NSIndexPath *)indexPath
+                       withTarget:(id)target
+{
+    PerfectInfoMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"%ld%ld",indexPath.section,indexPath.row]];
+    if (cell ==nil) {
+        cell = [[PerfectInfoMessageCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:[NSString stringWithFormat:@"%ld%ld",indexPath.section,indexPath.row] withIndexPath:indexPath withTarget:target];
+    }
+    cell.selectionStyle =  UITableViewCellSelectionStyleNone;
+    
+    return cell;
+    
+}
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier withIndexPath:(NSIndexPath *)indexPath withTarget:(id)target;
+{
+    
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]){
+        self.textfiled = [[UITextField alloc] init];
+        self.textfiled.delegate = target;
+        self.textfiled.tag = indexPath.row;
+        [self.textfiled addTarget:target action:@selector(textFieldChangeWithText:) forControlEvents:UIControlEventAllEvents];
+
+        self.textfiled.textAlignment = NSTextAlignmentLeft;
+        [self.contentView addSubview:self.textfiled];
+
+        self.nameLab = [[UILabel alloc]init];
+        _nameLab.textAlignment = NSTextAlignmentCenter;
+        [self.contentView addSubview:self.nameLab];
+
+        switch (indexPath.row) {
+            case 0:
+                self.nameLab.text = @"性别";
+                self.textfiled.placeholder = @"请选择";
+                
+                break;
+            case 1:
+                self.nameLab.text = @"生日";
+
+                self.textfiled.placeholder = @"请选择";
+                self.textfiled.keyboardType = UIKeyboardTypeNumberPad;
+                
+                break;
+            case 2:
+                self.nameLab.text = @"身高";
+                self.textfiled.placeholder = @"请选择";
+                break;
+            default:
+                break;
+        }
+    }
+    return self;
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    
+    [_nameLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(kWidth(20));
+        make.centerY.equalTo(self.contentView);
+        make.height.equalTo(self.contentView);
+    }];
+    [self.textfiled makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.contentView).offset(-kWidth(20));
+        make.centerY.equalTo(self.contentView);
+        make.height.equalTo(self.contentView);
+        make.left.equalTo(self.nameLab.right).offset(kWidth(20));
+    }];
+    
+    
+    
+}
+
+@end

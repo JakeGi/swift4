@@ -1,0 +1,13 @@
+//
+//  DZSignModel.m
+//  Police
+//
+//  Created by 陈刚 on 17/6/13.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZSignModel.h"
+
+@implementation DZSignModel
+
+@end

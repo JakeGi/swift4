@@ -1,0 +1,206 @@
+//
+//  DZAnswerViewController.m
+//  Expert
+//
+//  Created by jyyl on 2017/6/14.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZAnswerViewController.h"
+#import "DZBookingistoryViewController.h"
+#import "DZOnlineMessageViewController.h"
+#import "DZMyeservationViewController.h"
+#define BtnCount 3
+
+@interface DZAnswerViewController ()<UIScrollViewDelegate>
+/** 按钮底部标示*/
+@property(nonatomic,strong)UIView *indicatorView;
+/** 当前选中按钮*/
+@property(nonatomic,strong)UIButton *currentBtn;
+/** 顶部的所有标签 */
+@property (nonatomic, weak) UIView *titlesView;
+/** scollview*/
+@property(nonatomic,strong)UIScrollView *contentView;
+@end
+
+@implementation DZAnswerViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.view.backgroundColor = kWhiteColor;
+    self.navigationItem.title = @"民警健康";
+    //添加搜索
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initCreatRightItemWithNormalImg:[UIImage imageNamed:@"Answer.bundle/ico_messagealert"] HightImg:[UIImage imageNamed:@"Answer.bundle/ico_messagealert"] withTitle:nil withTitleColor:kWhiteColor withTarget:self withAction:@selector(newsMessage)];
+    
+    //添加子控制器
+    DZMyeservationViewController *DZProblem = [[DZMyeservationViewController alloc] init];
+    [self addChildVc:DZProblem withTitle:@"我的预约"];
+    DZOnlineMessageViewController *newslist = [[DZOnlineMessageViewController alloc] init];
+    
+    [self addChildVc:newslist withTitle:@"在线留言"];
+    
+    DZBookingistoryViewController *DZAppointment = [[DZBookingistoryViewController alloc] init];
+    
+    [self addChildVc:DZAppointment withTitle:@"预约历史"];
+    //添加内容scollview;
+    [self setUpscrollview];
+    //设置顶部标签View
+    [self setUpTitleView];
+
+}
+
+#pragma mark - 添加自控制器
+-(void)addChildVc:(UIViewController *)vc withTitle:(NSString *)title
+{
+    vc.navigationItem.title = title;
+    vc.title = title;
+    [self  addChildViewController:vc];
+    
+}
+#pragma mark - 添加横向导航栏
+/**
+ *  底部内容scollView
+ */
+- (void)setUpscrollview
+{
+    UIScrollView *contentView = [[UIScrollView alloc] init];
+    contentView.frame = CGRectMake(0, kHeight(44), JYScreenW, JYScreenH - 64 - kHeight(44));
+    contentView.delegate = self;
+    contentView.pagingEnabled = YES;
+    //将scollview插入到view的最底层中;
+    [self.view insertSubview:contentView atIndex:0];
+    
+    //设置scollView的区域
+    contentView.contentSize = CGSizeMake(contentView.JY_width *self.childViewControllers.count, 0);
+    self.contentView = contentView;
+    self.contentView.backgroundColor = kWhiteColor;
+    self.contentView.showsVerticalScrollIndicator = NO;
+    self.contentView.showsHorizontalScrollIndicator = NO;
+    //默认添加第一个控制器
+    [self scrollViewDidEndScrollingAnimation:contentView];
+    
+}
+#pragma mark - 添加横向导航栏
+/**
+ *  添加上部标签整体
+ */
+- (void)setUpTitleView
+{
+    //标签栏整体
+    UIView *titleView = [[UIView alloc] init];
+    titleView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
+    titleView.JY_width = JYScreenW;
+    titleView.JY_height = kHeight(44);
+    titleView.JY_y = 0;
+    [self.view addSubview:titleView];
+    self.titlesView = titleView;
+    
+//    //添加按钮底部view
+//    UIView *indicatorView = [[UIView alloc] init];
+//    indicatorView.backgroundColor = UIColorFromRGB(0x46A0E3);
+//    indicatorView.JY_height = 2;
+//    indicatorView.JY_y = titleView.JY_height - indicatorView.JY_height;
+//    self.indicatorView = indicatorView;
+    
+    //添加子标签
+    CGFloat width = titleView.JY_width / BtnCount;
+    for (NSInteger i =0; i <BtnCount; i++) {
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.JY_height = titleView.JY_height;
+        button.JY_width = width;
+        button.JY_x = i*width;
+        button.tag = i;
+        UIViewController *vc = self.childViewControllers[i];
+        [button setTitle:vc.title forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [button setTitleColor:UIColorFromRGB(0x46A0E3) forState:UIControlStateDisabled];
+        [button setBackgroundColor:UIColorFromRGB(0xEEEEEE)];
+        button.titleLabel.font = [UIFont systemFontOfSize:16];
+        
+        [button addTarget:self action:@selector(titleClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [titleView addSubview:button];
+        //默认讯中第一个按钮
+        if (i == 0) {
+            button.enabled  = NO;
+            self.currentBtn = button;
+            [self.currentBtn setBackgroundColor:kWhiteColor];
+
+            [button.titleLabel sizeToFit];
+//            self.indicatorView.JY_width = button.JY_width;
+//            self.indicatorView.JY_centerX = button.JY_centerX;
+            
+        }
+    }
+//    [titleView addSubview:indicatorView];
+    
+}
+/**
+ *  点击标签
+ *
+ *  @param button
+ */
+- (void)titleClick:(UIButton *)button
+{
+    //修改按钮状态
+    button.enabled = NO;
+    [self.currentBtn setBackgroundColor:UIColorFromRGB(0xEEEEEE)];
+
+    [button setBackgroundColor:kWhiteColor];
+
+    self.currentBtn.enabled = YES;
+    self.currentBtn = button;
+    
+    button.titleLabel.JY_height = button.titleLabel.JY_height*1.2;
+    //按钮下部标示滑动动画
+//    [UIView animateWithDuration:0.25 animations:^{
+//        self.indicatorView.JY_width = button.JY_width;
+//        self.indicatorView.JY_centerX = button.JY_centerX;
+//    }];
+    // 滚动
+    CGPoint offset = self.contentView.contentOffset;
+    offset.x = button.tag * self.contentView.JY_width;
+    [self.contentView setContentOffset:offset animated:YES];
+}
+#pragma mark- <UIScrollViewDelegate>
+/**
+ *
+ *
+ *  @param scrollView 动画结束调用
+ */
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
+    //添加子控制器
+    //取出相对应的索引
+    NSInteger index = scrollView.contentOffset.x / scrollView.JY_width;
+    
+    //取出自控制器
+    UIViewController *vc = self.childViewControllers[index];
+    vc.view.JY_x = scrollView.contentOffset.x;
+    vc.view.JY_y = 0;//设置控制器的列表y为0(默认为20)
+    vc.view.JY_height = scrollView.JY_height;
+    [vc viewWillAppear:YES];
+    [scrollView addSubview:vc.view];
+    
+}
+/**
+ *  滑动开始减速
+ *
+ *  @param scrollView
+ */
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    //调用动画结束的方法
+    [self scrollViewDidEndScrollingAnimation:scrollView];
+    
+    //点击选择按钮
+    NSInteger index = scrollView.contentOffset.x / scrollView.JY_width;
+    //调用点击按钮的方法,传送参数为此时标签对应的子view
+    [self titleClick:self.titlesView.subviews[index]];
+}
+- (void)newsMessage
+{
+    [Mediator pushToControll:@"BaseNewsTableViewController" withPropertyValueDic:(NSMutableDictionary *)@{@"type":@"3"}];
+
+}
+@end

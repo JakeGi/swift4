@@ -1,0 +1,266 @@
+//
+//  DZMyIntagerViewController.m
+//  Police
+//
+//  Created by 陈刚 on 17/6/8.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZMyIntagerViewController.h"
+#import "MyEBHeadView.h"
+#import "MyCashTableViewCell.h"
+#import "useCashModel.h"
+@interface DZMyIntagerViewController ()<UITableViewDelegate,UITableViewDataSource>
+@property(nonatomic,strong)UITableView *tableView;
+
+//headView
+@property (nonatomic,strong)MyEBHeadView *headView;
+
+//数据
+@property (nonatomic,strong)NSMutableArray *historyArr;
+
+//allPages
+@property (nonatomic,strong)NSString *allPages;
+
+//页数
+@property (nonatomic,assign)int pages;
+/** 请求参数*/
+@property(nonatomic,strong)NSDictionary *params;
+
+//导航栏图片
+@property (nonatomic,strong)UIImageView *navImgV;
+//琪币积分
+@property (nonatomic,strong)NSString *userIntegral;
+/**排名*/
+@property (nonatomic,strong)NSString *sort;
+@end
+
+@implementation DZMyIntagerViewController
+
+- (NSMutableArray *)historyArr
+{
+    if (_historyArr == nil) {
+        _historyArr = [NSMutableArray array];
+    }
+    return _historyArr;
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.navigationItem.title = @"我的积分";
+    self.view.backgroundColor = UIColorFromRGB(0xf7f7f8);
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    //默认状态显示界面数据
+    [self createUI];
+    //添加刷新控件
+    [self setUpRefresh];
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    //开始刷新
+    [self.tableView.mj_header beginRefreshing];
+    
+    _navImgV = self.navigationController.navigationBar.subviews.firstObject;
+    _navImgV.alpha = 0;
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    _navImgV.alpha = 1;
+}
+
+#pragma mark - 创建UI界面
+-(void)createUI{
+    
+    UITableView *tableView=[[UITableView alloc]initWithFrame:CGRectMake(0,kHeight(100), JYScreenW, JYScreenH-kHeight(100)-64) style:UITableViewStylePlain];
+    
+    self.tableView = tableView;
+    self.tableView.backgroundColor = UIColorFromRGB(0xf7f7f8);
+    
+    [self.view addSubview:self.tableView];
+    
+    _headView = [[MyEBHeadView alloc] initWithTarget:self WithFrame:CGRectMake(0, -64, JYScreenW, kHeight(100)+64)];
+    
+    [self.view addSubview:_headView];
+    
+    self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+}
+#pragma mark - 设置刷新控件
+- (void)setUpRefresh
+{
+    //下拉刷新控件
+    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(getHistory)];
+    // 控制下拉刷新显示,最开始位置透明度0，完全透明,自动感应透明度
+    self.tableView.mj_header.automaticallyChangeAlpha = YES;
+    
+    self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(getMoreHistory)];
+    
+    self.tableView.mj_footer.automaticallyHidden = YES;
+    self.tableView.mj_footer.automaticallyChangeAlpha = YES;
+}
+
+#pragma mark -  设置数据
+- (void)setHeadViewData
+{
+    _headView.userInfoDic = @{@"integral":self.userIntegral,@"ranking":self.sort};
+    
+}
+#pragma mark - 刷新界面
+-(void)getHistory
+{
+    self.pages = 1;
+    NSMutableDictionary *param = [NSMutableDictionary dictionary];
+    NSDictionary *dic = [[chiveDataManager sharedChive] unarchivewithPath:@"userInfo"];
+    param[@"token"] = [dic objectForKey:@"token"];
+    param[@"page"] = [NSString stringWithFormat:@"%d",self.pages];
+    param[@"rows"] = @"10";
+
+    self.params = param;
+    
+    [NetWorkRequest sendRequestWithUrl:searchUserIntegralListUrl withParameters:param withType:@"post" success:^(id responseObject) {
+        //如果请求不同不刷新列表
+        if (self.params != param) return ;
+        
+        JYLog(@"%@",responseObject);
+        self.userIntegral = [responseObject objectForKey:@"userIntegral"];
+        self.sort = [responseObject objectForKey:@"sort"];
+        if ([[responseObject objectForKey:@"code"] isEqualToString:@"001000"]) {
+            CGFloat section = [[responseObject objectForKey:@"total"] integerValue]/10.0;
+            self.allPages = [NSString stringWithFormat:@"%f",ceil(section)];
+            self.historyArr = [useCashModel mj_objectArrayWithKeyValuesArray:[responseObject objectForKey:@"integralList"]];
+
+        }else if ([[responseObject objectForKey:@"code"] isEqualToString:loginTimeout]){
+            //登录超时
+            [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"登录超时，请重新登录!" actionTitle:@"重新登录" withControl:self withHandler:^{
+                [Mediator loginOutWithLoginClass:@"LoginViewController" withNavC:@"JYNavigationContrller"];
+                
+            }];
+        }else{
+            [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:[responseObject objectForKey:@"message"] withDismissTime:1 withControl:self];
+        }
+        //设置数据
+        [self setHeadViewData];
+        [self.tableView reloadData];
+        [self.tableView.mj_header endRefreshing];
+        //新数据加载完成页数改为1;
+        self.pages = 1;
+        //判断页数是不是需要隐藏footer
+        self.tableView.mj_footer.hidden = self.pages>=[self.allPages intValue];
+    } failure:^(NSError *error) {
+        //如果请求不同不刷新列表
+        if (self.params != param) return ;
+        JYLog(@"%@",error);
+        [self.tableView.mj_header endRefreshing];
+        
+    }];
+    
+}
+#pragma mark - 加载更多
+-(void)getMoreHistory
+{
+    self.pages++;
+    [self.tableView.mj_header endRefreshing];
+    if (self.pages > [self.allPages intValue]) {//数据加载完毕
+        [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"已经到底了..." withDismissTime:1 withControl:self];
+        self.pages--;
+        self.tableView.mj_footer.hidden = YES;
+        [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        
+    }else{//数据加载
+        NSMutableDictionary *param = [NSMutableDictionary dictionary];
+        NSDictionary *dic = [[chiveDataManager sharedChive] unarchivewithPath:@"userInfo"];
+        param[@"token"] = [dic objectForKey:@"token"];
+        param[@"page"] = [NSString stringWithFormat:@"%d",self.pages];
+        param[@"rows"] = @"10";
+
+        self.params = param;
+        
+        [NetWorkRequest sendRequestWithUrl:getSalesRebateListUrl withParameters:param withType:@"post" success:^(id responseObject) {
+            //如果请求不同不刷新列表
+            if (self.params != param) return ;
+            
+            if ([[responseObject objectForKey:@"code"] isEqualToString:@"001007"]) {
+                
+                NSMutableArray *arr= [NSMutableArray arrayWithArray:[useCashModel mj_objectArrayWithKeyValuesArray:[responseObject objectForKey:@"list"]]];
+                
+                for (useCashModel *model in arr) {
+                    
+                    [self.historyArr addObject:model];
+                }
+                
+                [self.tableView reloadData];
+                
+            }else if ([[responseObject objectForKey:@"code"] isEqualToString:loginTimeout]){
+                //登录超时
+                [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"登录超时，请重新登录!" actionTitle:@"重新登录" withControl:self withHandler:^{
+                    [Mediator loginOutWithLoginClass:@"LoginViewController" withNavC:@"JYNavigationContrller"];
+                    
+                }];
+            }else{
+                [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:[responseObject objectForKey:@"message"] withDismissTime:1 withControl:self];
+            }
+            JYLog(@"%@",responseObject);
+            [self.tableView.mj_footer endRefreshing];
+            //判断页数是不是需要隐藏footer
+            self.tableView.mj_footer.hidden = self.pages>=[self.allPages intValue];
+            
+        } failure:^(NSError *error) {
+            
+            JYLog(@"%@",error);
+            self.pages--;
+            [self.tableView.mj_footer endRefreshing];
+        }];
+    }
+}
+
+#pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    
+    return 1;
+    
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    return  self.historyArr.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    MyCashTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (cell==nil){
+        cell=[[MyCashTableViewCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
+    }
+    cell.cashModel = self.historyArr[indexPath.row];
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return kHeight(64);
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.01;
+}
+#pragma mark - 赚取琪币
+- (void)getEB
+{
+    [Mediator pushToControll:@"healthTaskViewController"];
+    
+}
+#pragma mark - 琪币兑换
+
+- (void)changeEB
+{
+    [Mediator pushToControll:@"BaseShopListViewController" withPropertyValueDic:@{@"type":@"2",@"title":@"琪币兑换",@"type_id":@"100000"}];
+    
+}
+@end

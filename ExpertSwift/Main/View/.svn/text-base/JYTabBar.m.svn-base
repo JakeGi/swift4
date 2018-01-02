@@ -1,0 +1,151 @@
+//
+//  JYTabBar.m
+//  miaoyi
+//
+//  Created by 陈刚 on 16/8/20.
+//  Copyright © 2016年 jinyiyanglao. All rights reserved.
+//
+
+#import "JYTabBar.h"
+#import "JYTabBarButton.h"
+@interface JYTabBar ()<EMChatManagerDelegate>
+/** 选中按钮*/
+@property(nonatomic,strong)JYTabBarButton *selButton;
+//badValue
+@property (nonatomic,strong)NSString * value;
+@property (nonatomic,strong)JYTabBarButton *btn;
+@end
+
+@implementation JYTabBar
+
+- (void)setItemArray:(NSMutableArray *)itemArray
+{
+    _itemArray = itemArray;
+    [[EMClient sharedClient].chatManager removeDelegate:self];
+    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
+    
+    for (UITabBarItem *items in itemArray) {
+        JYTabBarButton *btn = [JYTabBarButton buttonWithType:UIButtonTypeCustom];
+        [btn setTitle:items.title forState:UIControlStateNormal];
+        [btn setTitle:items.title forState:UIControlStateSelected];
+//        [btn setBackgroundColor:UIColorFromRGB(0x87D3CD)];
+//        //设置颜色
+        [btn setTitleColor:kBlackColor forState:UIControlStateNormal];
+//        [btn setTitleColor:kWhiteColor forState:UIControlStateSelected];
+        [btn setImage:items.image forState:UIControlStateNormal];
+        [btn setImage:items.selectedImage forState:UIControlStateSelected];
+       
+        
+        btn.tag = self.subviews.count;
+        if (btn.tag == 3){
+            UIButton * button = [UIButton buttonWithType:UIButtonTypeCustom];
+            [button setBackgroundColor:[UIColor redColor]];
+            button.layer.cornerRadius = 10;
+            button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Semibold" size:10];
+            [btn addSubview:button];
+            [button makeConstraints:^(MASConstraintMaker *make) {
+                make.right.equalTo(btn).offset(-30);
+                make.top.equalTo(btn.top).offset(5);
+                make.width.equalTo(20);
+                make.height.equalTo(20);
+            }];
+        }
+        [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+        
+        if (self.subviews.count == 0) {
+            [self btnClick:btn];
+
+        }
+        [self addSubview:btn];
+        
+    }
+    [self didReceiveMessages:nil];
+    
+    //通知
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(didReceiveMessages:) name:@"changevalue" object:nil];
+}
+////判断选择位置
+- (void)btnClick:(JYTabBarButton *)btn
+{
+    
+    self.selButton.selected = NO;
+    
+    btn.selected = YES;
+    
+    self.selButton = btn;
+    
+    if ([self.delegate respondsToSelector:@selector(tabBar:selButtonIndex:)]) {
+
+        
+        [self.delegate tabBar:self selButtonIndex:btn.tag];
+    }
+
+}
+- (void)didReceiveMessages:(NSArray *)aMessages{
+    
+    JYLog(@"%@",aMessages);
+    
+    [self setupUnreadMessageCount];
+    
+    for (JYTabBarButton *bttn in self.subviews){
+        JYLog(@"%ld",(long)bttn.tag);
+        if (bttn.tag == 3){
+            JYLog(@"%@",bttn.subviews);
+            for (UIView *view in bttn.subviews) {
+                JYLog(@"%@",view);
+                if ([view isKindOfClass:[UIButton class]]){
+                    UIButton *b = (UIButton *)view;
+                    if (self.value.intValue >0){
+                        [b setTitleColor:kWhiteColor forState:UIControlStateNormal];
+                        [b setBackgroundColor:[UIColor redColor]];
+                        b.titleLabel.textAlignment = NSTextAlignmentCenter;
+                        b.layer.cornerRadius = 10;
+                        if(self.value.intValue > 99) {
+                            [b setTitle:[NSString stringWithFormat:@"%@",@"99+"] forState:UIControlStateNormal];
+                            b.frame = CGRectMake(bttn.JY_width-30, 5, 30, 20);
+
+                        }else{
+                            [b setTitle:[NSString stringWithFormat:@"%@",self.value] forState:UIControlStateNormal];
+                            b.frame = CGRectMake(bttn.JY_width-30, 5, 20, 20);
+                        }
+                    }else{
+                        [b setBackgroundColor:[UIColor clearColor]];
+                        [b setTitle:nil forState:UIControlStateNormal];
+                    }
+                }
+            }
+            
+        }
+    }
+    
+}
+-(void)setupUnreadMessageCount {
+    
+    NSArray *conversations = [[EMClient sharedClient].chatManager getAllConversations];
+    NSInteger unreadCount = 0;
+    for (EMConversation *conversation
+         in conversations)
+    {
+        unreadCount += conversation.unreadMessagesCount;
+    }
+    self.value = [NSString stringWithFormat:@"%ld",(long)unreadCount];
+    UIApplication *application = [UIApplication sharedApplication];
+    [application setApplicationIconBadgeNumber:unreadCount];
+}
+
+//布局子控件
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    CGFloat x = 0;
+    CGFloat y = 0;
+    CGFloat w = JYScreenW /self.subviews.count;
+    CGFloat h = 49;
+
+    for (int i = 0; i < self.subviews.count; i++) {
+        JYTabBarButton *btn = self.subviews[i];
+        x = i * w;
+        btn.frame = CGRectMake(x, y, w, h);
+    }
+}
+@end

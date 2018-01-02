@@ -1,0 +1,20 @@
+//
+//  FindPswdViewController.h
+//  demo_yijiankang
+//
+//  Created by jinyiyanglao on 16/8/11.
+//  Copyright © 2016年 jinyiyanglao. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@protocol changeValueDelegate <NSObject>
+
+- (void)changeUserName:(NSString *)username;
+- (void)changePassWord:(NSString *)password;
+
+@end
+
+@interface FindPswdViewController : UIViewController
+@property (nonatomic,strong) id<changeValueDelegate> delegate;
+@end

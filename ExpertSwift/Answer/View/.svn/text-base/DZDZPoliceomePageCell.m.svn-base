@@ -1,0 +1,46 @@
+//
+//  DZDZPoliceomePageCell.m
+//  Expert
+//
+//  Created by jyyl on 2017/6/15.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZDZPoliceomePageCell.h"
+
+@implementation DZDZPoliceomePageCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier indexPath:(NSIndexPath *)indexPath
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
+        self.nameLab = [[UILabel alloc]init];
+        self.nameLab.text = @"";
+        self.nameLab.font = [UIFont systemFontOfSize:14];
+        [self.contentView addSubview:self.nameLab];
+        
+        self.valueLab = [[UILabel alloc]init];
+        self.valueLab.text = @"123";
+        self.valueLab.font = [UIFont systemFontOfSize:14];
+        [self.contentView addSubview:self.valueLab];
+    }
+    return self;
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [self.nameLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(kWidth(12));
+        make.centerY.equalTo(self.contentView);
+    }];
+    
+    [self.valueLab makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.contentView).offset(-kWidth(12));
+        make.centerY.equalTo(self.contentView);
+    }];
+}
+
+
+@end

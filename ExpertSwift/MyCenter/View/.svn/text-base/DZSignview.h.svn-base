@@ -1,0 +1,23 @@
+//
+//  DZSignview.h
+//  Police
+//
+//  Created by 陈刚 on 17/6/13.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface DZSignview : UIView
+
+/**记录当前时间*/
+@property (nonatomic,strong)NSDateComponents *Todaycomponents;
+
+-(instancetype)initWithFrame:(CGRect)frame withTarget:(id)target;
+
+- (void)setupWithMonthDateComponents:(NSDateComponents *)components;
+
+- (void)updateWithSignDayArray:(NSArray *)signDayArray;
+//当前日期
+- (void)uploadCurrentDate:(NSDateComponents *)todayComponents;
+@end

@@ -1,0 +1,18 @@
+//
+//  changePswdTableViewCell.h
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/15.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface changePswdTableViewCell : UITableViewCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
+              reuseIdentifier:(NSString *)reuseIdentifier
+                withIndexPath:(NSIndexPath *)indexPath
+                   WithTarget:(id)target;
+
+@end

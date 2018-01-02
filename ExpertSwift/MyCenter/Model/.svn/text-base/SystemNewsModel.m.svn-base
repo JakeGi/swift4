@@ -1,0 +1,13 @@
+//
+//  SystemNewsModel.m
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/22.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "SystemNewsModel.h"
+
+@implementation SystemNewsModel
+
+@end

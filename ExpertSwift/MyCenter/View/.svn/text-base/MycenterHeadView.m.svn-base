@@ -1,0 +1,182 @@
+//
+//  MycenterHeadView.m
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/2.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "MycenterHeadView.h"
+#import "CustomPointInsideButton.h"
+#import "HeadVoticalBtn.h"
+@interface MycenterHeadView()
+{
+    UIImageView *_headImgv;
+    UIImageView *_backImgv;
+    UILabel *_nameLab;
+    //    UIImageView *_EBImgV;
+    //签到
+    HeadVoticalBtn *_registBtn;
+    //积分
+    HeadVoticalBtn *_integarBtn;
+    //步数
+    HeadVoticalBtn *_levelBtn;
+    
+    UIView *_line1;
+    UIView *_line2;
+}
+
+@end
+@implementation MycenterHeadView
+- (instancetype)initWithFrame:(CGRect)frame WithTarget:(id)target
+{
+    if (self = [super initWithFrame:frame]) {
+        
+        [self setUIWithTarget:target];
+    }
+    return self;
+}
+
+
+#pragma mark - setUI
+
+- (void)setUIWithTarget:(id)target
+{
+    _backImgv = [[UIImageView alloc] init];
+    _backImgv.image = [UIImage imageNamed:@"MyCenter.bundle/bg_my"];
+    [self addSubview:_backImgv];
+    
+    _headImgv = [[UIImageView alloc] init];
+    _headImgv.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:target action:@selector(goUserInfo)];
+    _headImgv.image = [UIImage imageNamed:@"EaseUIResource.bundle/img_avatar_default_lg"];
+    
+    [_headImgv addGestureRecognizer:tap];
+    [self addSubview:_headImgv];
+    
+    _nameLab  = [[UILabel alloc] init];
+    _nameLab.textColor = kWhiteColor;
+    _nameLab.text = @"李明";
+    _nameLab.textAlignment = NSTextAlignmentCenter;
+    [self addSubview:_nameLab];
+    
+    _titleLab  = [[UILabel alloc] init];
+    _titleLab.textColor = kWhiteColor;
+    _titleLab.textAlignment = NSTextAlignmentCenter;
+    _titleLab.text = @"我的";
+    [self addSubview:_titleLab];
+    
+    _registBtn = [HeadVoticalBtn buttonWithType:UIButtonTypeCustom];
+    
+    [_registBtn addTarget:target action:@selector(regist) forControlEvents:UIControlEventTouchUpInside];
+    [_registBtn setImage:[UIImage imageNamed:@"MyCenter.bundle/ico_checkin"] forState:UIControlStateNormal];
+    [_registBtn setTitle:@"智能签到" forState:UIControlStateNormal];
+    [_registBtn setTitleColor:kBlackColor forState:UIControlStateNormal];
+    
+    [self addSubview:_registBtn];
+    _line1 = [[UIView alloc] init];
+    _line1.backgroundColor = [UIColorFromRGB(0xe2e2e2) colorWithAlphaComponent:0.5];
+    [self addSubview:_line1];
+    
+    _integarBtn = [HeadVoticalBtn buttonWithType:UIButtonTypeCustom];
+    
+    [_integarBtn addTarget:target action:@selector(intager) forControlEvents:UIControlEventTouchUpInside];
+    [_integarBtn setImage:[UIImage imageNamed:@"MyCenter.bundle/ico_integral"] forState:UIControlStateNormal];
+    [_integarBtn setTitle:@"我的积分" forState:UIControlStateNormal];
+    [_integarBtn setTitleColor:kBlackColor forState:UIControlStateNormal];
+    
+    [self addSubview:_integarBtn];
+    _line2 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, JYScreenW, 1)];
+    _line2.backgroundColor = [UIColorFromRGB(0xe2e2e2) colorWithAlphaComponent:0.5];
+    [self addSubview:_line2];
+    
+    _levelBtn = [HeadVoticalBtn buttonWithType:UIButtonTypeCustom];
+    [_levelBtn addTarget:target action:@selector(levelBtn) forControlEvents:UIControlEventTouchUpInside];
+    [_levelBtn setImage:[UIImage imageNamed:@"MyCenter.bundle/ico_leve"] forState:UIControlStateNormal];
+    [_levelBtn setTitle:@"我的等级" forState:UIControlStateNormal];
+    [_levelBtn setTitleColor:kBlackColor forState:UIControlStateNormal];
+    
+    self.backgroundColor = kWhiteColor;
+    [self addSubview:_levelBtn];
+    
+}
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [_backImgv makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self);
+        make.left.equalTo(self);
+        make.height.equalTo(kHeight(210));
+        make.width.equalTo(self);
+    }];
+    
+    [_headImgv makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.centerX);
+        make.top.equalTo(self.top).offset(64+kHeight(10));
+        make.height.equalTo(kHeight(75));
+        make.width.equalTo(kWidth(75));
+    }];
+    
+    [_headImgv layoutRoundImage:_headImgv.JY_height*0.5];
+    
+    [_nameLab makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_headImgv.bottom).offset(kHeight(5));
+        make.centerX.equalTo(self);
+        make.height.equalTo(kHeight(30));
+        make.width.equalTo(kWidth(100));
+    }];
+    
+    [_integarBtn makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self);
+        make.bottom.equalTo(self.bottom).offset(-kHeight(15));
+        make.width.equalTo(kWidth(60));
+        make.height.equalTo(kHeight(60));
+    }];
+    [_line1 makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(_integarBtn.left).offset(-kWidth(10));
+        make.centerY.equalTo(_integarBtn);
+        make.width.equalTo(1);
+        make.height.equalTo(_integarBtn.height);
+    }];
+    
+    [_registBtn makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_integarBtn);
+        make.right.equalTo(_line1.left).offset(-kHeight(10));
+        make.width.equalTo(_integarBtn);
+        make.height.equalTo(_integarBtn);
+    }];
+    
+    [_line2 makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_integarBtn.right).offset(kWidth(10));
+        make.centerY.equalTo(_integarBtn);
+        make.width.equalTo(1);
+        make.height.equalTo(_integarBtn.height);
+    }];
+    
+    [_levelBtn makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_integarBtn);
+        make.left.equalTo(_line2.right).offset(kHeight(10));
+        make.width.equalTo(_integarBtn);
+        make.height.equalTo(_integarBtn);
+    }];
+    
+    [_titleLab makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self).offset(kHeight(20));
+        make.centerX.equalTo(self);
+        make.width.equalTo(kWidth(100));
+    }];
+    
+}
+
+#pragma mark - 设置分数据
+- (void)setUserInfoDic:(NSDictionary *)userInfoDic
+{
+    _userInfoDic = [NSDictionary dictionaryWithDictionary:userInfoDic];
+    
+    [UIImageView SDimageWithImageView:_headImgv withUrl:[_userInfoDic objectForKey:@"photo"] withPlaceholderImg:[UIImage imageNamed:@"MyCenter.bundle/img_avatar_police_lg"] withLoadErrorImg:[UIImage imageNamed:@"MyCenter.bundle/img_failtoload_lg"]];
+    
+    _nameLab.text = [_userInfoDic objectForKey:@"name"];
+    
+}
+@end

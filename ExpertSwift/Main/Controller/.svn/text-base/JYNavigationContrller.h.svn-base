@@ -1,0 +1,13 @@
+//
+//  JYNavigationContrller.h
+//  miaoyi
+//
+//  Created by 锦颐养老 on 16/8/31.
+//  Copyright © 2016年 陕西大众健康投资管理有限公司. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface JYNavigationContrller : UINavigationController
+
+@end

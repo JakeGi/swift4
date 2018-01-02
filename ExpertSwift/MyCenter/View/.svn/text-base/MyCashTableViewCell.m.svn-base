@@ -1,0 +1,81 @@
+//
+//  MyCashTableViewCell.m
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/15.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "MyCashTableViewCell.h"
+#import "useCashModel.h"
+@interface MyCashTableViewCell()
+/** 消费金额*/
+@property(nonatomic,strong)UILabel *labPrice;
+/** 消费时间*/
+@property(nonatomic,strong)UILabel *labTime;
+/** 商品名称*/
+@property(nonatomic,strong)UILabel *labName;
+@end
+@implementation MyCashTableViewCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+    
+        self.labPrice = [[UILabel alloc] init];
+        self.labPrice.textColor = [UIColor blackColor] ;
+        self.labPrice.font = [UIFont systemFontOfSize:16];
+        [self.contentView addSubview:self.labPrice];
+        
+        self.labTime = [[UILabel alloc] init];
+        self.labTime.textColor = [[UIColor blackColor] colorWithAlphaComponent:0.54];
+        self.labTime.font = [UIFont systemFontOfSize:12];
+        [self.contentView addSubview:self.labTime];
+        
+        self.labName = [[UILabel alloc] init];
+        self.labName.textColor = [UIColor blackColor];
+        self.labName.font = [UIFont systemFontOfSize:14];
+        [self.contentView addSubview:self.labName];
+        
+    }
+    
+    
+    return self;
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [self.labPrice makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.contentView).offset(-kWidth(12));
+        make.centerY.equalTo(self.contentView);
+    }];
+    [self.labName makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(kWidth(12));
+        make.right.equalTo(self.contentView).offset(-kWidth(100));
+        make.top.equalTo(self.contentView).offset(kHeight(12));
+    }];
+
+    [self.labTime makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(kWidth(12));
+        make.bottom.equalTo(self.contentView).offset(-kHeight(12));
+    }];
+    
+}
+- (void)setCashModel:(useCashModel *)cashModel
+{
+    _cashModel = cashModel;
+    self.labName.text = _cashModel.content;
+    self.labTime.text = _cashModel.create_time;
+    
+    if ([_cashModel.type isEqualToString:@"1"]) {
+        
+        self.labPrice.text = [NSString stringWithFormat:@"-%@",_cashModel.integral];
+    }else{
+        self.labPrice.text = [NSString stringWithFormat:@"+%@",_cashModel.integral];
+
+    }
+
+}
+@end

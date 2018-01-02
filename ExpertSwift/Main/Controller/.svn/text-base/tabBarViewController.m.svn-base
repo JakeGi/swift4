@@ -1,0 +1,195 @@
+//
+//  tabBarViewController.m
+//  miaoyi
+//
+//  Created by jinyiyanglao on 16/8/17.
+//  Copyright © 2016年 jinyiyanglao. All rights reserved.
+//
+
+#import "tabBarViewController.h"
+#import "HomePageViewController.h"
+#import "JYNavigationContrller.h"
+#import "DZAnswerViewController.h"
+#import "MyCenterViewController.h"
+#import "JYTabBar.h"
+@interface tabBarViewController ()<JYTabBarDelegate>
+@property (nonatomic,strong) NSMutableArray *itemArray;
+//当前选中的控制器
+@property (nonatomic,assign)NSInteger index;
+
+
+@end
+
+@implementation tabBarViewController
+
+- (NSMutableArray*)itemArray
+{
+    if (_itemArray == nil) {
+        _itemArray = [NSMutableArray array];
+    }
+    return _itemArray ;
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    //隐藏顶部横线
+    UITabBar *tabbar = [UITabBar appearance];
+    [tabbar setBackgroundImage:[UIImage new]];
+    [tabbar setShadowImage:[UIImage new]];
+    
+    //添加zi控制器
+    [self addChildVc:[[HomePageViewController alloc] init] title:@"首页" image:@"Home.bundle/tabs_home" selectedImage:@"Home.bundle/tabs_home_active"];
+        
+    [self addChildVc:[[DZAnswerViewController alloc] init] title:@"健康互动" image:@"Home.bundle/ico_answer" selectedImage:@"Home.bundle/ico_answer_active"];
+
+    [self addChildVc:[[MyCenterViewController alloc] init] title:@"我的" image:@"Home.bundle/ico_me" selectedImage:@"Home.bundle/ico_me_active"];
+    
+    JYTabBar *tabBar = [[JYTabBar alloc] init];
+    tabBar.frame = self.tabBar.bounds;
+    //tabbar的内容由tabbaritem决定
+    tabBar.itemArray = self.itemArray;
+    //设置tabbar颜色
+    tabBar.backgroundColor = kWhiteColor;
+    // 设置代理
+    tabBar.delegate = self;
+
+    [self.tabBar addSubview:tabBar];
+    self.tabBar.shadowImage = [[UIImage alloc] init];
+    
+    //极光通知
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidSetup:)
+                          name:kJPFNetworkDidSetupNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidClose:)
+                          name:kJPFNetworkDidCloseNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidRegister:)
+                          name:kJPFNetworkDidRegisterNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidLogin:)
+                          name:kJPFNetworkDidLoginNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(networkDidReceiveMessage:)
+                          name:kJPFNetworkDidReceiveMessageNotification
+                        object:nil];
+    [defaultCenter addObserver:self
+                      selector:@selector(serviceError:)
+                          name:kJPFServiceErrorNotification
+                        object:nil];    
+
+    //崩溃日志统计
+    [JPUSHService crashLogON];
+}
+
+#pragma mark - 去掉自带的tabBar
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    for (UIView *view in self.tabBar.subviews) {
+        JYLog(@"self.tabBar.subviews==%@",view);
+        if (![view isKindOfClass:[JYTabBar class]]) {
+            [view removeFromSuperview];
+        }
+        
+    }
+}
+
+#pragma mark-JYTabBarDelegate
+- (void)tabBar:(JYTabBar *)tabBar selButtonIndex:(NSInteger)index
+{
+    self.selectedIndex = index;
+}
+
+#pragma mark-添加子控制器
+- (void)addChildVc:(UIViewController *)vc title:(NSString *)title image:(NSString *)image selectedImage:(NSString *)selecImage
+{
+    vc.tabBarItem.title = title;
+    vc.tabBarItem.image = [UIImage imageNamed:image];
+    vc.tabBarItem.selectedImage =[UIImage imageNamed:selecImage];
+    //将数据储存到数组中
+    [self.itemArray addObject:vc.tabBarItem];
+
+    JYNavigationContrller *NVC=[[JYNavigationContrller alloc]initWithRootViewController:vc];
+    
+    [self addChildViewController:NVC];
+
+}
+
+#pragma mark 通知实现的方法
+- (void)networkDidSetup:(NSNotification *)notification {
+    
+    JYLog(@"已连接");
+    
+}
+
+- (void)networkDidClose:(NSNotification *)notification {
+    
+    JYLog(@"未连接");
+    
+}
+
+- (void)networkDidRegister:(NSNotification *)notification {
+    JYLog(@"%@", [notification userInfo]);
+    
+    JYLog(@"已注册");
+}
+
+- (void)networkDidLogin:(NSNotification *)notification {
+    
+    JYLog(@"已登录");
+    
+    [JPUSHService setTags:nil alias:DeviceUDID fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias){
+        JYLog(@"rescode: %d, \ntags: %@, \nalias: %@\n", iResCode, iTags, iAlias);
+    }];
+    
+    if ([JPUSHService registrationID]) {
+        
+        JYLog(@"get RegistrationID____%@",[JPUSHService registrationID]);
+    }
+}
+- (void)didReceiveMessages:(NSArray *)aMessages{
+    
+}
+- (void)serviceError:(NSNotification *)notification {
+    NSDictionary *userInfo = [notification userInfo];
+    NSString *error = [userInfo valueForKey:@"error"];
+    JYLog(@"%@", error);
+}
+- (void)dealloc {
+    [self unObserveAllNotifications];
+}
+
+- (void)unObserveAllNotifications {
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter removeObserver:self
+                             name:kJPFNetworkDidSetupNotification
+                           object:nil];
+    [defaultCenter removeObserver:self
+                             name:kJPFNetworkDidCloseNotification
+                           object:nil];
+    [defaultCenter removeObserver:self
+                             name:kJPFNetworkDidRegisterNotification
+                           object:nil];
+    [defaultCenter removeObserver:self
+                             name:kJPFNetworkDidLoginNotification
+                           object:nil];
+    [defaultCenter removeObserver:self
+                             name:kJPFServiceErrorNotification
+                           object:nil];
+    
+}
+#pragma mark - 设置状态颜色
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    //返回白色
+    return UIStatusBarStyleLightContent;
+    
+}
+@end

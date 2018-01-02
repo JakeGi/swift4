@@ -1,0 +1,155 @@
+//
+//  DZMyeservationCell.m
+//  Expert
+//
+//  Created by jyyl on 2017/6/14.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZMyeservationCell.h"
+@interface DZMyeservationCell()
+//图片
+@property (nonatomic,strong) UIImageView *listImg;
+//名称
+@property (nonatomic,strong) UILabel *NameLab;
+//时间
+@property (nonatomic,strong) UILabel *timeLab;
+//年龄
+@property (nonatomic,strong) UILabel *sexLab;
+//接诊
+@property (nonatomic,strong) UIButton *acceptsBtn;
+//约诊
+@property (nonatomic,strong) UILabel *appointmentLab;
+
+//预约次数
+@property (nonatomic,strong) UILabel *numLab;
+
+
+
+@end
+@implementation DZMyeservationCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier indexPath:(NSIndexPath *)indexPath cellType:(NSString *)type Withtarget:(id)target
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
+        self.listImg = [[UIImageView alloc]init];
+        [self.listImg setImage:[UIImage imageNamed:@"Home.bundle/ico_schedule"]];
+
+        [self.contentView addSubview:self.listImg];
+        
+        self.NameLab = [[UILabel alloc]init];
+        self.NameLab.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
+        self.NameLab.textColor = UIColorFromRGB(0x000000);
+        self.NameLab.text = @"王卫东";
+        [self.contentView addSubview:self.NameLab];
+
+        
+        self.sexLab = [[UILabel alloc]init];
+        self.sexLab.font = [UIFont systemFontOfSize:14];
+        self.sexLab.textColor = UIColorFromRGB(0x000000);
+        self.sexLab.text = @"(男)";
+        [self.contentView addSubview:self.sexLab];
+        
+   
+        self.numLab = [[UILabel alloc]init];
+        self.numLab.font = [UIFont systemFontOfSize:12];
+        self.numLab.textColor = UIColorFromRGB(0x000000);
+        self.numLab.numberOfLines = 0;
+        [self.contentView addSubview:self.numLab];
+        
+        self.acceptsBtn  = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//        [self.acceptsBtn setBackgroundImage:[UIImage imageNamed:@"Answer.bundle/bg_btn_report"] forState:UIControlStateNormal];
+        self.acceptsBtn.titleLabel.font = [UIFont systemFontOfSize:13];
+        [self.acceptsBtn.layer setBorderColor:UIColorFromRGB(0x46A0E3).CGColor];
+        [self.acceptsBtn.layer setBorderWidth:1];
+        [self.acceptsBtn.layer setMasksToBounds:YES];
+        [self.acceptsBtn.layer setCornerRadius:2.0];
+        self.acceptsBtn.tag = indexPath.row;
+        [self.acceptsBtn addTarget:target action:@selector(accepts:) forControlEvents:UIControlEventTouchUpInside];
+        [self.acceptsBtn setTitleColor:UIColorFromRGB(0x46A0E3) forState:UIControlStateNormal];
+        [self.contentView addSubview:self.acceptsBtn];
+        
+        if ([type isEqualToString:@"1"]) {
+            self.timeLab = [[UILabel alloc]init];
+            self.timeLab.font = [UIFont systemFontOfSize:12];
+            self.timeLab.textColor = UIColorFromRGB(0x000000);
+            self.timeLab.text = @"2020-29-22 00:00";
+            self.timeLab.numberOfLines = 0;
+            [self.contentView addSubview:self.timeLab];
+            
+            
+            self.appointmentLab = [[UILabel alloc]init];
+            self.appointmentLab.font = [UIFont systemFontOfSize:15];
+            self.appointmentLab.textColor = UIColorFromRGB(0x000000);
+            self.appointmentLab.text = @"约诊时间:";
+            [self.contentView addSubview:self.appointmentLab];
+            
+            [self.acceptsBtn setTitle:@"接诊" forState:UIControlStateNormal];
+            
+            self.numLab.text = @"已预约 2 次";
+
+
+        }else if ([type isEqualToString:@"3"]){
+            [self.acceptsBtn setTitle:@"建议" forState:UIControlStateNormal];
+            
+            self.numLab.text = @"2017-06-12";
+
+
+        }
+    }
+    return self;
+
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [self.listImg makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(kWidth(16));
+        make.width.mas_equalTo(kHeight(40));
+        make.height.mas_equalTo(kHeight(40));
+        make.centerY.equalTo(self.contentView);
+    }];
+    
+    [self.NameLab makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.contentView).offset(kHeight(13.5));
+        make.left.equalTo(self.listImg.right).offset(kWidth(16));
+        
+    }];
+    
+    [self.appointmentLab makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.contentView);
+        make.left.equalTo(self.listImg.right).offset(kWidth(16));
+        
+    }];
+    
+    [self.timeLab makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.appointmentLab);
+        make.left.equalTo(self.appointmentLab.right).offset(kWidth(5));
+        
+    }];
+    
+    [self.numLab makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.contentView).offset(-kHeight(13.5));
+        make.left.equalTo(self.listImg.right).offset(kWidth(16));
+        
+    }];
+
+    [self.acceptsBtn makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.contentView).offset(-kWidth(16));
+        make.centerY.equalTo(self.contentView);
+        make.height.mas_equalTo(kHeight(26));
+        make.width.mas_equalTo(kWidth(50));
+
+        
+    }];
+    
+    [self.sexLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.NameLab.right).offset(kWidth(2));
+        make.bottom.equalTo(self.NameLab.bottom);
+    }];
+}
+
+@end

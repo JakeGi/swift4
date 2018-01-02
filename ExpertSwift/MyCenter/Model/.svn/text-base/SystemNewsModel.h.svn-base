@@ -1,0 +1,32 @@
+//
+//  SystemNewsModel.h
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/22.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface SystemNewsModel : NSObject
+//备注信息
+@property (nonatomic,strong)NSString *remarks;
+//消息id
+@property (nonatomic,strong)NSString *jpushid;
+//关联关系Id
+@property (nonatomic,strong)NSString *userfriendid;
+//是否添加成功 0 同意 1 未确认 2 拒绝
+@property (nonatomic,strong)NSString *issuccess;
+//详细
+@property (nonatomic,strong)NSString *message;
+//发送时间
+@property (nonatomic,strong)NSString *creat_time;
+//消息处理时间
+@property (nonatomic,strong)NSString *update_time;
+//是否已读
+@property (nonatomic,strong)NSString *isread;
+//申请人ID
+@property (nonatomic,strong)NSString *userid;
+//头像
+@property (nonatomic,strong)NSString *photo;
+@end

@@ -1,0 +1,134 @@
+//
+//  DZPoliceomePageViewController.m
+//  Expert
+//
+//  Created by jyyl on 2017/6/15.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZPoliceomePageViewController.h"
+#import "DZDZPoliceomePageCell.h"
+#import "DZPoliceomePageHead.h"
+@interface DZPoliceomePageViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+@property (nonatomic,strong) UITableView *tableview;
+@property (nonatomic,strong) NSMutableArray *leftArr;
+@property (nonatomic,strong) DZPoliceomePageHead *DZPoliceomePageHead;
+@property (nonatomic,strong) UIButton *saveMessageBtn;
+@end
+
+@implementation DZPoliceomePageViewController
+
+- (NSMutableArray *)leftArr
+{
+    if (_leftArr == nil) {
+        _leftArr = [NSMutableArray arrayWithObjects:@"性别",@"身高(cm)",@"体重(kg)", nil];
+    }
+    return _leftArr;
+}
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.view.backgroundColor = kWhiteColor;
+    self.navigationItem.title = @"民警主页";
+    [self setUI];
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    
+    
+}
+
+
+#pragma mark - 添加tableview
+- (void)setUI
+{
+    self.tableview = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, JYScreenW,JYScreenH) style:UITableViewStylePlain];
+    //隐藏滚动条
+    
+    self.tableview.showsVerticalScrollIndicator = NO;
+    _tableview.delegate = self;
+    _tableview.dataSource = self;
+    _DZPoliceomePageHead = [[DZPoliceomePageHead alloc]initWithFrame:CGRectMake(0, 0, JYScreenW, kHeight(240)) WithTarget:self];
+    self.tableview.tableHeaderView = _DZPoliceomePageHead;
+    [self.view addSubview:self.tableview];
+    
+    self.saveMessageBtn = [[UIButton alloc]init];
+    [self.saveMessageBtn setTitle:@"发消息" forState:UIControlStateNormal];
+    self.saveMessageBtn.titleLabel.font = [UIFont fontWithName:@"Helvetica-Bold" size:18];
+    [self.saveMessageBtn setTitleColor:UIColorFromRGB(0x00BAFF) forState:UIControlStateNormal];
+    [self.saveMessageBtn addTarget:self action:@selector(savemessage) forControlEvents:UIControlEventTouchUpInside];
+    [self.saveMessageBtn setBackgroundImage:[UIImage imageNamed:@"Answer.bundle/bg_btn_report"] forState:UIControlStateNormal];
+    [self.saveMessageBtn setBackgroundImage:[UIImage imageNamed:@"Answer.bundle/bg_btn_report"] forState:UIControlStateSelected];
+
+    [self.view addSubview:self.saveMessageBtn];
+    
+    [self.saveMessageBtn makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.view).offset(-kHeight(10));
+        make.left.equalTo(self.view).offset(kWidth(8));
+        make.right.equalTo(self.view).offset(-kWidth(8));
+
+    }];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    
+    return 1;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    
+    return self.leftArr.count;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    
+    return kHeight(0.01);
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return kHeight(0.01);
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    DZDZPoliceomePageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"DZDZPoliceomePageCell"];
+    if (cell == nil) {
+        cell = [[DZDZPoliceomePageCell alloc]initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"DZDZPoliceomePageCell" indexPath:indexPath];
+        
+    }
+    cell.nameLab.text = self.leftArr[indexPath.row];
+    return cell;
+    
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    return kHeight(44);
+    
+}
+
+#pragma mark - 发送消息
+- (void)savemessage
+{
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    [dic setValue:@"张辉" forKey:@"name"];
+    [dic setValue:@"dlnkjn ewnv " forKey:@"miniphoto"];
+    [dic setValue:@"dnjencndnce" forKey:@"ID"];
+    [dic setValue:@"18291849484" forKey:@"phone"];
+    [dic setValue:@"0" forKey:@"sex"];
+    [[chiveDataManager sharedChive] chiveDataDic:dic withPathName:@"chatData"];
+    //跳转聊天界面
+    NSMutableDictionary *valueDic = [NSMutableDictionary dictionary];
+    [valueDic setObject:@"0" forKey:@"isChat"];
+    [[JumpChat shareChat] pushToChatWithConversationChatter:@"18291849484" conversationType:EMConversationTypeChat withValuesDic:valueDic];
+
+}
+@end

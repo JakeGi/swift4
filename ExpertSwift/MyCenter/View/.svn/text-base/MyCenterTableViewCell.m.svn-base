@@ -1,0 +1,64 @@
+//
+//  MyCenterTableViewCell.m
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/2.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "MyCenterTableViewCell.h"
+
+@interface MyCenterTableViewCell()
+
+@property (nonatomic,strong)UILabel *textLab;
+@property (nonatomic,strong)UIImageView *leftImg;
+
+@end
+
+@implementation MyCenterTableViewCell
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
+        self.textLabel.textAlignment = NSTextAlignmentLeft;
+        
+        self.textLabel.textColor = kBlackColor;
+        self.textLab = [[UILabel alloc]init];
+        self.textLab.textAlignment = NSTextAlignmentLeft;
+        [self.contentView addSubview:self.textLab];
+        
+        self.leftImg = [[UIImageView alloc]init];
+        [self.contentView addSubview:self.leftImg];
+        
+        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+    }
+    return self;
+}
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self.leftImg makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(kHeight(20));
+        make.width.equalTo(kWidth(20));
+        make.centerY.equalTo(self.contentView);
+        make.left.equalTo(self.contentView).offset(kWidth(12));
+    }];
+    
+    [self.textLab makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.contentView);
+        make.left.equalTo(self.contentView).offset(kWidth(40));
+    }];
+}
+
+- (void)setCellDic:(NSDictionary *)cellDic
+{
+    _cellDic = cellDic;
+    
+    self.leftImg.image = [UIImage imageNamed:[_cellDic objectForKey:@"left"]];
+    
+    self.textLab.text = [_cellDic objectForKey:@"right"];
+    
+}
+@end

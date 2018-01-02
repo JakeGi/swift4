@@ -1,0 +1,190 @@
+//
+//  DZCalenderView.m
+//  Police
+//
+//  Created by 陈刚 on 17/6/13.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZCalenderView.h"
+#import "DZSignCollectionViewCell.h"
+#import "DZSignModel.h"
+static NSString * const Identifier = @"CalendarDayCell";
+
+@interface DZCalenderView()<UICollectionViewDataSource, UICollectionViewDelegate>
+@property (nonatomic, strong) UICollectionView *collectionView;
+
+@property (nonatomic, strong) NSMutableArray *dataArray;//存储日期和空白的数组
+@property (nonatomic, strong) NSCalendar *calendar;
+
+@property (nonatomic, assign) NSInteger frontBlankCount;//每个月前面空白的个数
+@property (nonatomic, assign) NSInteger dayCount;//每个月的天数
+@property (nonatomic, assign) NSInteger backBlankCount;//每个月后面空白的个数
+
+@property (nonatomic, strong) NSDateComponents *monthDateComponents;//用于保存目前是几月
+
+@end
+@implementation DZCalenderView
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setupDefault];
+    }
+    return self;
+}
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    [self setupDefault];
+}
+
+- (void)setupDefault {
+    [self setupCollectionView];
+}
+
+- (void)setupCollectionView {
+    CGFloat itemWidth = floor((self.JY_width)/ 7);
+    CGFloat itemHeight = 35;
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    
+    layout.itemSize = CGSizeMake(itemWidth, itemHeight);
+    layout.sectionInset = UIEdgeInsetsZero;
+    layout.minimumInteritemSpacing = 0;
+    layout.minimumLineSpacing = 0;
+    
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:layout];
+    collectionView.backgroundColor = [UIColor whiteColor];
+    collectionView.delegate = self;
+    collectionView.dataSource = self;
+    collectionView.allowsMultipleSelection = YES;
+    [self addSubview:collectionView];
+    self.collectionView = collectionView;
+    [self.collectionView registerClass:[DZSignCollectionViewCell class] forCellWithReuseIdentifier:Identifier];
+    
+}
+
+#pragma mark - publicMethod
+
+- (void)setupWithMonthDateComponents:(NSDateComponents *)components {
+    self.monthDateComponents = components;
+    NSDateComponents *firstDayComponents = [[NSDateComponents alloc] init];
+    firstDayComponents.year = components.year;
+    firstDayComponents.month = components.month;
+    firstDayComponents.day = 1;
+    NSDate *firstDay = [self.calendar dateFromComponents:firstDayComponents];
+    
+    NSDateComponents *dateComponents = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday fromDate:firstDay];
+    
+    NSRange range = [self.calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:firstDay];//指定日期的day在month中的位置
+    self.dayCount = range.length;
+    
+    self.dataArray = nil;
+    self.frontBlankCount  = dateComponents.weekday - self.calendar.firstWeekday;
+    if (self.frontBlankCount  < 0) {
+        //这里，因为weekday周日是1，所以判断下
+        self.frontBlankCount += 7;
+    }
+    for (int i = 0; i < self.frontBlankCount; i++) {
+        //这里是让每个月最开始的地方按需求空白
+        DZSignModel *model = [[DZSignModel alloc] init];
+        model.dayText = @"";
+        [self.dataArray addObject:model];
+    }
+    for (int i = 0; i < range.length; i++) {
+        DZSignModel *model = [[DZSignModel alloc] init];
+        model.dayText = [NSString stringWithFormat:@"%@", @(i + 1)];
+        [self.dataArray addObject:model];
+    }
+    NSInteger weeks = 0; //每个月有几周
+    NSInteger aaa = self.dataArray.count / 7;
+    NSInteger bbb = self.dataArray.count % 7;
+    if (bbb == 0) {
+        weeks = aaa;
+    } else {
+        weeks = aaa + 1;
+    }
+    self.backBlankCount = weeks * 7 - self.dataArray.count;
+    for (int i = 0; i < self.backBlankCount; i++) {
+        DZSignModel *model = [[DZSignModel alloc] init];
+        model.dayText = @"";
+        [self.dataArray addObject:model];
+    }
+    [self.collectionView reloadData];
+}
+
+- (void)updateWithSignDayArray:(NSArray *)signDayArray {
+    for (DZSignModel *tempModel in self.dataArray) {
+        if ([self model:tempModel isInArray:signDayArray]) {
+            tempModel.signType = DZSignTypeSigned;
+        } else {
+            tempModel.signType = DZSignTypeNone;
+        }
+    }
+    [self.collectionView reloadData];
+}
+
+- (BOOL)model:(DZSignModel *)model isInArray:(NSArray *)array {
+    if ([array containsObject:model.dayText]) {
+        return YES;
+    } else {
+        return NO;
+    }
+    
+}
+
+- (void)setTodaycomponents:(NSDateComponents *)Todaycomponents
+{
+    _Todaycomponents = Todaycomponents;
+    [self.collectionView reloadData];
+}
+#pragma mark - UICollectionViewDataSource
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    DZSignCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:Identifier forIndexPath:indexPath];
+    DZSignModel *model = [self.dataArray objectAtIndex:indexPath.item];
+    
+    NSDateComponents *firstDayComponents = [[NSDateComponents alloc] init];
+    firstDayComponents.year = self.monthDateComponents.year;
+    firstDayComponents.month = self.monthDateComponents.month;
+    firstDayComponents.day = 1;
+    
+    NSDate *firstDay = [self.calendar dateFromComponents:firstDayComponents];
+    NSDateComponents *Components = [self.calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday fromDate:firstDay];
+    
+    if (self.Todaycomponents.year == Components.year &&self.Todaycomponents.month == Components.month&&[model.dayText isEqualToString:[NSString stringWithFormat:@"%ld",self.Todaycomponents.day]]) {
+    
+        [cell.dataBtn setBackgroundImage:[UIImage imageNamed:@"MyCenter.bundle/ico_checkin_current"] forState:UIControlStateNormal];
+    }else{
+        [cell.dataBtn setBackgroundImage:nil forState:UIControlStateNormal];
+    }
+    if (self.Todaycomponents.year >= Components.year &&self.Todaycomponents.month >= Components.month&&[model.dayText integerValue]<self.Todaycomponents.day) {
+        [cell.dataBtn setTitleColor:[UIColorFromRGB(0x000000) colorWithAlphaComponent:0.54] forState:UIControlStateNormal];
+    }else{
+        [cell.dataBtn setTitleColor:[UIColorFromRGB(0x000000) colorWithAlphaComponent:0.87] forState:UIControlStateNormal];
+    }
+    [cell configureWithSignModel:model];
+    
+    return cell;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.dataArray.count;
+}
+#pragma mark - property
+
+- (NSMutableArray *)dataArray {
+    if (!_dataArray) {
+        _dataArray = [NSMutableArray array];
+    }
+    return _dataArray;
+}
+
+- (NSCalendar *)calendar {
+    if (!_calendar) {
+        _calendar = [NSCalendar currentCalendar];
+        _calendar.firstWeekday = 1;//1是周日，2是周一，以此类推
+        _calendar.minimumDaysInFirstWeek = 1;//表示一个月的最初一周如果少于这个值，则算为上个月的最后一周，大约等于则算本月第一周，用1就好
+    }
+    return _calendar;
+}
+@end

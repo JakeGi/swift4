@@ -1,0 +1,13 @@
+//
+//  PerfectInfoMessageController.h
+//  qierkang
+//
+//  Created by jyyl on 17/4/12.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface PerfectInfoMessageController : UIViewController
+
+@end

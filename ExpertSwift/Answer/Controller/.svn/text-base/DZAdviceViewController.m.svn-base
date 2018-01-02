@@ -1,0 +1,148 @@
+//
+//  DZAdviceViewController.m
+//  Expert
+//
+//  Created by jyyl on 2017/6/14.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZAdviceViewController.h"
+
+@interface DZAdviceViewController ()<UITextViewDelegate>
+//label
+@property (nonatomic,strong)UILabel *detailLabel;
+
+//信息
+@property (nonatomic,strong)NSString *str;
+
+//
+@property (nonatomic,strong)UITextView *textView;
+//保存按钮
+@property (nonatomic,strong)UIButton *subMitBtn;
+
+@end
+
+@implementation DZAdviceViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.navigationItem.title = @"建议";
+    self.view.backgroundColor =kWhiteColor;
+    
+        //添加textview
+        _textView = [[UITextView alloc] init];
+        _textView.delegate = self;
+        _textView.textColor = kBlackColor;
+        _textView.font = [UIFont systemFontOfSize:16];
+        [self.view addSubview:_textView];
+
+
+        [_textView makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.view).offset(kHeight(10));
+            make.left.equalTo(self.view);
+            make.right.equalTo(self.view);
+            make.height.equalTo(kHeight(150));
+        }];
+        _textView.autoresizingMask= UIViewAutoresizingFlexibleHeight;//自适应高度
+
+        self.detailLabel = [[UILabel alloc] init];
+        self.detailLabel.text = @"请写下你的建议";
+        self.detailLabel.textColor = UIColorFromRGB(0xa0a6a9);
+        [_textView addSubview:self.detailLabel];
+
+        [self.detailLabel makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.textView).offset(5);
+            make.left.equalTo(self.textView).offset(5);
+            make.width.equalTo(self.textView);
+        }];
+        _subMitBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_subMitBtn setTitle:@"提交" forState:UIControlStateNormal];
+        [_subMitBtn setTitleColor:kWhiteColor forState:UIControlStateNormal];
+        [_subMitBtn setBackgroundImage:[UIImage imageNamed:@"Answer.bundle/btn_primary_b"] forState:UIControlStateNormal];
+        [_subMitBtn setBackgroundImage:[UIImage imageNamed:@"Answer.bundle/btn_primary"] forState:UIControlStateDisabled];
+        _subMitBtn.enabled = NO;    [_subMitBtn addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:_subMitBtn];
+
+        [_subMitBtn makeConstraints:^(MASConstraintMaker *make) {
+            make.height.equalTo(kHeight(44));
+            make.left.equalTo(self.view).offset(kWidth(12));
+            make.right.equalTo(self.view).offset(-kWidth(12));
+            make.top.equalTo(_textView.bottom).offset(kHeight(32));
+        }];
+
+}
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.textView becomeFirstResponder];
+}
+#pragma mark - 发送
+- (void)send
+{
+    NSDictionary *userInfo = [[chiveDataManager sharedChive] unarchivewithPath:@"userInfo"];
+    NSMutableDictionary *mutableDic=[NSMutableDictionary dictionary];
+    mutableDic[@"token"] = [userInfo objectForKey:@"token"];
+    mutableDic[@"content"] = self.str;
+    [NetWorkRequest sendRequestWithUrl:addFeedbackUrl withParameters:mutableDic withType:@"post" success:^(id responseObject) {
+        JYLog(@"%@",responseObject);
+        if ([[responseObject objectForKey:@"code"] isEqualToString:@"001003"]) {
+            [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"反馈意见已发送" withDismissTime:1 withControl:self withDisHandler:^{
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            }];
+            
+        }else if ([[responseObject objectForKey:@"code"] isEqualToString:loginTimeout]){
+            //登录超时
+            [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"登录超时，请重新登录!" actionTitle:@"重新登录" withControl:self withHandler:^{
+                [Mediator loginOutWithLoginClass:@"LoginViewController" withNavC:@"JYNavigationContrller"];
+                
+            }];
+        }else{
+            [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:[responseObject objectForKey:@"message"] withDismissTime:1 withControl:self];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        JYLog(@"%@",error);
+        
+    }];
+}
+
+#pragma mark - UITextViewDelegate
+
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    //判断加上输入的字符，是否超过界限
+    if (range.length ==0&& range.location>299)
+    {
+        return NO;
+    }else{
+        JYLog(@"%@",textView.text);
+        self.str = textView.text;
+        return YES;
+    }
+
+}
+
+- (void)textViewDidChange:(UITextView *)textView
+{
+    JYLogFunc;
+    
+    JYLog(@"%@",textView.text);
+    //该判断用于联想输
+    self.str = textView.text;
+    
+    if (textView.text.length<1) {
+        self.detailLabel.hidden = NO;
+        self.subMitBtn.enabled = NO;
+    }else{
+        self.detailLabel.hidden = YES;
+        self.subMitBtn.enabled = YES;
+        
+    }
+    
+}
+
+
+
+@end

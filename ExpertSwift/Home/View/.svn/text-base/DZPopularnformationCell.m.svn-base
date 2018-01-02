@@ -1,0 +1,60 @@
+//
+//  DZPopularnformationCell.m
+//  Expert
+//
+//  Created by jyyl on 2017/6/14.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZPopularnformationCell.h"
+@interface DZPopularnformationCell()
+
+@property (nonatomic,strong) UILabel *leftLab;
+@property (nonatomic,strong) UILabel *rightLab;
+
+@end
+
+@implementation DZPopularnformationCell
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier indexPath:(NSIndexPath *)indexPath cellType:(NSString *)type
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.leftLab = [[UILabel alloc]init];
+        self.leftLab.font = [UIFont systemFontOfSize:14];
+        self.leftLab.textColor = UIColorFromRGB(0x1A1A1A);
+        [self.contentView addSubview:self.leftLab];
+        
+        self.rightLab = [[UILabel alloc]init];
+        self.rightLab.font = [UIFont systemFontOfSize:12];
+        self.rightLab.textColor = UIColorFromRGB(0x000000);
+        self.rightLab.text = @"更多";
+        [self.contentView addSubview:self.rightLab];
+        
+        if ([type isEqualToString:@"1"]) {
+            self.leftLab.text = @"互动在线";
+
+        }else if([type isEqualToString:@"2"]){
+            self.leftLab.text = @"热门资讯";
+
+        }
+        
+    }
+    return self;
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [self.leftLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(kWidth(13));
+        make.centerY.equalTo(self.contentView);
+    }];
+    
+    
+    [self.rightLab makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.contentView).offset(-kWidth(5));
+        make.centerY.equalTo(self.contentView);
+    }];
+    
+}
+@end

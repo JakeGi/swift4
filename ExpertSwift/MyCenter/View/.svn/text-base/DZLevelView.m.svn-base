@@ -1,0 +1,84 @@
+//
+//  DZLevelView.m
+//  Expert
+//
+//  Created by jyyl on 2017/6/14.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZLevelView.h"
+@interface DZLevelView()
+{
+//    字母
+    UILabel *numV;
+//    数字
+    UILabel *num;
+    // 提示
+    UILabel *tipLab;
+//    背景图
+    UIImageView * backImg;
+}
+@end
+@implementation DZLevelView
+-(instancetype)initWithFrame:(CGRect)frame withTarget:(id)target;
+{
+    if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = kWhiteColor;
+        [self setUIwithTarget:target];
+    }
+    return self;
+}
+
+- (void)setUIwithTarget:(id)target
+{
+    
+    backImg = [[UIImageView alloc]init];
+    backImg.image = [UIImage imageNamed:@"MyCenter.bundle/bg_myleve"];
+    [self addSubview:backImg];
+    
+
+    tipLab = [[UILabel alloc] init];
+    tipLab.text = @"您的当前等级为";
+    tipLab.textAlignment = NSTextAlignmentCenter;
+    tipLab.font = [UIFont boldSystemFontOfSize:18];
+    [self addSubview:tipLab];
+    
+    
+    num = [[UILabel alloc] init];
+    num.textAlignment = NSTextAlignmentCenter;
+    num.textColor =  kRedColor;
+    num.text = @"V5";
+    num.font = [UIFont boldSystemFontOfSize:36];
+    [self addSubview:num];
+
+    
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [backImg makeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(self);
+        make.height.equalTo(self);
+        make.left.equalTo(self);
+        make.top.equalTo(self);
+    }];
+    
+    [tipLab makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self);
+        make.bottom.equalTo(self).offset(-kWidth(80.5));
+    }];
+    
+    
+    [num makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(tipLab.bottom).offset(kHeight(5));
+        make.centerX.equalTo(self);
+
+    }];
+    
+
+    
+}
+
+@end

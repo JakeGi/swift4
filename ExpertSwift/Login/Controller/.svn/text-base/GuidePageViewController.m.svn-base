@@ -1,0 +1,123 @@
+//
+//  GuidePageViewController.m
+//  qierkang
+//
+//  Created by jyyl on 2017/5/25.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "GuidePageViewController.h"
+#import "SDCycleScrollView.h"
+#import "LoginViewController.h"
+#import "JYNavigationContrller.h"
+#import "tabBarViewController.h"
+@interface GuidePageViewController ()<UIScrollViewDelegate>
+@property (nonatomic, strong) SDCycleScrollView *cycleScrollView;
+//图片数组
+@property (nonatomic, strong) NSArray *imagesUrlArr;
+//进入软件按钮
+@property (nonatomic, strong) UIButton *nextBtn;
+//ScrollView
+@property (nonatomic, strong) UIScrollView *ScrollView;
+//pageControl
+@property (nonatomic, strong)UIPageControl *pageControl;
+
+@end
+
+@implementation GuidePageViewController
+
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    _imagesUrlArr = @[@"Login.bundle/pic_introduction1",@"Login.bundle/pic_introduction2",@"Login.bundle/pic_introduction3"];
+    
+    //创建ScrollView
+    UIScrollView *sv = [[UIScrollView alloc] init];
+    sv.frame = self.view.bounds;
+    //设置边缘不弹跳
+    sv.bounces = NO;
+    //整页滚动
+    sv.pagingEnabled = YES;
+    sv.showsHorizontalScrollIndicator = NO;
+    
+    //加入多个子视图(ImageView)
+    for(NSInteger i=0; i<_imagesUrlArr.count; i++){
+        NSString *imgName = [NSString stringWithFormat:_imagesUrlArr[i]];
+        UIImage *image = [UIImage imageNamed:imgName];
+        UIImageView *imageView = [[UIImageView alloc]initWithImage:image];
+        CGRect frame = CGRectZero;
+        frame.origin.x = i * sv.frame.size.width;
+        frame.size = sv.frame.size;
+        imageView.frame = frame;
+        [sv addSubview:imageView];
+        
+        if(i==_imagesUrlArr.count-1){
+            //开启图片的用户点击功能
+            imageView.userInteractionEnabled = YES;
+            //加个按钮
+            UIButton *button = [[UIButton alloc]init];
+            
+            button.frame = CGRectMake((imageView.frame.size.width-150)/2, imageView.frame.size.height*0.8, 150, 40);
+            [button setTitle:@"立即体验" forState:UIControlStateNormal];
+            button.titleLabel.font = [UIFont boldSystemFontOfSize:16];
+            [button setBackgroundImage:[UIImage imageNamed:@"login.bundle/btn_primary"] forState:0];
+            [button setBackgroundImage:[UIImage imageNamed:@"login.bundle/btn_primary"] forState:UIControlStateSelected];
+            [imageView addSubview:button];
+            [button addTarget:self action:@selector(nextPage) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        
+    }
+    
+    sv.contentSize = CGSizeMake(_imagesUrlArr.count * sv.frame.size.width, sv.frame.size.height);
+    
+    [self.view addSubview:sv];
+    
+    //加入页面指示控件PageControl
+    UIPageControl *pageControl = [[UIPageControl alloc]init];
+    self.pageControl = pageControl;
+    //设置frame
+    pageControl.frame = CGRectMake(0, self.view.frame.size.height - 40, self.view.frame.size.width, 20);
+    //分页面的数量
+    pageControl.numberOfPages = _imagesUrlArr.count;
+    //设置小圆点渲染颜色
+    pageControl.pageIndicatorTintColor = UIColorFromRGB(0xdcdcdc);
+    //设置当前选中小圆点的渲染颜色
+    pageControl.currentPageIndicatorTintColor = [UIColor whiteColor];
+    //关闭用户点击交互
+    pageControl.userInteractionEnabled = NO;
+    
+    [self.view addSubview:pageControl];
+    
+    sv.delegate = self;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    // 减速结束时取出偏移量
+    CGPoint offSet = scrollView.contentOffset;
+    CGFloat number = offSet.x / kScreenWidth;
+    _pageControl.currentPage = (NSInteger)number; // image与点关联  scrollView 与 pageControl关联
+}
+//进入软件
+- (void)nextPage
+{
+        NSDictionary *userInfoDic = [[chiveDataManager sharedChive] unarchivewithPath:@"userInfo"];
+    if ([[userInfoDic objectForKey:@"phone"] length] == 0  || userInfoDic == nil) {
+        LoginViewController *login=[[LoginViewController alloc]init];
+        JYNavigationContrller *nav= [[JYNavigationContrller alloc] initWithRootViewController:login];
+        [UIApplication sharedApplication].keyWindow.rootViewController = nav;
+        return;
+    }else{
+        tabBarViewController *tabbar = [[tabBarViewController alloc]init];
+        //添加一个缩放效果
+        tabbar.view.transform = CGAffineTransformMakeScale(0.2, 0.2);
+        [UIView animateWithDuration:0.1 animations:^{
+            tabbar.view.transform = CGAffineTransformIdentity;
+        }];
+        [UIApplication sharedApplication].keyWindow.rootViewController = tabbar;
+    }
+
+}
+
+@end

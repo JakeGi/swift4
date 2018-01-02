@@ -1,0 +1,122 @@
+//
+//  MyInfoTableViewCell.m
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/9.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "MyInfoTableViewCell.h"
+
+@interface MyInfoTableViewCell()<UITextFieldDelegate>
+
+
+@end
+
+@implementation MyInfoTableViewCell
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier withIndexPath:(NSIndexPath *)indexPath withTarget:(id)target
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.detailTextLabel.textColor = UIColorFromRGB(0xa0a6a9);
+        switch (indexPath.section) {
+            case 0:
+                //头像
+                self.headImage =[[UIImageView alloc]init];
+                [self.contentView addSubview:self.headImage];
+                
+                break;
+                
+            default:
+                switch (indexPath.row) {
+                    case 0:
+                        self.detailTextLabel.text = @"";
+                        self.textField = [[UITextField alloc] init];
+                        self.textField.tag = indexPath.row;
+                        self.textField.textAlignment = NSTextAlignmentRight;
+                        self.textField.placeholder = @"请设置";
+//                        [self.textField addTarget:target action:@selector(textFieldChangeWithText:) forControlEvents:UIControlEventEditingChanged];
+                        [self.contentView addSubview:self.textField];
+
+                        break;
+                    case 1:
+                        self.detailTextLabel.text = @"未设置";
+                        break;
+                    case 3:
+                        self.detailTextLabel.text = @"未设置";
+
+                        break;
+                    case 4:
+                        self.detailTextLabel.text = @"未设置";
+
+                        break;
+                    case 7:
+                        self.detailTextLabel.text = @"未设置";
+
+                        break;
+                    case 8:
+                        self.detailTextLabel.text = @"未设置";
+
+                        break;
+                    case 9:
+                        self.detailTextLabel.text = @"未设置";
+
+                        break;
+                    case 10:
+                        self.detailTextLabel.text = @"请设置";
+
+                        break;
+                    default:
+                        self.detailTextLabel.text = @"";
+                        self.textField = [[UITextField alloc] init];
+                        self.textField.tag = indexPath.row;
+                        self.textField.textAlignment = NSTextAlignmentRight;
+                        self.textField.placeholder = @"请设置";
+//                        [self.textField addTarget:target action:@selector(textFieldChangeWithText:) forControlEvents:UIControlEventEditingChanged];
+                        self.textField.keyboardType = UIKeyboardTypeDecimalPad;
+                        
+                        [self.contentView addSubview:self.textField];
+
+                        break;
+                }
+                break;
+        }
+
+    }
+    self.textField.delegate = target;
+    return self;
+}
+
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    [self.headImage mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.equalTo(CGSizeMake(kWidth(44),kWidth(44)));
+        make.right.equalTo(self.contentView).offset(-kWidth(12));
+        make.centerY.equalTo(self.contentView);
+    }];
+    [self.headImage layoutRoundImage:kWidth(22)];
+    
+    [self.textField makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.contentView).offset(-kWidth(12));
+        make.centerY.equalTo(self.contentView);
+        make.width.equalTo(kWidth(200));
+    }];
+    
+    [self.textLabel makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.contentView);
+        make.left.equalTo(self.contentView).offset(kWidth(12));
+    }];
+    
+    
+}
+
+- (void)setCellDic:(NSDictionary *)cellDic
+{
+    
+    _cellDic = cellDic;
+    
+    self.textLabel.text = [_cellDic objectForKey:@"right"];
+    
+}
+@end

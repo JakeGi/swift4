@@ -1,0 +1,98 @@
+//
+//  MyEBHeadView.m
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/20.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "MyEBHeadView.h"
+@interface MyEBHeadView()
+{
+    UILabel *_priceLab;
+    UIImageView * _unitImgV;
+    UIImageView * _backGImgV;
+    UILabel * _rankingLab;
+}
+@end
+@implementation MyEBHeadView
+- (instancetype)initWithTarget:(id)target WithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = UIColorFromRGB(0xf7f7f8);
+        [self setUIwithTarget:target];
+    }
+    return self;
+}
+
+- (void)setUIwithTarget:(id)target
+{
+    
+    _backGImgV = [[UIImageView alloc]init];
+    _backGImgV.image = [UIImage imageNamed:@"MyCenter.bundle/bg_myintegral"];
+    [self addSubview:_backGImgV];
+    
+    _unitImgV = [[UIImageView alloc]init];
+    _unitImgV.image = [UIImage imageNamed:@"MyCenter.bundle/ico_gold"];
+    [self addSubview:_unitImgV];
+    _priceLab = [[UILabel alloc] init];
+    _priceLab.textColor =  kWhiteColor;
+    _priceLab.textAlignment = NSTextAlignmentCenter;
+    _priceLab.font = [UIFont boldSystemFontOfSize:36];
+    [self addSubview:_priceLab];
+    
+    _rankingLab = [[UILabel alloc] init];
+    _rankingLab.textColor =  kWhiteColor;
+    _rankingLab.textAlignment = NSTextAlignmentCenter;
+    _rankingLab.font = [UIFont systemFontOfSize:16];
+    [self addSubview:_rankingLab];
+    
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [_backGImgV makeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(self);
+        make.height.equalTo(self);
+        make.left.equalTo(self);
+        make.top.equalTo(self);
+    }];
+    
+    [_priceLab makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self).offset(-kHeight(10));
+        make.left.equalTo(self).offset(kWidth(10));
+        make.height.equalTo(kHeight(35));
+    }];
+    
+    [_unitImgV makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_priceLab.right);
+        make.width.equalTo(kWidth(20));
+        make.height.equalTo(kHeight(20));
+        make.bottom.equalTo(_priceLab.bottom).offset(-5);
+    }];
+    [_rankingLab makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(_priceLab);
+        make.right.equalTo(self).offset(-kWidth(15));
+        make.height.equalTo(kHeight(30));
+    }];
+
+}
+#pragma mark - 设置分数据
+- (void)setUserInfoDic:(NSDictionary *)userInfoDic
+{
+    _userInfoDic = [NSDictionary dictionaryWithDictionary:userInfoDic];
+
+    NSString * qB = [NSString stringWithFormat:@"%@",[_userInfoDic objectForKey:@"integral"]];
+    _priceLab.text = qB;
+    
+    NSMutableAttributedString *Titletring = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"排名第%@位",[_userInfoDic objectForKey:@"ranking"]]];
+//    NSInteger ranks = [[_userInfoDic objectForKey:@"ranking"] length] +2;
+    [Titletring addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:32] range:NSMakeRange(3,[[_userInfoDic objectForKey:@"ranking"] length])];
+    _rankingLab.attributedText = Titletring;
+
+    
+}
+
+@end

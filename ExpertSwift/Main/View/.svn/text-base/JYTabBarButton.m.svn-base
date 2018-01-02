@@ -1,0 +1,40 @@
+//
+//  JYTabBarButton.m
+//  miaoyi
+//
+//  Created by 陈刚 on 16/8/20.
+//  Copyright © 2016年 jinyiyanglao. All rights reserved.
+//
+// 只要添加了这个宏，就不用带mas_前缀
+#define MAS_SHORTHAND
+// 只要添加了这个宏，equalTo就等价于mas_equalTo
+#define MAS_SHORTHAND_GLOBALS
+#import "JYTabBarButton.h"
+#import "Masonry.h"
+@implementation JYTabBarButton
+
+//自定义按钮,取消高亮状态
+- (void) setHighlighted:(BOOL)highlighted
+{
+}
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    //调整图片
+    [self layoutIfNeeded];
+    self.imageView.JY_width = self.JY_width *0.2;
+    self.imageView.JY_height = self.imageView.JY_width;
+    self.imageView.JY_x = self.JY_width/2 - self.imageView.JY_width/2;
+    self.imageView.JY_y = 5;
+
+    //调整文字
+    self.titleLabel.JY_width = self.JY_width;
+    self.titleLabel.JY_height = self.JY_height -  self.imageView.JY_height -self.imageView.JY_y;
+    self.titleLabel.JY_y = self.imageView.JY_height +self.imageView.JY_y;
+    self.titleLabel.JY_x = 0;
+    self.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.titleLabel.font = [UIFont systemFontOfSize:14];
+    
+}
+
+@end

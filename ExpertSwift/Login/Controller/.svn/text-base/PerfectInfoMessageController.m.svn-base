@@ -1,0 +1,391 @@
+//
+//  PerfectInfoMessageController.m
+//  qierkang
+//
+//  Created by jyyl on 17/4/12.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "PerfectInfoMessageController.h"
+#import "PerfectInfoMessageCell.h"
+#import "AppDelegate.h"
+#import "tabBarViewController.h"
+@interface PerfectInfoMessageController ()<UITextFieldDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UITableViewDelegate,UITableViewDataSource>
+
+@property (nonatomic,strong) UIButton *saveBtn;
+
+@property (nonatomic,strong) UITableView *tableView;
+@property (nonatomic,strong) NSString *ageStr;
+@property (nonatomic,strong) NSString *sexStr;
+@property (nonatomic,strong) NSString *heightStr;
+
+@property (nonatomic,strong) NSMutableArray *sexArr;
+@property (nonatomic,strong) NSMutableArray *ageArr;
+@property (nonatomic,strong) NSMutableArray *heightArr;
+@property (nonatomic,strong) UIDatePicker *datePicker;
+
+@end
+
+@implementation PerfectInfoMessageController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.navigationItem.title = @"完善个人信息";
+    self.view.backgroundColor = UIColorFromRGB(0xf7f7f8);
+    [self creatUI];
+}
+
+#pragma mark - 界面搭建
+- (void)creatUI
+{
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.tableView.showsVerticalScrollIndicator = NO;
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(kWidth(15),0, JYScreenW-kWidth(30), kHeight(182)) style:UITableViewStylePlain];
+    self.tableView.scrollEnabled = NO;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    self.tableView.backgroundColor = kWhiteColor;
+    [self.view addSubview:_tableView];
+    
+    //添加按钮
+    _saveBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_saveBtn setTitle:@"保存" forState:UIControlStateNormal];
+    [_saveBtn setTitleColor:kWhiteColor forState:UIControlStateNormal];
+    [_saveBtn setBackgroundImage:[UIImage imageNamed:@"Login.bundle/btn_primary_default"] forState:UIControlStateNormal];
+    [_saveBtn setBackgroundImage:[UIImage imageNamed:@"Login.bundle/btn_disable"] forState:UIControlStateDisabled];
+    
+    [_saveBtn addTarget:self action:@selector(finish) forControlEvents:UIControlEventTouchUpInside];
+//    _saveBtn.enabled = NO;
+    [self.view addSubview:_saveBtn];
+    
+    [_saveBtn makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.tableView);
+        make.right.equalTo(self.tableView);
+        make.height.equalTo(kHeight(44));
+        make.top.equalTo(self.tableView.bottom).offset(kHeight(25));
+    }];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 3;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    PerfectInfoMessageCell *cell = [PerfectInfoMessageCell cellWithTableView:tableView withIndexPath:indexPath withTarget:self];
+    switch (indexPath.row) {
+        case 0:
+            cell.textfiled.text = _sexStr;
+            break;
+        case 1:
+            cell.textfiled.text = _ageStr;
+            break;
+        case 2:
+            cell.textfiled.text = _heightStr;
+            break;
+        default:
+            break;
+    }
+    
+    return cell;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return kHeight(44);
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return kHeight(50);
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *headView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, JYScreenW, 50)];
+    headView.backgroundColor = UIColorFromRGB(0xf7f7f8);
+    UILabel*tipLab = [[UILabel alloc]init];
+    tipLab.text = @"完善个人信息，获得更完美的体验";
+    tipLab.font = [UIFont systemFontOfSize:14];
+    tipLab.textColor = UIColorFromRGB(0xA0A6A9);
+    [headView addSubview:tipLab];
+    [tipLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(kWidth(12));
+        make.top.equalTo(kHeight(12));
+    }];
+    
+    return headView;
+}
+-(BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    
+    switch (textField.tag ) {
+        case 0:
+            [self selectMedicationWithTag:0];
+            break;
+            return NO;
+
+        case 1:
+            [self selectTime];
+            break;
+            return NO;
+
+        case 2:
+            [self selectMedicationWithTag:2];
+            break;
+            return NO;
+
+        default:
+            break;
+    }
+    return NO;
+}
+
+- (void)textFieldChangeWithText:(UITextField *)text{
+
+}
+
+#pragma mark - 选择用户信息
+- (void)selectMedicationWithTag:(NSInteger)tag
+{
+    UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(-20,0, JYScreenW, kHeight(150))];
+    pickerView.delegate = self;
+    pickerView.dataSource = self;
+    pickerView.tag = tag;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"\n\n\n\n\n\n\n\n" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    [alert.view addSubview:pickerView];
+    pickerView.JY_width = alert.view.JY_width;
+    switch (tag) {
+        case 2:
+            [pickerView selectRow:120 inComponent:0 animated:YES];
+            
+            break;
+        default:
+            break;
+    }
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        switch (tag) {
+            case 0:
+                if (_sexStr == nil ) {
+                    _sexStr = @"男";
+                }
+                break;
+            case 2:
+                if(_heightStr == nil){
+                    _heightStr = @"170";
+                }
+                break;
+                
+            default:
+                break;
+        }
+   
+        [self.tableView reloadData];
+
+    }];
+    [ok setValue:UIColorFromRGB(0x77bcb6) forKey:@"_titleTextColor"];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    }];
+    [cancel setValue:UIColorFromRGB(0x77bcb6) forKey:@"_titleTextColor"];
+    
+    [alert addAction:ok];
+    [alert addAction:cancel];
+    [self presentViewController:alert animated:YES completion:^{ }];
+}
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    
+    switch (pickerView.tag) {
+        case 0:
+            return [NSString stringWithFormat:@"%@",self.sexArr[row]];
+            break;
+        case 2:
+            return [NSString stringWithFormat:@"%@",self.heightArr[row]];
+
+            break;
+        default:
+            return nil;
+            break;
+    }
+    
+}
+#pragma mark - 选择用药类型
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    switch (pickerView.tag) {
+        case 0:
+            _sexStr = self.sexArr[row];
+            break;
+        case 2:
+            _heightStr = self.heightArr[row];
+            break;
+        default:
+            break;
+    }
+    
+}
+- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
+{
+    return JYScreenW;
+    
+}
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+#pragma mark - pickerView.delegate
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    switch (pickerView.tag) {
+        case 0:
+            return self.sexArr.count;
+            break;
+        case 2:
+            return self.heightArr.count;
+            break;
+        default:
+            return 0;
+            break;
+    }
+    
+}
+
+- (NSMutableArray *)sexArr{
+    if (_sexArr == nil) {
+        _sexArr = [NSMutableArray arrayWithObjects:@"男",@"女", nil];
+    }
+    return _sexArr;
+}
+
+
+- (NSMutableArray *)heightArr{
+    if (_heightArr == nil) {
+        _heightArr = [NSMutableArray arrayWithCapacity:250];
+        for (int i=50;i<251 ; i++) {
+            [_heightArr addObject:[NSString stringWithFormat:@"%d",i]];
+        }
+        
+        JYLog(@"_heightArr%ld",_heightArr.count);
+    }
+    return _heightArr;
+}
+//#pragma mark - 更改泊村按钮
+//- (void)upload
+//{
+//    
+//}
+#pragma mark - 选择出生日期
+- (void)selectTime
+{
+    _datePicker = [[UIDatePicker alloc] init];
+    //设置可选的最大日期就是现在的时间
+    _datePicker.maximumDate = [NSDate date];
+    //显示中文
+    NSLocale *locale = [[NSLocale alloc]initWithLocaleIdentifier:@"zh_CN"];
+    _datePicker.datePickerMode = UIDatePickerModeDate;
+
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"\n\n\n\n\n\n\n\n\n\n" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    [alert.view addSubview:_datePicker];
+    _datePicker.JY_width = alert.view.JY_width;
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        NSDateFormatter* dateFormat = [[NSDateFormatter alloc] init];
+        //实例化一个NSDateFormatter对象
+        [dateFormat setDateFormat:@"yyyy-MM-dd"];//设定时间格式
+        NSString *dateString = [dateFormat stringFromDate:_datePicker.date];
+        _ageStr = dateString;
+        [self.tableView reloadData];
+   
+    }];
+    
+    [ok setValue:UIColorFromRGB(0x77bcb6) forKey:@"_titleTextColor"];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    }];
+    [cancel setValue:UIColorFromRGB(0x77bcb6) forKey:@"_titleTextColor"];
+    
+    [alert addAction:ok];
+    [alert addAction:cancel];
+    
+    
+    [self presentViewController:alert animated:YES completion:^{ }];
+}
+#pragma mark - 完成保存
+- (void)finish
+{
+    if (self.heightStr == nil || self.ageStr == nil || _sexStr == nil) {
+        
+        [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"请补全信息" withDismissTime:1 withControl:self];
+    }else{
+        NSString *sex = @"";
+        if ([_sexStr isEqualToString:@"女"]) {
+            sex = @"1";
+        }else{
+            sex = @"0";
+        }
+        NSDictionary *userInfo = [[chiveDataManager sharedChive] unarchivewithPath:@"userInfo"];
+        NSMutableDictionary *mutableDic=[NSMutableDictionary dictionary];
+        mutableDic[@"token"] = [userInfo objectForKey:@"token"];
+        mutableDic[@"name"] = [userInfo objectForKey:@"name"];
+        mutableDic[@"weight"] = @"";
+        mutableDic[@"height"] = self.heightStr;
+        mutableDic[@"nickname"] = @"";
+        mutableDic[@"edu"] = @"";
+        mutableDic[@"occupation"] = @"";
+        mutableDic[@"is_marriage"] = @"";
+        mutableDic[@"medical_insurance"] = @"";
+        mutableDic[@"referee"] = @"";
+        mutableDic[@"member_code"] = @"";
+        mutableDic[@"address"] = @"";
+        mutableDic[@"birth"] = self.ageStr;
+        mutableDic[@"idcard"] = @"";
+        mutableDic[@"sex"] = sex;
+        [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+        [SVProgressHUD showWithStatus:@"正在保存..."];
+        [NetWorkRequest sendRequestWithUrl:updateUserInfoUrl withParameters:mutableDic withType:@"post" success:^(id responseObject) {
+            JYLog(@"%@",responseObject);
+            
+            [SVProgressHUD dismiss];
+            if ([[responseObject objectForKey:@"code"] isEqualToString:@"001004"]) {
+                
+                tabBarViewController *tabbar = [[tabBarViewController alloc]init];
+                //添加一个缩放效果
+                tabbar.view.transform = CGAffineTransformMakeScale(0.2, 0.2);
+                [UIView animateWithDuration:0.1 animations:^{
+                    tabbar.view.transform = CGAffineTransformIdentity;
+                }];
+                [UIApplication sharedApplication].keyWindow.rootViewController = tabbar;
+            }else if ([[responseObject objectForKey:@"code"] isEqualToString:loginTimeout]){
+                //登录超时
+                [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"登录超时，请重新登录!" actionTitle:@"重新登录" withControl:self withHandler:^{
+                    [Mediator loginOutWithLoginClass:@"LoginViewController" withNavC:@"JYNavigationContrller"];
+                    
+                }];
+                
+            }else{
+                [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:[responseObject objectForKey:@"message"] withDismissTime:1.5 withControl:self];
+            }
+            
+        } failure:^(NSError *error) {
+            [SVProgressHUD dismiss];
+            JYLog(@"%@",error);
+            
+        }];
+        
+
+    }
+    
+    
+}
+
+@end

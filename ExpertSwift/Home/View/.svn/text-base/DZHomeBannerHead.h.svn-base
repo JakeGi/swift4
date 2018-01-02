@@ -1,0 +1,17 @@
+//
+//  DZHomeBannerHead.h
+//  Expert
+//
+//  Created by jyyl on 2017/6/13.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface DZHomeBannerHead : UITableViewHeaderFooterView
+
+- (instancetype)initWithFrame:(CGRect)frame WithTarget:(id)target;
+
+//banner
+@property (nonatomic,strong)NSString *imgUrl;
+@end

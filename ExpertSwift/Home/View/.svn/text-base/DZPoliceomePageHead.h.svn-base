@@ -1,0 +1,14 @@
+//
+//  DZPoliceomePageHead.h
+//  Expert
+//
+//  Created by jyyl on 2017/6/15.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface DZPoliceomePageHead : UITableViewHeaderFooterView
+- (instancetype)initWithFrame:(CGRect)frame WithTarget:(id)target;
+
+@end

@@ -1,0 +1,43 @@
+//
+//  MyNewsModel.h
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/22.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface MyNewsModel : NSObject
+//头像
+@property (nonatomic,strong)NSString *photoMini;
+//姓名
+@property (nonatomic,strong)NSString *name;
+//详细
+@property (nonatomic,strong)NSString *message;
+//申请人ID
+@property (nonatomic,strong)NSString *userid;
+//电话
+@property (nonatomic,strong)NSString *phone;
+//昵称
+@property (nonatomic,strong)NSString *nickname;
+//性别
+@property (nonatomic,strong)NSString *sex;
+//备注信息
+@property (nonatomic,strong)NSString *remarks;
+//消息id
+@property (nonatomic,strong)NSString *jpushid;
+//发送时间
+@property (nonatomic,strong)NSString *creat_time;
+//消息处理时间
+@property (nonatomic,strong)NSString *update_time;
+//消息类型
+@property (nonatomic,strong)NSString *type;
+//关联关系Id
+@property (nonatomic,strong)NSString *userfriendid;
+//申请人设备标示吗
+@property (nonatomic,strong)NSString *alias;
+//是否添加成功 0 同意 1 未确认 2 拒绝
+@property (nonatomic,strong)NSString *issuccess;
+
+@end

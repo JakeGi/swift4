@@ -1,0 +1,12 @@
+//
+//  tabBarViewController.h
+//  miaoyi
+//
+//  Created by jinyiyanglao on 16/8/17.
+//  Copyright © 2016年 jinyiyanglao. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface tabBarViewController : UITabBarController
+@end

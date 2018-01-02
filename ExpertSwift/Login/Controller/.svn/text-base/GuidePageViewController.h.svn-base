@@ -1,0 +1,13 @@
+//
+//  GuidePageViewController.h
+//  qierkang
+//
+//  Created by jyyl on 2017/5/25.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface GuidePageViewController : UIViewController
+
+@end

@@ -1,0 +1,818 @@
+//
+//  MyInfoTableViewController.m
+//  qierkang
+//
+//  Created by 陈刚 on 17/3/9.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "MyInfoTableViewController.h"
+#import "MyInfoTableViewCell.h"
+#import "NSString+checkCardId.h"
+#import "UIImage+scaleMG.h"
+@interface MyInfoTableViewController ()<UIPickerViewDelegate,UIPickerViewDataSource,UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,UITextFieldDelegate>
+//tableview
+@property (nonatomic,strong)UITableView *tableView;
+//列表展示信息
+@property (nonatomic,strong)NSArray *cellArr;
+//头像地址
+@property (nonatomic,strong)NSString *headUrl;
+//图片data
+@property (nonatomic,strong)NSData *imageData;
+//姓名
+@property (nonatomic,strong)NSString *username;
+//phone
+@property (nonatomic,strong)NSString *phone;
+//身份证号
+@property (nonatomic,strong)NSString *userID;
+//性别 男 0 女 1
+@property (nonatomic,strong)NSString *sex;
+//生日
+@property (nonatomic,strong)NSString *brth;
+//身高
+@property (nonatomic,strong)NSString *userTalls;
+//体重
+@property (nonatomic,strong)NSString *userWeight;
+//婚姻状况
+@property (nonatomic,strong)NSString *Marriage;
+//文化
+@property (nonatomic,strong)NSString *culture;
+//工作
+@property (nonatomic,strong)NSString *working;
+//文化程度数组
+@property (nonatomic,strong)NSArray *cultureArr;
+//婚姻状况
+@property (nonatomic,strong)NSArray *MarriageArr;
+//工作
+@property (nonatomic,strong)NSArray *workingArr;
+//个人信息
+@property (nonatomic,strong)NSDictionary *userInfoDic;
+//性别字典
+@property (nonatomic,strong)NSDictionary *sexDic;
+
+@end
+
+@implementation MyInfoTableViewController
+#pragma mark - 懒加载数组
+- (NSArray *)cultureArr
+{
+    if (_cultureArr == nil) {
+        _cultureArr = [NSArray array];
+        _cultureArr = @[@"初中",@"高中",@"中专及技校",@"大学本科/专科",@"研究生以上"];
+    }
+    return _cultureArr;
+}
+
+- (NSDictionary *)userInfoDic
+{
+    if (_userInfoDic == nil) {
+        _userInfoDic = [NSDictionary dictionary];
+    }
+    return _userInfoDic;
+}
+
+- (NSArray *)MarriageArr
+{
+    if (_MarriageArr == nil) {
+        _MarriageArr = [NSArray array];
+        _MarriageArr = @[@"未婚",@"已婚",@"丧偶",@"离异",@"其他"];
+        
+    }
+    return _MarriageArr;
+}
+
+- (NSArray *)workingArr
+{
+    if (_workingArr == nil) {
+        _workingArr = [NSArray array];
+        _workingArr = @[@"国家公务员",@"专业技术人员",@"职员",@"企业管理员",@"工人",@"农民",@"学生",@"现役军人",@"自由职业者",@"个体经营者",@"无业人员",@"退(离)休人员",@"其他"];
+        
+    }
+    return _workingArr;
+}
+
+- (NSArray *)cellArr
+{
+    if (_cellArr == nil) {
+        _cellArr = [NSArray array];
+    }
+    _cellArr = @[@[@{@"right":@"头像"}],
+                 @[@{@"right":@"姓名"},
+                 @{@"right":@"手机号"},
+                 @{@"right":@"身份证"},
+                 @{@"right":@"性别"},
+                 @{@"right":@"生日"},
+                 @{@"right":@"身高(cm)"},
+                 @{@"right":@"体重(kg)"},
+                 @{@"right":@"婚姻状况"},
+                 @{@"right":@"文化程度"},
+                 @{@"right":@"职业"}]];
+    
+    return _cellArr;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.navigationItem.title = @"个人信息";
+    
+    //设置界面
+    [self setUI];
+    
+    _sexDic = @{@"0":@"男",@"1":@"女"};
+
+}
+
+#pragma mark - 添加tableview
+- (void)setUI
+{
+    
+    self.view.backgroundColor = kWhiteColor;
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, JYScreenW,JYScreenH-64) style:UITableViewStyleGrouped];
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+    
+    [self.view addSubview:self.tableView];
+    
+//    //tableview
+//    UIView *footView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, JYScreenW, kHeight(66))];
+//    //添加按钮
+//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [btn setTitleColor:kWhiteColor forState:UIControlStateNormal];
+//    [btn setTitle:@"完成" forState:UIControlStateNormal];
+//    [btn setBackgroundImage:[UIImage imageNamed:@"MyCenter.bundle/btn_primary_default"] forState:UIControlStateNormal];
+//    [btn setBackgroundImage:[UIImage imageNamed:@"MyCenter.bundle/btn_disable"] forState:UIControlStateDisabled];
+//    [btn addTarget:self action:@selector(save) forControlEvents:UIControlEventTouchUpInside];
+//    [footView addSubview:btn];
+//    
+//    [btn makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(footView).offset(kWidth(12));
+//        make.right.equalTo(footView).offset(-kWidth(12));
+//        make.height.equalTo(kHeight(44));
+//        make.centerY.equalTo(footView);
+//    }];
+//    
+//    self.tableView.tableFooterView = footView;
+
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    // 获取个人信息
+     [self getUserInfo];
+
+}
+#pragma mark - 获取用户信息
+- (void)getUserInfo
+{
+    NSDictionary *userInfo = [[chiveDataManager sharedChive] unarchivewithPath:@"userInfo"];
+    NSMutableDictionary *mutableDic=[NSMutableDictionary dictionary];
+    mutableDic[@"token"] = [userInfo objectForKey:@"token"];
+    
+    [NetWorkRequest sendRequestWithUrl:getUserInfoUrl withParameters:mutableDic withType:@"post" success:^(id responseObject) {
+        JYLog(@"%@",responseObject);
+        if ([[responseObject objectForKey:@"code"] isEqualToString:@"001000"]) {
+            
+            self.userInfoDic = [NSDictionary dictionaryWithDictionary:responseObject];
+            
+            self.username = [responseObject objectForKey:@"username"];
+            self.userID = [responseObject objectForKey:@"idcard"];
+            self.phone = [responseObject objectForKey:@"phone"];
+            self.userTalls = [responseObject objectForKey:@"height"];
+            self.userWeight = [responseObject objectForKey:@"weight"];
+            self.sex = [responseObject objectForKey:@"sex"];
+            self.brth = [responseObject objectForKey:@"birth"];
+            self.Marriage = [responseObject objectForKey:@"is_marriage"];
+
+            self.headUrl = [responseObject objectForKey:@"photo"];
+            self.working = [responseObject objectForKey:@"occupation"];
+            self.culture = [responseObject objectForKey:@"edu"];
+            //设置数据
+            [self.tableView reloadData];
+        }else if ([[responseObject objectForKey:@"code"] isEqualToString:loginTimeout]){
+            //登录超时
+            [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"登录超时，请重新登录!" actionTitle:@"重新登录" withControl:self withHandler:^{
+                [Mediator loginOutWithLoginClass:@"LoginViewController" withNavC:@"JYNavigationContrller"];
+                
+            }];
+        }
+    } failure:^(NSError *error) {
+        
+        JYLog(@"%@",error);
+        
+    }];
+    
+}
+
+//-(void)viewWillDisappear:(BOOL)animated{
+//    [super viewWillDisappear:animated];
+//    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+//    [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+//}
+//
+//-(void)openKeyboard:(NSNotification*)notification{
+//
+//    CGRect keyboardFrame=[notification.userInfo[UIKeyboardFrameEndUserInfoKey]CGRectValue];
+//    NSTimeInterval durations=[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey]doubleValue];
+//    UIViewAnimationOptions options=[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey]intValue];
+//    
+//    [UIView animateWithDuration:durations delay:0 options:options animations:^{
+//        self.view.JY_y = -keyboardFrame.size.height +64;
+//        
+//    } completion:nil];
+//}
+//
+//-(void)closeKeyboard:(NSNotification *)notification{
+//
+//    CGRect keyboardFrame=[notification.userInfo[UIKeyboardFrameEndUserInfoKey]CGRectValue];
+//    NSTimeInterval durations=[notification.userInfo[UIKeyboardAnimationDurationUserInfoKey]doubleValue];
+//    UIViewAnimationOptions options=[notification.userInfo[UIKeyboardAnimationCurveUserInfoKey]intValue];
+//    [UIView animateWithDuration:durations delay:0 options:options animations:^{
+//        self.view.JY_y = 64;
+//
+//    } completion:nil];
+//    
+//}
+//
+#pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    
+    return self.cellArr.count;
+    
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    
+    return  [self.cellArr[section] count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    NSString *indentifier = [NSString stringWithFormat:@"%ld%ld",(long)indexPath.section,(long)indexPath.row];
+
+    MyInfoTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:indentifier];
+    if (cell==nil){
+        cell=[[MyInfoTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:indentifier withIndexPath:indexPath withTarget:self];
+    }
+    cell.cellDic = self.cellArr[indexPath.section][indexPath.row];
+    
+    switch (indexPath.section) {
+        case 0:
+            if (self.imageData) {
+                cell.headImage.image = [UIImage imageWithData:self.imageData];
+            }else{
+                [UIImageView SDimageWithImageView:cell.headImage withUrl:self.headUrl withPlaceholderImg:[UIImage imageNamed:@"MyCenter.bundle/img_avatar_default_lg"] withLoadErrorImg:[UIImage imageNamed:@"MyCenter.bundle/img_failtoload_lg"]];
+            }
+            break;
+        case 1:
+            cell.textField.enabled = NO;
+
+            switch (indexPath.row) {
+                case 0:
+                    cell.textField.text = self.username;
+                    
+                    break;
+                case 1:
+                    if (self.phone.length>0) {
+                        
+                        cell.detailTextLabel.text = self.phone;
+                    }
+                    break;
+                case 2:
+                    cell.textField.text = self.userID;
+
+                    break;
+                case 3:
+                    if (self.sex.length>0) {
+                        cell.detailTextLabel.textColor = kBlackColor;
+                        cell.detailTextLabel.text = [_sexDic objectForKey:self.sex];
+                    }
+                    break;
+                case 4:
+                    if (self.brth.length>0) {
+                        cell.detailTextLabel.textColor = kBlackColor;
+                        cell.detailTextLabel.text = self.brth;
+                    }
+                    break;
+                case 5:
+                    cell.textField.text = self.userTalls;
+
+                    break;
+                case 6:
+                    cell.textField.text = self.userWeight;
+
+                    break;
+                case 7:
+                    if (self.Marriage.length>0) {
+                        
+                        cell.detailTextLabel.textColor = kBlackColor;
+                        cell.detailTextLabel.text = self.Marriage;
+                    }
+                    break;
+                case 8:
+                    if (self.culture.length>0) {
+                        
+                        cell.detailTextLabel.textColor = kBlackColor;
+                        cell.detailTextLabel.text = self.culture;
+                    }
+                    break;
+                case 9:
+                    if (self.working.length>0) {
+                        
+                        cell.detailTextLabel.textColor = kBlackColor;
+                        cell.detailTextLabel.text = self.working;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            break;
+        default:
+          
+            break;
+    }
+    
+    return cell;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    switch (indexPath.section) {
+//        case 0:
+////            [self headImageTap];
+//            break;
+//        default:
+////            switch (indexPath.row) {
+////                case 3:
+////                    [self selectSex];
+////                    
+////                    break;
+////                case 4:
+////                    [self selectTime];
+////
+////                    break;
+////                case 7:
+////                    [self selectMerry];
+////
+////                    break;
+////                case 8:
+////                    [self selectCulture];
+////
+////                    break;
+////                case 9:
+////                    [self selectWork];
+////
+////                    break;
+//
+//                default:
+//                    break;
+//            }
+//    }
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (indexPath.row) {
+        case 0:
+            return kHeight(64);
+            break;
+            
+        default:
+            return kHeight(44);
+            break;
+    }
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    switch (section) {
+        case 0:
+             return 0.01;
+            break;
+            
+        default:
+            return 10;
+            break;
+    }
+   
+}
+
+//#pragma mark - 输入
+//- (void)textFieldChangeWithText:(UITextField *)tf
+//{
+//    switch (tf.tag) {
+//        case 0:
+//            self.username = tf.text;
+//            break;
+//        case 2:
+//            self.userID = tf.text;
+//            break;
+//        case 5:
+//            self.userTalls = tf.text;
+//            break;
+//        case 6:
+//            self.userWeight = tf.text;
+//            break;
+//        default:
+//            break;
+//    }
+//}
+//#pragma mark - 编辑结束获取生日和性别
+//- (void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    switch (textField.tag) {
+//        case 2:
+//            if (![NSString isCorrect:self.userID]) {//身份证验证
+//                [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"请输入有效的18位身份证号" withDismissTime:1.2 withControl:self];
+//            }else{
+//                self.brth = [NSString birthdayStrFromIdentityCard:self.userID];
+//                self.sex = [NSString getIdentityCardSex:self.userID];
+//                [self.tableView reloadData];
+//            }
+//            break;
+//         case 5:
+//            if ([self.userTalls integerValue]>=250) {
+//                [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"请输入有效的身高数据" withDismissTime:1.2 withControl:self];
+//            }
+//            break;
+//        default:
+//            break;
+//    }
+//}
+//#pragma mark - 限制输入位数
+//- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+//{
+//    switch (textField.tag) {
+//        case 2:
+//            if (range.length ==0&& range.location>17) {
+//                return NO;
+//            }
+//            return YES;
+//            break;
+//        case 5:
+//            if (range.length ==0&& range.location>2) {
+//                return NO;
+//            }
+//            return YES;
+//            break;
+//        case 6:
+//            if (range.length ==0&& range.location>2) {
+//                return NO;
+//            }
+//            return YES;
+//            break;
+//        default:
+//            return YES;
+//            break;
+//    }
+//}
+//#pragma mark - 限制弹出键盘
+//- (void)textFieldDidBeginEditing:(UITextField *)textField
+//{
+//    if (textField.tag >4) {
+//        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(openKeyboard:) name:UIKeyboardWillShowNotification object:nil];
+//        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(closeKeyboard:) name:UIKeyboardWillHideNotification object:nil];
+//    }else{
+//        [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+//        [[NSNotificationCenter defaultCenter]removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+//    }
+//}
+//#pragma mark - pickerView.delegate
+//- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+//{
+//    switch (pickerView.tag) {
+//        case 1:
+//            return  self.workingArr.count;
+//            break;
+//        case 2:
+//            return  self.cultureArr.count;
+//            break;
+//            
+//        case 3:
+//            return  self.MarriageArr.count;
+//            break;
+//        default:
+//            return 0;
+//            break;
+//    }
+//
+//}
+//- (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
+//{
+//    return JYScreenW;
+//    
+//}
+//
+//- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+//{
+//    return 1;
+//}
+//- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+//{
+//    switch (pickerView.tag) {
+//        case 1:
+//            self.working = self.workingArr[row];
+//            break;
+//        case 2:
+//            self.culture = self.cultureArr[row];
+//            break;
+//            
+//        case 3:
+//            self.Marriage = self.MarriageArr[row];
+//            break;
+//        default:
+//            break;
+//    }
+//}
+//- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+//{
+//    switch (pickerView.tag) {
+//        case 1:
+//            return [NSString stringWithFormat:@"%@",self.workingArr[row]];
+//            break;
+//        case 2:
+//            return [NSString stringWithFormat:@"%@",self.cultureArr[row]];
+//            break;
+//            
+//        case 3:
+//            JYLog(@"%@",self.MarriageArr);
+//            return [NSString stringWithFormat:@"%@",self.MarriageArr[row]];
+//            break;
+//        default:
+//            return @"";
+//            break;
+//    }
+//
+//}
+//
+//#pragma mark - 选择婚姻状况
+//- (void)selectMerry
+//{
+////    self.Marriage = @"未婚";
+//    [self selectInfoWithTag:3];
+//
+//}
+//#pragma mark - 选择文化程度
+//- (void)selectCulture
+//{
+////    self.culture = @"初中";
+//    [self selectInfoWithTag:2];
+//
+//}
+//#pragma mark - 选择职业
+//- (void)selectWork
+//{
+////    self.working = @"国家公务员";
+//
+//    [self selectInfoWithTag:1];
+//   
+//}
+//#pragma mark - 选择个人信息
+//- (void)selectInfoWithTag:(NSInteger)tag
+//{
+//    UIPickerView *pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(-20,0, JYScreenW, kHeight(150))];
+//    pickerView.delegate = self;
+//    pickerView.dataSource = self;
+//    pickerView.tag = tag;
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"\n\n\n\n\n\n\n\n" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+//    [alert.view addSubview:pickerView];
+//    pickerView.JY_width = alert.view.JY_width;
+//    
+//    [pickerView selectedRowInComponent:0];
+//    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//        switch (tag) {
+//            case 1:
+//                if (self.working.length == 0) {
+//                  self.working = @"国家公务员";
+//                }
+//                break;
+//            case 2:
+//                if (self.culture.length == 0) {
+//                    self.culture = @"初中";
+//                }
+//                break;
+//            default:
+//                if (self.Marriage.length == 0) {
+//                    self.Marriage = @"未婚";
+//                }
+//                break;
+//        }
+//        [self.tableView reloadData];
+//    }];
+//    [ok setValue:UIColorFromRGB(0x46A0E3) forKey:@"_titleTextColor"];
+//    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+//    }];
+//    [cancel setValue:UIColorFromRGB(0x46A0E3) forKey:@"_titleTextColor"];
+//    
+//    [alert addAction:ok];
+//    [alert addAction:cancel];
+//    [self presentViewController:alert animated:YES completion:^{ }];
+//}
+//#pragma mark - 选择出生日期
+//- (void)selectTime
+//{
+//    UIDatePicker *datePicker = [[UIDatePicker alloc] init];
+//    //设置可选的最大日期就是现在的时间
+//    datePicker.maximumDate = [NSDate date];
+//    //显示中文
+//    NSLocale *locale = [[NSLocale alloc]initWithLocaleIdentifier:@"zh_CN"];
+//    datePicker.locale = locale;
+//    datePicker.datePickerMode = UIDatePickerModeDate;
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"\n\n\n\n\n\n\n\n\n\n" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+//    
+//    [alert.view addSubview:datePicker];
+//    datePicker.JY_width = alert.view.JY_width;
+//    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//        NSDateFormatter* dateFormat = [[NSDateFormatter alloc] init];
+//        //实例化一个NSDateFormatter对象
+//        [dateFormat setDateFormat:@"yyyy-MM-dd"];//设定时间格式
+//        NSString *dateString = [dateFormat stringFromDate:datePicker.date];
+//        //求出当天的时间字符串
+//        self.brth = dateString;
+//        [self.tableView reloadData];
+//    }];
+//    
+//    [ok setValue:UIColorFromRGB(0x46A0E3) forKey:@"_titleTextColor"];
+//    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+//    }];
+//    [cancel setValue:UIColorFromRGB(0x46A0E3) forKey:@"_titleTextColor"];
+//    
+//    [alert addAction:ok];
+//    [alert addAction:cancel];
+//    [self presentViewController:alert animated:YES completion:^{ }];
+//}
+//
+//#pragma mark - 选择性别
+//- (void)selectSex
+//{
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+//    
+//    UIAlertAction *man = [UIAlertAction actionWithTitle:@"男" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//        self.sex = @"0";
+//        [self.tableView reloadData];
+//    }];
+//     [man setValue:UIColorFromRGB(0x46A0E3) forKey:@"_titleTextColor"];
+//    UIAlertAction *woman = [UIAlertAction actionWithTitle:@"女" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+//        self.sex = @"1";
+//        [self.tableView reloadData];
+//    }];
+//    [woman setValue:UIColorFromRGB(0x46A0E3) forKey:@"_titleTextColor"];
+//    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+//    [cancel setValue:UIColorFromRGB(0x46A0E3) forKey:@"_titleTextColor"];
+//    [alert addAction:man];
+//    [alert addAction:woman];
+//    [alert addAction:cancel];
+//    [self presentViewController:alert animated:YES completion:^{ }];
+//}
+//#pragma mark - 选择图片
+//-(void)headImageTap{
+//    [[commonUnit sharedCommonUtils] selectPhoneAndShowCameraWithControll:self];
+//    [self.tableView endEditing:YES];
+//}
+//- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
+//    UIImage *image = nil;
+//    
+//    if ([info objectForKey:UIImagePickerControllerOriginalImage])
+//    {
+//        image = [info objectForKey:UIImagePickerControllerOriginalImage];
+//        if (picker.sourceType ==UIImagePickerControllerSourceTypeCamera) {
+//            
+//            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+//        }
+//        JYLog(@"%@",image);
+//    }
+//    else
+//    {
+//        JYLog(@"UIImagePickerControllerReferenceURL = %@", info);
+//    }
+//    
+//    image = [UIImage imageByScalingAndCroppingForSize:CGSizeMake(300, 300) withIMG:image];//100k
+//    _imageData = UIImageJPEGRepresentation(image,1.0);
+//    //上传头像
+//    [self sendHeadData];
+//    [picker dismissViewControllerAnimated:YES completion:nil];
+//    
+//    [self.tableView reloadData];
+//}
+//#pragma mark - 上传头像
+//- (void)sendHeadData
+//{
+//    NSDictionary *userInfo = [[chiveDataManager sharedChive] unarchivewithPath:@"userInfo"];
+//
+//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+//    formatter.dateFormat = @"yyyyMMddHHmmss";
+//    NSString *str = [formatter stringFromDate:[NSDate date]];
+//    NSString *fileName = [NSString stringWithFormat:@"%@.jpg", str];
+//    NSMutableDictionary *mutableDic=[NSMutableDictionary dictionary];
+//    
+//    mutableDic[@"token"]= [userInfo objectForKey:@"token"];
+//    
+//    [NetWorkRequest upLoadDataWithUrl:uploadFileUrl withData:_imageData withParameters:mutableDic withFileName:fileName withmimeType:@"image/jpeg" success:^(id responseObject) {
+//        JYLog(@"%@",responseObject);
+//        if ([[responseObject valueForKey:@"code"]isEqualToString:@"0"]){
+//            NSString *photo = [responseObject objectForKey:@"photo"];
+//            NSString *miniphoto = [responseObject objectForKey:@"miniphoto"];
+//            JYLog(@"adressStr %@ ,miniStr %@",photo,miniphoto);
+//            
+//            [self sendDiseaseRequestWithAdressStr:photo with:miniphoto];
+//        }
+//        
+//    } failure:^(NSError *error) {
+//        JYLog(@"%@",error);
+//    }];
+//
+//}
+//#pragma mark 上传头像
+//- (void)sendDiseaseRequestWithAdressStr:(NSString *)adress with:(NSString *)minimageStr
+//{
+//    //获取token
+//    NSDictionary *userInfo = [[chiveDataManager sharedChive] unarchivewithPath:@"userInfo"];
+//
+//    NSMutableDictionary *mutableDic=[NSMutableDictionary dictionary];
+//    mutableDic[@"photo"]= adress;
+//    mutableDic[@"miniphoto"] = minimageStr;
+//    mutableDic[@"token"]= [userInfo objectForKey:@"token"];
+//    
+//    [NetWorkRequest sendRequestWithUrl:addPhotoUrl withParameters:mutableDic withType:@"post" success:^(id responseObject) {
+//        JYLog(@"responseObject=====%@",responseObject);
+//        [SVProgressHUD dismiss];
+//        if ([[responseObject valueForKey:@"code"]isEqualToString:@"001013"]){
+//
+//            [SVProgressHUD showSuccessWithStatus:@"上传成功！"];
+//            
+//            [SVProgressHUD dismissWithDelay:1.2];
+//            
+//            [[chiveDataManager sharedChive] chiveDataDic:@{@"photo":minimageStr} withPathName:@"userPhoto"];
+//            [self.tableView reloadData];
+//        }
+//    } failure:^(NSError *error) {
+//        [SVProgressHUD showWithStatus:@"上传失败！"];
+//        
+//        [SVProgressHUD dismissWithDelay:1.2];
+//    }];
+//}
+//#pragma mark - 开始编辑键盘隐藏
+//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+//{
+//    [self.view endEditing:YES];
+//    JYLog(@"%f",scrollView.contentOffset.y);
+//    
+//}
+//#pragma mark - 完成保存
+//- (void)save
+//{
+//    //身份证验证
+//    if (![NSString isCorrect:self.userID]) {
+//        [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"请输入有效的18位身份证号" withDismissTime:1.2 withControl:self];
+//        return;
+//    }
+//    if (![self.brth isEqualToString:[NSString birthdayStrFromIdentityCard:self.userID]]||![self.sex isEqualToString:[NSString getIdentityCardSex:self.userID]]) {
+//        [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"个人信息和身份账号不匹配" withDismissTime:1.2 withControl:self];
+//        return;
+//    }
+//    if ([self.userTalls integerValue]>=250) {
+//        [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"请输入有效的身高数据" withDismissTime:1.2 withControl:self];
+//        return;
+//    }
+//    NSDictionary *userInfo = [[chiveDataManager sharedChive] unarchivewithPath:@"userInfo"];
+//    NSMutableDictionary *mutableDic=[NSMutableDictionary dictionary];
+//    mutableDic[@"token"] = [userInfo objectForKey:@"token"];
+//    mutableDic[@"weight"] = self.userWeight;//体重
+//    mutableDic[@"height"] = self.userTalls;//身高
+//    mutableDic[@"name"] = self.username;//姓名
+//    mutableDic[@"edu"] = self.culture;//文化程度
+//    mutableDic[@"occupation"] = self.working;//工作
+//    mutableDic[@"is_marriage"] = self.Marriage;//婚姻
+//    mutableDic[@"birth"] = self.brth;//出生年-月-日
+//    mutableDic[@"idcard"] = self.userID;//身份账号
+//    mutableDic[@"sex"] = self.sex;//性别
+//
+//    [SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+//    [SVProgressHUD showWithStatus:@"正在保存"];
+//    [NetWorkRequest sendRequestWithUrl:updateUserInfoUrl withParameters:mutableDic withType:@"post" success:^(id responseObject) {
+//        JYLog(@"%@",responseObject);
+//        [SVProgressHUD dismiss];
+//        if ([[responseObject objectForKey:@"code"] isEqualToString:@"001004"]) {
+//            
+//            [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:[responseObject objectForKey:@"message"] withDismissTime:1.5 withControl:self];
+//
+//        }else if ([[responseObject objectForKey:@"code"] isEqualToString:loginTimeout]){
+//            //登录超时
+//            [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:@"登录超时，请重新登录!" actionTitle:@"重新登录" withControl:self withHandler:^{
+//                [Mediator loginOutWithLoginClass:@"LoginViewController" withNavC:@"JYNavigationContrller"];
+//            }];
+//        }else{
+//            [[commonUnit sharedCommonUtils] showAlertWithTitle:@"提示" message:[responseObject objectForKey:@"message"] withDismissTime:1.5 withControl:self];
+//        }
+//    } failure:^(NSError *error) {
+//        [SVProgressHUD dismiss];
+//        JYLog(@"%@",error);
+//        
+//    }];
+//
+//    
+//    
+//}
+@end
