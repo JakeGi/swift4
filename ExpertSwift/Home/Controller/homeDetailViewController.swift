@@ -15,6 +15,8 @@ class homeDetailViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         self.view.backgroundColor = UIColor.red
+        navigationItem.titleView = nil;
+        navigationItem.title = "新帖"
     }
 
     override func didReceiveMemoryWarning() {

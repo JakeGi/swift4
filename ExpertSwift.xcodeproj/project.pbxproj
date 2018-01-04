@@ -40,6 +40,7 @@
 		EF5F9A5D1FB99A4C00AEF8C1 /* UIColor-Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5F9A5C1FB99A4C00AEF8C1 /* UIColor-Extension.swift */; };
 		EF705FB71FBA938500E2A719 /* PageMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF705FB61FBA938500E2A719 /* PageMenu.swift */; };
 		EF7E87AE1FF1E23600E2126C /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7E87AD1FF1E23500E2126C /* TestViewController.swift */; };
+		EFA4DF5B1FFDF35E00B0A8C7 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA4DF5A1FFDF35E00B0A8C7 /* CustomCell.swift */; };
 		EFADB74A1FDE1841007ADF11 /* reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFADB7491FDE1841007ADF11 /* reachability.swift */; };
 		EFD47DB51FF0BFA4002D3FED /* CKSlideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD47DB41FF0BFA3002D3FED /* CKSlideMenu.swift */; };
 		EFE38E641FB94227001F1222 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE38E631FB94227001F1222 /* MediaPlayer.framework */; };
@@ -85,6 +86,7 @@
 		EF5F9A5C1FB99A4C00AEF8C1 /* UIColor-Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor-Extension.swift"; sourceTree = "<group>"; };
 		EF705FB61FBA938500E2A719 /* PageMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageMenu.swift; sourceTree = "<group>"; };
 		EF7E87AD1FF1E23500E2126C /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		EFA4DF5A1FFDF35E00B0A8C7 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
 		EFADB7491FDE1841007ADF11 /* reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reachability.swift; sourceTree = "<group>"; };
 		EFD47DB41FF0BFA3002D3FED /* CKSlideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKSlideMenu.swift; sourceTree = "<group>"; };
 		EFE38E631FB94227001F1222 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -196,6 +198,7 @@
 		EF10F2131FB2943C00C71AAD /* View */ = {
 			isa = PBXGroup;
 			children = (
+				EFA4DF5A1FFDF35E00B0A8C7 /* CustomCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -562,6 +565,7 @@
 				EF10F24C1FB2A3C200C71AAD /* HomeViewController.swift in Sources */,
 				EF5F9A5D1FB99A4C00AEF8C1 /* UIColor-Extension.swift in Sources */,
 				EF10F2421FB2A02B00C71AAD /* publicUrl.swift in Sources */,
+				EFA4DF5B1FFDF35E00B0A8C7 /* CustomCell.swift in Sources */,
 				EF3520201FDA8CC6006711D8 /* UIAlertExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -708,7 +712,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = iconme.ExpertSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/jyyl/Desktop/SWFTDemo/ExpertSwift/Swift-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/jyyl/Desktop/swift4/Swift-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -729,7 +733,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = iconme.ExpertSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OBJC_BRIDGING_HEADER = "/Users/jyyl/Desktop/SWFTDemo/ExpertSwift/Swift-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/jyyl/Desktop/swift4/Swift-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;

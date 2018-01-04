@@ -13,12 +13,10 @@ class HomeViewController: UIViewController {
 
     var cycleScrollView:WRCycleScrollView?
     
-    var tableview = UITableView()
+    var tableView : UITableView?
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        
     self.creatUI()
     
     }
@@ -28,13 +26,12 @@ class HomeViewController: UIViewController {
     }
     
     fileprivate func creatUI(){
-         let height = 520 * SCREEN_WIDTH / 1080.0
-        tableview.frame = CGRect(x: 0, y: height, width: SCREEN_WIDTH, height: SCREEN_HEIGHT)
-        tableview.delegate = self;
-        tableview.dataSource = self;
-        view.addSubview(tableview)
+        tableView = UITableView.init(frame: CGRect(x: 0, y: 164, width: SCREEN_WIDTH, height: SCREEN_HEIGHT-64-24), style: UITableViewStyle.plain)
+        tableView?.delegate = self;
+        tableView?.dataSource = self;
+        view.addSubview(tableView!)
        
-        let frame = CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: height)
+        let frame = CGRect(x: 0, y: 64, width: SCREEN_WIDTH, height: 100)
         let serverImages = ["http://p.lrlz.com/data/upload/mobile/special/s252/s252_05471521705899113.png",
                             "http://p.lrlz.com/data/upload/mobile/special/s303/s303_05442007678060723.png",
                             "http://p.lrlz.com/data/upload/mobile/special/s303/s303_05442007587372591.png",
@@ -89,19 +86,23 @@ extension HomeViewController: WRCycleScrollViewDelegate,UITableViewDelegate,UITa
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
+//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        return nil
+//    }
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        return nil
+//    }
+//    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        var cell = tableView.dequeueReusableCell(withIdentifier: "KUserCellID")
-        
+        var cell:CustomCell?
+        cell = tableView.dequeueReusableCell(withIdentifier: "cell") as? CustomCell
         if cell == nil {
-            cell = UITableViewCell(style: .value1, reuseIdentifier: "KUserCellID")
+            cell = CustomCell(style: UITableViewCellStyle.default, reuseIdentifier: "cell")
         }
         cell!.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
 //        let model:BasicTypes = (self.dataArr[indexPath.row] as! BasicTypes)
-        cell!.textLabel?.text = "model.category";
-        cell!.detailTextLabel?.text = (indexPath.row == 1) ? "100元" : ""
-        
+        cell?.titleLab.text = String(indexPath.row)
         return cell!
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
