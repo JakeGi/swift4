@@ -7,14 +7,32 @@
 //
 
 import UIKit
+import WebKit
+class AnswerViewController: UIViewController,WKNavigationDelegate,WKUIDelegate {
 
-class AnswerViewController: UIViewController {
-
+    var webView = WKWebView()
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+//        setUpWKwebView()
+        let v = CountDownView()
+        
+        v.frame = CGRect(x: 100, y: 100, width: 100, height: 50)
+        
+        self.view.addSubview(v)
+        
     }
+    func setUpWKwebView() {
+        
+        let webConfiguration = WKWebViewConfiguration()
+        let myURL = URL(string: "http://by.zgshfp.com.cn/app/Billboard.html")
+        webView = WKWebView(frame: view.bounds, configuration: webConfiguration)
+        let myRequest = URLRequest(url: myURL!)
+        webView.load(myRequest)
+        view.addSubview(webView)
+        
+    }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

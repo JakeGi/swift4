@@ -9,5 +9,4 @@
 #ifndef Swift_Bridging_Header_h
 #define Swift_Bridging_Header_h
 
-
 #endif /* Swift_Bridging_Header_h */

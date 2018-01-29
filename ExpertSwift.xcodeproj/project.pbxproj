@@ -33,6 +33,22 @@
 		EF10F2561FB2D99B00C71AAD /* WRCycleScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF10F2531FB2D99A00C71AAD /* WRCycleScrollView.swift */; };
 		EF10F2571FB2D99B00C71AAD /* WRProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF10F2541FB2D99A00C71AAD /* WRProxy.swift */; };
 		EF16B4E91FECAF1C008120D8 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF16B4E81FECAF1C008120D8 /* CustomButton.swift */; };
+		EF24329B201EB15A00A79706 /* ConstantsFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF243279201EB15900A79706 /* ConstantsFile.swift */; };
+		EF24329C201EB15A00A79706 /* Dictionary+JHExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF24327A201EB15900A79706 /* Dictionary+JHExtension.swift */; };
+		EF24329D201EB15A00A79706 /* String+JHExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF24327B201EB15900A79706 /* String+JHExtension.swift */; };
+		EF24329E201EB15A00A79706 /* TimeUntil.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF24327C201EB15900A79706 /* TimeUntil.swift */; };
+		EF24329F201EB15A00A79706 /* UIImage+JHExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF24327D201EB15900A79706 /* UIImage+JHExtension.swift */; };
+		EF2432A0201EB15A00A79706 /* JHNetManagerAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF24327F201EB15900A79706 /* JHNetManagerAPI.swift */; };
+		EF2432A1201EB15A00A79706 /* JHProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF243280201EB15900A79706 /* JHProgressHUD.swift */; };
+		EF2432A2201EB15A00A79706 /* JHWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF243281201EB15900A79706 /* JHWebViewController.swift */; };
+		EF2432A3201EB15A00A79706 /* ScrollView+JHEmptyDataSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF243282201EB15900A79706 /* ScrollView+JHEmptyDataSet.swift */; };
+		EF2432A4201EB15A00A79706 /* ScrollView+JHRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF243283201EB15900A79706 /* ScrollView+JHRefresh.swift */; };
+		EF2432B1201EB15A00A79706 /* CountDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF243295201EB15A00A79706 /* CountDownView.swift */; };
+		EF2432B2201EB15A00A79706 /* JHPOPAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF243296201EB15A00A79706 /* JHPOPAlertView.swift */; };
+		EF2432B3201EB15A00A79706 /* Label+JHExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF243297201EB15A00A79706 /* Label+JHExtension.swift */; };
+		EF2432B4201EB15A00A79706 /* Textfield+JHExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF243298201EB15A00A79706 /* Textfield+JHExtension.swift */; };
+		EF2432B5201EB15A00A79706 /* UIButton+JHExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF243299201EB15A00A79706 /* UIButton+JHExtension.swift */; };
+		EF2432B6201EB15A00A79706 /* UIView+JHExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF24329A201EB15A00A79706 /* UIView+JHExtension.swift */; };
 		EF3520201FDA8CC6006711D8 /* UIAlertExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF35201F1FDA8CC6006711D8 /* UIAlertExtension.swift */; };
 		EF5BF5101FE7583800FE779B /* coustomSeg.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5BF50F1FE7583800FE779B /* coustomSeg.swift */; };
 		EF5F9A581FB9970A00AEF8C1 /* PageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5F9A4E1FB9970A00AEF8C1 /* PageContentView.swift */; };
@@ -42,6 +58,7 @@
 		EF7E87AE1FF1E23600E2126C /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7E87AD1FF1E23500E2126C /* TestViewController.swift */; };
 		EFA4DF5B1FFDF35E00B0A8C7 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA4DF5A1FFDF35E00B0A8C7 /* CustomCell.swift */; };
 		EFADB74A1FDE1841007ADF11 /* reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFADB7491FDE1841007ADF11 /* reachability.swift */; };
+		EFCA39972006122E006BD6FC /* NetWorkManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCA39962006122E006BD6FC /* NetWorkManger.swift */; };
 		EFD47DB51FF0BFA4002D3FED /* CKSlideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD47DB41FF0BFA3002D3FED /* CKSlideMenu.swift */; };
 		EFE38E641FB94227001F1222 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE38E631FB94227001F1222 /* MediaPlayer.framework */; };
 		EFE38E661FB9423D001F1222 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE38E651FB9423D001F1222 /* libstdc++.tbd */; };
@@ -79,6 +96,22 @@
 		EF10F2531FB2D99A00C71AAD /* WRCycleScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WRCycleScrollView.swift; sourceTree = "<group>"; };
 		EF10F2541FB2D99A00C71AAD /* WRProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WRProxy.swift; sourceTree = "<group>"; };
 		EF16B4E81FECAF1C008120D8 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
+		EF243279201EB15900A79706 /* ConstantsFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConstantsFile.swift; sourceTree = "<group>"; };
+		EF24327A201EB15900A79706 /* Dictionary+JHExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+JHExtension.swift"; sourceTree = "<group>"; };
+		EF24327B201EB15900A79706 /* String+JHExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+JHExtension.swift"; sourceTree = "<group>"; };
+		EF24327C201EB15900A79706 /* TimeUntil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeUntil.swift; sourceTree = "<group>"; };
+		EF24327D201EB15900A79706 /* UIImage+JHExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+JHExtension.swift"; sourceTree = "<group>"; };
+		EF24327F201EB15900A79706 /* JHNetManagerAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JHNetManagerAPI.swift; sourceTree = "<group>"; };
+		EF243280201EB15900A79706 /* JHProgressHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JHProgressHUD.swift; sourceTree = "<group>"; };
+		EF243281201EB15900A79706 /* JHWebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JHWebViewController.swift; sourceTree = "<group>"; };
+		EF243282201EB15900A79706 /* ScrollView+JHEmptyDataSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ScrollView+JHEmptyDataSet.swift"; sourceTree = "<group>"; };
+		EF243283201EB15900A79706 /* ScrollView+JHRefresh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ScrollView+JHRefresh.swift"; sourceTree = "<group>"; };
+		EF243295201EB15A00A79706 /* CountDownView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountDownView.swift; sourceTree = "<group>"; };
+		EF243296201EB15A00A79706 /* JHPOPAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JHPOPAlertView.swift; sourceTree = "<group>"; };
+		EF243297201EB15A00A79706 /* Label+JHExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Label+JHExtension.swift"; sourceTree = "<group>"; };
+		EF243298201EB15A00A79706 /* Textfield+JHExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Textfield+JHExtension.swift"; sourceTree = "<group>"; };
+		EF243299201EB15A00A79706 /* UIButton+JHExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+JHExtension.swift"; sourceTree = "<group>"; };
+		EF24329A201EB15A00A79706 /* UIView+JHExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+JHExtension.swift"; sourceTree = "<group>"; };
 		EF35201F1FDA8CC6006711D8 /* UIAlertExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAlertExtension.swift; sourceTree = "<group>"; };
 		EF5BF50F1FE7583800FE779B /* coustomSeg.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = coustomSeg.swift; sourceTree = "<group>"; };
 		EF5F9A4E1FB9970A00AEF8C1 /* PageContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageContentView.swift; sourceTree = "<group>"; };
@@ -88,6 +121,7 @@
 		EF7E87AD1FF1E23500E2126C /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		EFA4DF5A1FFDF35E00B0A8C7 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
 		EFADB7491FDE1841007ADF11 /* reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reachability.swift; sourceTree = "<group>"; };
+		EFCA39962006122E006BD6FC /* NetWorkManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetWorkManger.swift; sourceTree = "<group>"; };
 		EFD47DB41FF0BFA3002D3FED /* CKSlideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKSlideMenu.swift; sourceTree = "<group>"; };
 		EFE38E631FB94227001F1222 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		EFE38E651FB9423D001F1222 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
@@ -150,6 +184,9 @@
 		EF10F1FC1FB293E500C71AAD /* ExpertSwift */ = {
 			isa = PBXGroup;
 			children = (
+				EF243278201EB15900A79706 /* NSObject */,
+				EF24327E201EB15900A79706 /* ThirdParty */,
+				EF243294201EB15A00A79706 /* UIView */,
 				EF10F2381FB2A02B00C71AAD /* NetWorking */,
 				EF10F2351FB29D6900C71AAD /* Tool */,
 				EF10F21A1FB294CC00C71AAD /* Answer */,
@@ -243,7 +280,6 @@
 				EF10F21C1FB294CC00C71AAD /* Controller */,
 				EF10F21D1FB294CC00C71AAD /* Model */,
 				EF10F21E1FB294CC00C71AAD /* View */,
-				EF10F24F1FB2A3E700C71AAD /* AnswerViewController.swift */,
 			);
 			path = Answer;
 			sourceTree = "<group>";
@@ -251,6 +287,7 @@
 		EF10F21C1FB294CC00C71AAD /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				EF10F24F1FB2A3E700C71AAD /* AnswerViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -357,6 +394,7 @@
 				EF10F23B1FB2A02B00C71AAD /* publicUrl.swift */,
 				EF10F23E1FB2A02B00C71AAD /* SaveTools.swift */,
 				EFADB7491FDE1841007ADF11 /* reachability.swift */,
+				EFCA39962006122E006BD6FC /* NetWorkManger.swift */,
 			);
 			path = NetWorking;
 			sourceTree = "<group>";
@@ -369,6 +407,43 @@
 				EF10F2541FB2D99A00C71AAD /* WRProxy.swift */,
 			);
 			path = WRCycleScrollView;
+			sourceTree = "<group>";
+		};
+		EF243278201EB15900A79706 /* NSObject */ = {
+			isa = PBXGroup;
+			children = (
+				EF243279201EB15900A79706 /* ConstantsFile.swift */,
+				EF24327A201EB15900A79706 /* Dictionary+JHExtension.swift */,
+				EF24327B201EB15900A79706 /* String+JHExtension.swift */,
+				EF24327C201EB15900A79706 /* TimeUntil.swift */,
+				EF24327D201EB15900A79706 /* UIImage+JHExtension.swift */,
+			);
+			path = NSObject;
+			sourceTree = "<group>";
+		};
+		EF24327E201EB15900A79706 /* ThirdParty */ = {
+			isa = PBXGroup;
+			children = (
+				EF24327F201EB15900A79706 /* JHNetManagerAPI.swift */,
+				EF243280201EB15900A79706 /* JHProgressHUD.swift */,
+				EF243281201EB15900A79706 /* JHWebViewController.swift */,
+				EF243282201EB15900A79706 /* ScrollView+JHEmptyDataSet.swift */,
+				EF243283201EB15900A79706 /* ScrollView+JHRefresh.swift */,
+			);
+			path = ThirdParty;
+			sourceTree = "<group>";
+		};
+		EF243294201EB15A00A79706 /* UIView */ = {
+			isa = PBXGroup;
+			children = (
+				EF243295201EB15A00A79706 /* CountDownView.swift */,
+				EF243296201EB15A00A79706 /* JHPOPAlertView.swift */,
+				EF243297201EB15A00A79706 /* Label+JHExtension.swift */,
+				EF243298201EB15A00A79706 /* Textfield+JHExtension.swift */,
+				EF243299201EB15A00A79706 /* UIButton+JHExtension.swift */,
+				EF24329A201EB15A00A79706 /* UIView+JHExtension.swift */,
+			);
+			path = UIView;
 			sourceTree = "<group>";
 		};
 		EF5BF50C1FE7567800FE779B /* coustomSegment */ = {
@@ -475,8 +550,11 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ExpertSwift/Pods-ExpertSwift-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet/DZNEmptyDataSet.framework",
 				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
+				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
 				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/ReachabilitySwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
@@ -486,8 +564,11 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DZNEmptyDataSet.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReachabilitySwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
@@ -543,30 +624,47 @@
 				EF705FB71FBA938500E2A719 /* PageMenu.swift in Sources */,
 				EF10F2441FB2A02B00C71AAD /* SaveTools.swift in Sources */,
 				EF10F24A1FB2A38D00C71AAD /* NavgationViewController.swift in Sources */,
+				EF24329D201EB15A00A79706 /* String+JHExtension.swift in Sources */,
 				EF16B4E91FECAF1C008120D8 /* CustomButton.swift in Sources */,
+				EF2432B1201EB15A00A79706 /* CountDownView.swift in Sources */,
+				EF2432A1201EB15A00A79706 /* JHProgressHUD.swift in Sources */,
 				EF10F2571FB2D99B00C71AAD /* WRProxy.swift in Sources */,
 				EF10F2481FB2A34E00C71AAD /* TabBarViewController.swift in Sources */,
 				EF10F2371FB29EBF00C71AAD /* BaseSetting.swift in Sources */,
 				EF10F2551FB2D99B00C71AAD /* WRCycleCell.swift in Sources */,
+				EF24329B201EB15A00A79706 /* ConstantsFile.swift in Sources */,
 				EF5F9A581FB9970A00AEF8C1 /* PageContentView.swift in Sources */,
 				EF5F9A591FB9970A00AEF8C1 /* PageTitleView.swift in Sources */,
 				EF10F2561FB2D99B00C71AAD /* WRCycleScrollView.swift in Sources */,
 				EF10F2411FB2A02B00C71AAD /* NetWorkTools.swift in Sources */,
+				EF24329C201EB15A00A79706 /* Dictionary+JHExtension.swift in Sources */,
 				EFADB74A1FDE1841007ADF11 /* reachability.swift in Sources */,
+				EF2432B2201EB15A00A79706 /* JHPOPAlertView.swift in Sources */,
+				EFCA39972006122E006BD6FC /* NetWorkManger.swift in Sources */,
 				EFD47DB51FF0BFA4002D3FED /* CKSlideMenu.swift in Sources */,
+				EF2432A0201EB15A00A79706 /* JHNetManagerAPI.swift in Sources */,
 				EF10F2001FB293E500C71AAD /* ViewController.swift in Sources */,
 				EF10F1FE1FB293E500C71AAD /* AppDelegate.swift in Sources */,
 				EF10F2401FB2A02B00C71AAD /* Const.swift in Sources */,
 				EF7E87AE1FF1E23600E2126C /* TestViewController.swift in Sources */,
+				EF24329E201EB15A00A79706 /* TimeUntil.swift in Sources */,
 				EF10F24E1FB2A3D000C71AAD /* MyCenterViewController.swift in Sources */,
+				EF2432A2201EB15A00A79706 /* JHWebViewController.swift in Sources */,
 				EFF87F091FFB4BDF004F9063 /* homeDetailViewController.swift in Sources */,
 				EF5BF5101FE7583800FE779B /* coustomSeg.swift in Sources */,
+				EF2432B5201EB15A00A79706 /* UIButton+JHExtension.swift in Sources */,
+				EF2432A3201EB15A00A79706 /* ScrollView+JHEmptyDataSet.swift in Sources */,
 				EF10F2501FB2A3E700C71AAD /* AnswerViewController.swift in Sources */,
+				EF2432B4201EB15A00A79706 /* Textfield+JHExtension.swift in Sources */,
 				EF10F24C1FB2A3C200C71AAD /* HomeViewController.swift in Sources */,
+				EF2432B6201EB15A00A79706 /* UIView+JHExtension.swift in Sources */,
 				EF5F9A5D1FB99A4C00AEF8C1 /* UIColor-Extension.swift in Sources */,
 				EF10F2421FB2A02B00C71AAD /* publicUrl.swift in Sources */,
 				EFA4DF5B1FFDF35E00B0A8C7 /* CustomCell.swift in Sources */,
+				EF2432B3201EB15A00A79706 /* Label+JHExtension.swift in Sources */,
+				EF2432A4201EB15A00A79706 /* ScrollView+JHRefresh.swift in Sources */,
 				EF3520201FDA8CC6006711D8 /* UIAlertExtension.swift in Sources */,
+				EF24329F201EB15A00A79706 /* UIImage+JHExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -708,7 +806,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3F2735QP6E;
 				INFOPLIST_FILE = ExpertSwift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = iconme.ExpertSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -729,7 +827,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3F2735QP6E;
 				INFOPLIST_FILE = ExpertSwift/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = iconme.ExpertSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";

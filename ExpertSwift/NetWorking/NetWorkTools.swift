@@ -119,7 +119,7 @@ extension NetWorkTools {
             let end = CACurrentMediaTime()
             let elapsedTime = end - start
             print("请求时间 = \(elapsedTime)")
-//            print("response.timeline = \(response.timeline)")
+//          print("response.timeline = \(response.timeline)")
             
             // 请求失败
             if response.result.isFailure {
