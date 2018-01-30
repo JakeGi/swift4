@@ -1,0 +1,139 @@
+//
+//  DZHomeBannerHead.m
+//  Expert
+//
+//  Created by jyyl on 2017/6/13.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZHomeBannerHead.h"
+#import "SDCycleScrollView.h"
+@interface DZHomeBannerHead()
+//scrollView
+@property (nonatomic,strong)SDCycleScrollView *sdcycleScrollView;
+
+@property (nonatomic,strong) UIImageView *banneImg;
+
+@property (nonatomic,strong) UIImageView *dayImg;
+
+@property (nonatomic,strong) UILabel *bannerNameLab;
+
+@property (nonatomic,strong) UILabel *bannerDetileLab;
+
+//数量
+@property (nonatomic,strong) UILabel *bannerDayLab;
+
+//单位
+@property (nonatomic,strong) UILabel *bannerUnitLab;
+
+
+
+
+@end
+@implementation DZHomeBannerHead
+
+- (instancetype)initWithFrame:(CGRect)frame WithTarget:(id)target
+{
+    if (self = [super initWithFrame:frame]) {
+        
+        [self setUIWithTarget:target];
+    }
+    return self;
+}
+
+- (void)setUIWithTarget:(id)target
+{
+
+    _sdcycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, JYScreenW,kHeight(193)) delegate:target placeholderImage:nil];
+
+    _sdcycleScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleClassic;
+    _sdcycleScrollView.pageControlAliment = SDCycleScrollViewPageContolAlimentCenter;
+    _sdcycleScrollView.currentPageDotColor = [UIColor whiteColor];
+    _sdcycleScrollView.autoScrollTimeInterval = 2;
+    _sdcycleScrollView.autoScroll = YES;
+    _sdcycleScrollView.delegate = target;
+    _sdcycleScrollView.bannerImageViewContentMode = UIViewContentModeScaleAspectFill;//防止图片变形
+    _sdcycleScrollView.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    
+    _sdcycleScrollView.localizationImageNamesGroup = @[@"Home.bundle/slide",
+                                                       @"Home.bundle/slide",
+                                                       @"Home.bundle/slide"];
+    [self.contentView addSubview:_sdcycleScrollView];
+    
+    self.banneImg = [[UIImageView alloc]init];
+    [self.banneImg setImage:[UIImage imageNamed:@"Home.bundle/bg_schedule"]];
+    self.banneImg.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:target action:@selector(noTask:)];
+    [self.banneImg addGestureRecognizer:tap];
+    
+    [self.contentView addSubview:self.banneImg];
+    
+    self.dayImg = [[UIImageView alloc]init];
+    [self.dayImg setImage:[UIImage imageNamed:@"Home.bundle/ico_schedule"]];
+    [self.contentView addSubview:self.dayImg];
+    
+    self.bannerNameLab = [[UILabel alloc]init];
+    self.bannerNameLab.text = @"我的日程";
+    self.bannerNameLab.font = [UIFont fontWithName:@"PingFangSC-Medium" size:16];
+    [self.contentView addSubview:self.bannerNameLab];
+    
+    self.bannerDayLab = [[UILabel alloc]init];
+    self.bannerDayLab.font = [UIFont systemFontOfSize:32];
+    self.bannerDayLab.text = @"32";
+    self.bannerDayLab.textColor = kWhiteColor;
+    [self.contentView addSubview:self.bannerDayLab];
+    
+    self.bannerUnitLab = [[UILabel alloc]init];
+    self.bannerUnitLab.font = [UIFont systemFontOfSize:12];
+    self.bannerUnitLab.text = @"件";
+    self.bannerUnitLab.textColor = kWhiteColor;
+
+    [self.contentView addSubview:self.bannerUnitLab];
+    
+    self.bannerDetileLab = [[UILabel alloc]init];
+    self.bannerDetileLab.font = [UIFont systemFontOfSize:12];
+    self.bannerDetileLab.text = @"近期待处理的预约任务";
+    [self.contentView addSubview:self.bannerDetileLab];
+    
+
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [self.banneImg makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.sdcycleScrollView.bottom);
+        make.width.mas_equalTo(JYScreenW);
+        make.bottom.equalTo(self.contentView);
+    }];
+    
+    [self.dayImg makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(kWidth(16));
+        make.top.equalTo(self.sdcycleScrollView.bottom).offset(kHeight(15));
+    }];
+    
+    [self.bannerNameLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.dayImg.right).offset(kWidth(9));
+        make.top.equalTo(self.dayImg.top);
+    }];
+    
+    [self.bannerDetileLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.dayImg.right).offset(kWidth(9));
+        make.bottom.equalTo(self.dayImg.bottom);
+    }];
+    
+    [self.bannerDayLab makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.contentView).offset(-kWidth(30));
+        make.centerY.equalTo(self.dayImg);
+    }];
+    
+    [self.bannerUnitLab makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.bannerDayLab.right).offset(kWidth(1));
+        make.bottom.equalTo(self.bannerDayLab.bottom).offset(-kHeight(2));
+    }];
+    
+    
+}
+
+@end

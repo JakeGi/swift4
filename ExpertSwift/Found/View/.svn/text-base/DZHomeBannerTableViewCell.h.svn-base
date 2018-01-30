@@ -1,0 +1,22 @@
+//
+//  DZHomeBannerTableViewCell.h
+//  Police
+//
+//  Created by 陈刚 on 17/6/8.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+@class SDCycleScrollView;
+@interface DZHomeBannerTableViewCell : UITableViewCell
+//SDCycleScrollView
+@property (nonatomic,strong)SDCycleScrollView *sdcycleScrollView;
+//bannerARR
+@property (nonatomic,strong)NSArray *topBanner;
+//bannerARR
+@property (nonatomic,strong)NSArray *botomBanner;
+
++ (instancetype)cellWithTableView:(UITableView *)tableView
+                    withIndexPath:(NSIndexPath *)indexPath
+                       withTarget:(id)target;
+@end

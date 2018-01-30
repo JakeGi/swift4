@@ -58,6 +58,8 @@
 		EF7E87AE1FF1E23600E2126C /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7E87AD1FF1E23500E2126C /* TestViewController.swift */; };
 		EFA4DF5B1FFDF35E00B0A8C7 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA4DF5A1FFDF35E00B0A8C7 /* CustomCell.swift */; };
 		EFADB74A1FDE1841007ADF11 /* reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFADB7491FDE1841007ADF11 /* reachability.swift */; };
+		EFB0106C202049350050D101 /* Found.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EFB01069202049350050D101 /* Found.bundle */; };
+		EFB0106E202049640050D101 /* FoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB0106D202049640050D101 /* FoundViewController.swift */; };
 		EFCA39972006122E006BD6FC /* NetWorkManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCA39962006122E006BD6FC /* NetWorkManger.swift */; };
 		EFD47DB51FF0BFA4002D3FED /* CKSlideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD47DB41FF0BFA3002D3FED /* CKSlideMenu.swift */; };
 		EFE38E641FB94227001F1222 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE38E631FB94227001F1222 /* MediaPlayer.framework */; };
@@ -121,6 +123,8 @@
 		EF7E87AD1FF1E23500E2126C /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		EFA4DF5A1FFDF35E00B0A8C7 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
 		EFADB7491FDE1841007ADF11 /* reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reachability.swift; sourceTree = "<group>"; };
+		EFB01069202049350050D101 /* Found.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Found.bundle; sourceTree = "<group>"; };
+		EFB0106D202049640050D101 /* FoundViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundViewController.swift; sourceTree = "<group>"; };
 		EFCA39962006122E006BD6FC /* NetWorkManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetWorkManger.swift; sourceTree = "<group>"; };
 		EFD47DB41FF0BFA3002D3FED /* CKSlideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKSlideMenu.swift; sourceTree = "<group>"; };
 		EFE38E631FB94227001F1222 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -193,6 +197,7 @@
 				EF10F2241FB294CD00C71AAD /* Login */,
 				EF10F21F1FB294CD00C71AAD /* Main */,
 				EF10F2151FB294CC00C71AAD /* MyCenter */,
+				EFB01067202049350050D101 /* Found */,
 				EF10F20F1FB2943C00C71AAD /* Home */,
 				EF10F1FD1FB293E500C71AAD /* AppDelegate.swift */,
 				EF10F1FF1FB293E500C71AAD /* ViewController.swift */,
@@ -466,6 +471,39 @@
 			path = PageMenu;
 			sourceTree = "<group>";
 		};
+		EFB01067202049350050D101 /* Found */ = {
+			isa = PBXGroup;
+			children = (
+				EFB01068202049350050D101 /* Controller */,
+				EFB01069202049350050D101 /* Found.bundle */,
+				EFB0106A202049350050D101 /* Model */,
+				EFB0106B202049350050D101 /* View */,
+			);
+			path = Found;
+			sourceTree = "<group>";
+		};
+		EFB01068202049350050D101 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				EFB0106D202049640050D101 /* FoundViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		EFB0106A202049350050D101 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		EFB0106B202049350050D101 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -536,6 +574,7 @@
 				EF10F22C1FB294CD00C71AAD /* Login.bundle in Resources */,
 				EF10F2031FB293E500C71AAD /* Main.storyboard in Resources */,
 				EF10F22B1FB294CD00C71AAD /* Main.bundle in Resources */,
+				EFB0106C202049350050D101 /* Found.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -627,6 +666,7 @@
 				EF24329D201EB15A00A79706 /* String+JHExtension.swift in Sources */,
 				EF16B4E91FECAF1C008120D8 /* CustomButton.swift in Sources */,
 				EF2432B1201EB15A00A79706 /* CountDownView.swift in Sources */,
+				EFB0106E202049640050D101 /* FoundViewController.swift in Sources */,
 				EF2432A1201EB15A00A79706 /* JHProgressHUD.swift in Sources */,
 				EF10F2571FB2D99B00C71AAD /* WRProxy.swift in Sources */,
 				EF10F2481FB2A34E00C71AAD /* TabBarViewController.swift in Sources */,

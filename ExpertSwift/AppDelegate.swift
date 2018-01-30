@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        }
         window  = UIWindow(frame: UIScreen.main.bounds);
         window?.backgroundColor = UIColor.white;
-        let tabbar = LoginViewController();
+        let tabbar = TabBarViewController();
         window?.rootViewController = tabbar;
         window?.makeKeyAndVisible();
         return true

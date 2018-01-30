@@ -1,0 +1,73 @@
+//
+//  DZPoliceomePageHead.m
+//  Expert
+//
+//  Created by jyyl on 2017/6/15.
+//  Copyright © 2017年 dzjk. All rights reserved.
+//
+
+#import "DZPoliceomePageHead.h"
+@interface DZPoliceomePageHead()
+@property (nonatomic,strong) UIImageView *headImg;
+@property (nonatomic,strong) UIImageView *bgImg;
+
+@property (nonatomic,strong) UILabel *userName;
+@end
+
+@implementation DZPoliceomePageHead
+
+
+- (instancetype)initWithFrame:(CGRect)frame WithTarget:(id)target
+{
+    if (self = [super initWithFrame:frame]) {
+        
+        [self setUIWithTarget:target];
+    }
+    return self;
+}
+
+- (void)setUIWithTarget:(id)target
+{
+    
+
+    
+    self.bgImg = [[UIImageView alloc]init];
+    [self.bgImg setImage:[UIImage imageNamed:@"MyCenter.bundle/bg_my"]];
+    [self.contentView addSubview:self.bgImg];
+    
+    
+    self.headImg = [[UIImageView alloc]init];
+    [self.headImg setImage:[UIImage imageNamed:@"Answer.bundle/ico_userhead"]];
+    [self.contentView addSubview:self.headImg];
+    
+    
+    self.userName = [[UILabel alloc]init];
+    self.userName.text = @"fdfd";
+    self.userName.font = [UIFont systemFontOfSize:18];
+    [self.contentView addSubview:self.userName];
+    
+}
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [self.bgImg makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(self.contentView);
+        make.height.mas_equalTo(self.contentView);
+    }];
+    
+    [self.headImg makeConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(kWidth(80));
+        make.height.mas_equalTo(kHeight(80));
+        make.centerX.equalTo(self.contentView);
+        make.centerY.equalTo(self.contentView);
+    }];
+    
+    [self.userName makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.headImg.bottom).offset(kHeight(10));
+        make.centerX.equalTo(self.contentView);
+    }];
+}
+
+
+@end
