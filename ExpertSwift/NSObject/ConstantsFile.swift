@@ -14,7 +14,8 @@ func randomColor() ->  UIColor{
     let r = Int(arc4random_uniform(255))
     let g = Int(arc4random_uniform(255))
     let b = Int(arc4random_uniform(255))
-    return Color(red: r, green: g, blue: b)
+//    return Color(red: r, green: g, blue: b)
+    return UIColor(red: CGFloat(r)/255.0, green: CGFloat(g)/255.0, blue: CGFloat(b)/255.0, alpha: 1)
 }
 
 ///RGB转化

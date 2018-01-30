@@ -389,9 +389,7 @@
 		EF10F2381FB2A02B00C71AAD /* NetWorking */ = {
 			isa = PBXGroup;
 			children = (
-				EF10F2391FB2A02B00C71AAD /* Const.swift */,
 				EF10F23A1FB2A02B00C71AAD /* NetWorkTools.swift */,
-				EF10F23B1FB2A02B00C71AAD /* publicUrl.swift */,
 				EF10F23E1FB2A02B00C71AAD /* SaveTools.swift */,
 				EFADB7491FDE1841007ADF11 /* reachability.swift */,
 				EFCA39962006122E006BD6FC /* NetWorkManger.swift */,
@@ -424,6 +422,8 @@
 		EF24327E201EB15900A79706 /* ThirdParty */ = {
 			isa = PBXGroup;
 			children = (
+				EF10F23B1FB2A02B00C71AAD /* publicUrl.swift */,
+				EF10F2391FB2A02B00C71AAD /* Const.swift */,
 				EF24327F201EB15900A79706 /* JHNetManagerAPI.swift */,
 				EF243280201EB15900A79706 /* JHProgressHUD.swift */,
 				EF243281201EB15900A79706 /* JHWebViewController.swift */,
