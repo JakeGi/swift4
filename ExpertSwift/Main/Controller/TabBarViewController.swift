@@ -27,10 +27,10 @@ class TabBarViewController: UITabBarController {
     
     //添加自控制器
     private func addChildViewControllers() {
-        addChildViewController(childController: HomeViewController(), title: "首页", imageName: "", selectedImage: "")
-        addChildViewController(childController: AnswerViewController(), title: "我听", imageName: "", selectedImage: "")
-        addChildViewController(childController: FoundViewController(), title: "发现", imageName: "", selectedImage: "")
-        addChildViewController(childController: MyCenterViewController(), title: "我的", imageName: "", selectedImage: "")
+        addChildViewController(childController: HomeViewController(), title: "首页", imageName: "tabbar_icon_home_normal", selectedImage: "tabbar_icon_home_pressed")
+        addChildViewController(childController: AnswerViewController(), title: "我听", imageName: "tabbar_icon_hear_normal", selectedImage: "tabbar_icon_hear_pressed")
+        addChildViewController(childController: FoundViewController(), title: "发现", imageName: "tabbar_icon_Rss_normal", selectedImage: "tabbar_icon_Rss_pressed")
+        addChildViewController(childController: MyCenterViewController(), title: "我的", imageName: "tabbar_icon_mine_normal", selectedImage: "tabbar_icon_mine_pressed")
 
         
     }

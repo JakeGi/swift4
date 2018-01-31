@@ -14,7 +14,7 @@ class FoundViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        let item1=UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.edit, target: self, action: Selector(("LoginBtn")))
+        let item1=UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.edit, target: self, action: #selector(LoginBtn))
         self.navigationItem.rightBarButtonItem=item1
     }
 
@@ -22,8 +22,9 @@ class FoundViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    func LoginBtn(){
-    print(111)
+    @objc func LoginBtn(){
+        let vc = LoginViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
 

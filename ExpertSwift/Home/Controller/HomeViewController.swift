@@ -12,12 +12,15 @@ import UIKit
 class HomeViewController: UIViewController {
 
     var cycleScrollView:WRCycleScrollView?
+    var titleArray : [String] = [String]()
+    var exmapleIndex = 0
+    var slideMenu:CKSlideMenu?
     
     var tableView : UITableView?
     override func viewDidLoad() {
         super.viewDidLoad()
-
-    self.creatUI()
+    example2()
+//    self.creatUI()
     
     }
     
@@ -26,12 +29,12 @@ class HomeViewController: UIViewController {
     }
     
     fileprivate func creatUI(){
-        tableView = UITableView.init(frame: CGRect(x: 0, y: 164, width: SCREEN_WIDTH, height: SCREEN_HEIGHT-64-24), style: UITableViewStyle.plain)
+        tableView = UITableView.init(frame: CGRect(x: 0, y: 100+NAV_HEIGHT, width: SCREEN_WIDTH, height: SCREEN_HEIGHT-100-NAV_HEIGHT), style: UITableViewStyle.plain)
         tableView?.delegate = self;
         tableView?.dataSource = self;
         view.addSubview(tableView!)
        
-        let frame = CGRect(x: 0, y: 64, width: SCREEN_WIDTH, height: 100)
+        let frame = CGRect(x: 0, y: NAV_HEIGHT, width: SCREEN_WIDTH, height: 100)
         let serverImages = ["http://p.lrlz.com/data/upload/mobile/special/s252/s252_05471521705899113.png",
                             "http://p.lrlz.com/data/upload/mobile/special/s303/s303_05442007678060723.png",
                             "http://p.lrlz.com/data/upload/mobile/special/s303/s303_05442007587372591.png",
@@ -43,8 +46,6 @@ class HomeViewController: UIViewController {
     }
     
     fileprivate func requestData(){
-        
-
         
         let user = SaveTools.mg_UnArchiver(path: "userInfo") as! NSDictionary
         print(user["token"]!)
@@ -61,6 +62,27 @@ class HomeViewController: UIViewController {
             print(error!)
 
         })
+    }
+    func example2()  {
+        let titles = ["分类","推荐","精品","直播","广播"]
+        var arr:Array<UIViewController> = []
+        for _ in 0 ..< titles.count {
+            let vc = UIViewController()
+            self.addChildViewController(vc)
+            arr.append(vc)
+        }
+        slideMenu = CKSlideMenu(frame: CGRect(x:0,y:NAV_HEIGHT,width:view.frame.width,height:40), titles:titles, childControllers:arr)
+        slideMenu?.indicatorStyle = .stretch
+        slideMenu?.titleStyle = .transfrom
+        slideMenu?.indicatorHeight = 1.5
+        slideMenu?.bodySuperView = view
+        slideMenu?.indicatorView.backgroundColor = UIColor.orange
+        slideMenu?.isFixed = true
+        slideMenu?.bodyFrame = CGRect.init(x: 0, y: 64, width: view.frame.width, height: view.frame.height - 64)
+        slideMenu?.font = UIFont.systemFont(ofSize: 12)
+        //        slideMenu?.indicatorAnimatePadding = 0
+        slideMenu?.indicatorAnimatePadding = 15
+        navigationItem.titleView = slideMenu
     }
 
 

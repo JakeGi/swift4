@@ -15,6 +15,7 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "登录"
+        self.view.backgroundColor = UIColor.white
         creatUI()
         
 
@@ -38,7 +39,7 @@ class LoginViewController: UIViewController {
         topView.snp.makeConstraints { (make) in
             make.width.equalTo(SCREEN_WIDTH)
             make.height.equalTo(50)
-            make.top.equalTo(0)
+            make.top.equalTo(NAV_HEIGHT)
         }
         leftBtn.snp.makeConstraints { (make) in
             make.width.equalTo(SCREEN_WIDTH/2)
