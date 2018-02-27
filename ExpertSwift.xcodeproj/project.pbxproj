@@ -60,7 +60,6 @@
 		EFADB74A1FDE1841007ADF11 /* reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFADB7491FDE1841007ADF11 /* reachability.swift */; };
 		EFB0106C202049350050D101 /* Found.bundle in Resources */ = {isa = PBXBuildFile; fileRef = EFB01069202049350050D101 /* Found.bundle */; };
 		EFB0106E202049640050D101 /* FoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB0106D202049640050D101 /* FoundViewController.swift */; };
-		EFCA39972006122E006BD6FC /* NetWorkManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFCA39962006122E006BD6FC /* NetWorkManger.swift */; };
 		EFD47DB51FF0BFA4002D3FED /* CKSlideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFD47DB41FF0BFA3002D3FED /* CKSlideMenu.swift */; };
 		EFE38E641FB94227001F1222 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE38E631FB94227001F1222 /* MediaPlayer.framework */; };
 		EFE38E661FB9423D001F1222 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = EFE38E651FB9423D001F1222 /* libstdc++.tbd */; };
@@ -125,7 +124,6 @@
 		EFADB7491FDE1841007ADF11 /* reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = reachability.swift; sourceTree = "<group>"; };
 		EFB01069202049350050D101 /* Found.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Found.bundle; sourceTree = "<group>"; };
 		EFB0106D202049640050D101 /* FoundViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoundViewController.swift; sourceTree = "<group>"; };
-		EFCA39962006122E006BD6FC /* NetWorkManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetWorkManger.swift; sourceTree = "<group>"; };
 		EFD47DB41FF0BFA3002D3FED /* CKSlideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CKSlideMenu.swift; sourceTree = "<group>"; };
 		EFE38E631FB94227001F1222 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		EFE38E651FB9423D001F1222 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
@@ -397,7 +395,6 @@
 				EF10F23A1FB2A02B00C71AAD /* NetWorkTools.swift */,
 				EF10F23E1FB2A02B00C71AAD /* SaveTools.swift */,
 				EFADB7491FDE1841007ADF11 /* reachability.swift */,
-				EFCA39962006122E006BD6FC /* NetWorkManger.swift */,
 			);
 			path = NetWorking;
 			sourceTree = "<group>";
@@ -680,7 +677,6 @@
 				EF24329C201EB15A00A79706 /* Dictionary+JHExtension.swift in Sources */,
 				EFADB74A1FDE1841007ADF11 /* reachability.swift in Sources */,
 				EF2432B2201EB15A00A79706 /* JHPOPAlertView.swift in Sources */,
-				EFCA39972006122E006BD6FC /* NetWorkManger.swift in Sources */,
 				EFD47DB51FF0BFA4002D3FED /* CKSlideMenu.swift in Sources */,
 				EF2432A0201EB15A00A79706 /* JHNetManagerAPI.swift in Sources */,
 				EF10F2001FB293E500C71AAD /* ViewController.swift in Sources */,
@@ -847,7 +843,7 @@
 				DEVELOPMENT_TEAM = 3F2735QP6E;
 				INFOPLIST_FILE = ExpertSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks $(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = iconme.ExpertSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "/Users/jyyl/Desktop/swift4/Swift-Bridging-Header.h";
@@ -868,7 +864,7 @@
 				DEVELOPMENT_TEAM = 3F2735QP6E;
 				INFOPLIST_FILE = ExpertSwift/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks $(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = iconme.ExpertSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "/Users/jyyl/Desktop/swift4/Swift-Bridging-Header.h";

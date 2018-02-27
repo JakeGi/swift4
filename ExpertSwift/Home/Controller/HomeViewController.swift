@@ -19,8 +19,10 @@ class HomeViewController: UIViewController {
     var tableView : UITableView?
     override func viewDidLoad() {
         super.viewDidLoad()
-    example2()
-//    self.creatUI()
+        let item1=UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.edit, target: self, action: #selector(LoginBtn))
+        self.navigationItem.rightBarButtonItem=item1
+        example4()
+        self.creatUI()
     
     }
     
@@ -29,60 +31,65 @@ class HomeViewController: UIViewController {
     }
     
     fileprivate func creatUI(){
-        tableView = UITableView.init(frame: CGRect(x: 0, y: 100+NAV_HEIGHT, width: SCREEN_WIDTH, height: SCREEN_HEIGHT-100-NAV_HEIGHT), style: UITableViewStyle.plain)
+        tableView = UITableView.init(frame: CGRect(x: 0, y: 0, width: SCREEN_WIDTH, height: SCREEN_HEIGHT-100-NAV_HEIGHT), style: UITableViewStyle.plain)
         tableView?.delegate = self;
         tableView?.dataSource = self;
         view.addSubview(tableView!)
        
-        let frame = CGRect(x: 0, y: NAV_HEIGHT, width: SCREEN_WIDTH, height: 100)
-        let serverImages = ["http://p.lrlz.com/data/upload/mobile/special/s252/s252_05471521705899113.png",
-                            "http://p.lrlz.com/data/upload/mobile/special/s303/s303_05442007678060723.png",
-                            "http://p.lrlz.com/data/upload/mobile/special/s303/s303_05442007587372591.png",
-                            "http://p.lrlz.com/data/upload/mobile/special/s303/s303_05442007388249407.png",
-                            "http://p.lrlz.com/data/upload/mobile/special/s303/s303_05442007470310935.png"]
-        cycleScrollView = WRCycleScrollView(frame: frame, type: .SERVER, imgs: serverImages)
-        view.addSubview(cycleScrollView!)
-        cycleScrollView?.delegate = self
+//        let frame = CGRect(x: 0, y: NAV_HEIGHT, width: SCREEN_WIDTH, height: 100)
+//        let serverImages = ["http://p.lrlz.com/data/upload/mobile/special/s252/s252_05471521705899113.png",
+//                            "http://p.lrlz.com/data/upload/mobile/special/s303/s303_05442007678060723.png",
+//                            "http://p.lrlz.com/data/upload/mobile/special/s303/s303_05442007587372591.png",
+//                            "http://p.lrlz.com/data/upload/mobile/special/s303/s303_05442007388249407.png",
+//                            "http://p.lrlz.com/data/upload/mobile/special/s303/s303_05442007470310935.png"]
+//        cycleScrollView = WRCycleScrollView(frame: frame, type: .SERVER, imgs: serverImages)
+//        view.addSubview(cycleScrollView!)
+//        cycleScrollView?.delegate = self
     }
     
     fileprivate func requestData(){
         
         let user = SaveTools.mg_UnArchiver(path: "userInfo") as! NSDictionary
         print(user["token"]!)
-        print(user["name"]!)
-        print(user["birth"]!)
-        print(user["police_code"]!)
+//        print(user["name"]!)
+//        print(user["birth"]!)
+//        print(user["police_code"]!)
 
-        let token = user["token"]!
-        
-        let param = ["token":token,"page":"1","rows":"10"]
-        NetWorkTools.requestData(type: .post, urlString:getHealthHomeListUrl, parameters: param, succeed: { (result, error) in
-            print(result!)
-        }, failure: { (error) in
-            print(error!)
+        let token = "12121121212"
+        let param = ["phone":"15800000000","password":"123456","login_type":"phone","platform":"0","alias":"31323121231"]
 
-        })
+        JHNetManagerAPI.shareManager.JHRequestData(.post, URLString: getNewsListByTypeUrl, para: param , ShowHUD: true) { (result) in
+            print(result!);
+        }
+//        NetWorkTools.requestData(type: .post, urlString:getHealthHomeListUrl, parameters: param, succeed: { (result, error) in
+//            print(result!)
+//        }, failure: { (error) in
+//            print(error!)
+//
+//        })
     }
-    func example2()  {
-        let titles = ["分类","推荐","精品","直播","广播"]
+    func example4()  {
+        let titles = ["今天","速度100","是啊","测试机","水电","今天","速度","是啊","今天","速度","是啊"]
         var arr:Array<UIViewController> = []
         for _ in 0 ..< titles.count {
             let vc = UIViewController()
             self.addChildViewController(vc)
             arr.append(vc)
         }
-        slideMenu = CKSlideMenu(frame: CGRect(x:0,y:NAV_HEIGHT,width:view.frame.width,height:40), titles:titles, childControllers:arr)
-        slideMenu?.indicatorStyle = .stretch
-        slideMenu?.titleStyle = .transfrom
-        slideMenu?.indicatorHeight = 1.5
+        slideMenu = CKSlideMenu(frame: CGRect(x:0,y:64,width:view.frame.width,height:40), titles:titles, childControllers:arr)
+        
+        slideMenu?.titleStyle = .gradient
+        slideMenu?.indicatorStyle = .followText
+        slideMenu?.unSelectedColor = UIColor.gray
+        slideMenu?.bottomPadding = 4
+        slideMenu?.indicatorHeight = 2
         slideMenu?.bodySuperView = view
-        slideMenu?.indicatorView.backgroundColor = UIColor.orange
-        slideMenu?.isFixed = true
-        slideMenu?.bodyFrame = CGRect.init(x: 0, y: 64, width: view.frame.width, height: view.frame.height - 64)
-        slideMenu?.font = UIFont.systemFont(ofSize: 12)
-        //        slideMenu?.indicatorAnimatePadding = 0
-        slideMenu?.indicatorAnimatePadding = 15
-        navigationItem.titleView = slideMenu
+        slideMenu?.bodyFrame = CGRect.init(x: 0, y: 104, width: view.frame.width, height: view.frame.height - 104)
+        view.addSubview(slideMenu!)
+    }
+    
+    @objc func LoginBtn(){
+        
     }
 
 

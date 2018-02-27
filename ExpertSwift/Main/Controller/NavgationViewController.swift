@@ -12,6 +12,7 @@ class NavgationViewController: UINavigationController , UIGestureRecognizerDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         self.interactivePopGestureRecognizer?.delegate = self
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(named:"LoginBtn")!, for: UIBarMetrics.default)
     }
     override func viewSafeAreaInsetsDidChange() {
         

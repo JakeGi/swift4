@@ -26,7 +26,7 @@ class JHNetManagerAPI: NSObject {
     }
     
     //基础url
-    let baseUrl = JYPostUrl
+    let baseUrl = AfnBaseUrl
     //基础参数
     var param = [String:String]()
     //请求头

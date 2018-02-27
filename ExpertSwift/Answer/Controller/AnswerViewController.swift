@@ -15,21 +15,30 @@ class AnswerViewController: UIViewController,WKNavigationDelegate,WKUIDelegate {
         super.viewDidLoad()
 
 //        setUpWKwebView()
-        let v = CountDownView()
+//        let v = CountDownView()
+//
+//        v.frame = CGRect(x: 100, y: 100, width: 100, height: 50)
+//
+//        self.view.addSubview(v)
+//        webView.frame = CGRect(x:0, y:0,width:SCREEN_WIDTH, height:SCREEN_HEIGHT-NAV_HEIGHT-20)
+
+    
         
-        v.frame = CGRect(x: 100, y: 100, width: 100, height: 50)
-        
-        self.view.addSubview(v)
+//        let request = NSURLRequest.init(URL: NSURL.init(string: "http://by.zgshfp.com.cn/app/Billboard.html?token=6e61b4ebc27df7ae861b4ba7c06899ef2a00196ae75648dd06c3f92ecafa7010ded9da1a2440e1b7b01e06210d0d2f539836a944f5490ae7f0cb90efb234573ae0053a1df52c407061”)
+//        webView.loadRequest(request)
+//            self.view.addSubview(webView) as URL
         
     }
     func setUpWKwebView() {
         
         let webConfiguration = WKWebViewConfiguration()
-        let myURL = URL(string: "http://by.zgshfp.com.cn/app/Billboard.html")
-        webView = WKWebView(frame: view.bounds, configuration: webConfiguration)
+        let myURL = URL(string: "http://by.zgshfp.com.cn/app/Billboard.html?token=6e61b4ebc27df7ae861b4ba7c06899ef2a00196ae75648dd06c3f92ecafa7010ded9da1a2440e1b7b01e06210d0d2f539836a944f5490ae7f0cb90efb234573ae0053a1df52c407061")
+        webView = WKWebView(frame:CGRect(x:0, y:0,width:SCREEN_WIDTH, height:SCREEN_HEIGHT-NAV_HEIGHT-20), configuration: webConfiguration)
         let myRequest = URLRequest(url: myURL!)
         webView.load(myRequest)
-        view.addSubview(webView)
+        self.view.addSubview(webView)
+        
+        
         
     }
     
